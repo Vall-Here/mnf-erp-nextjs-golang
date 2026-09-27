@@ -1428,7 +1428,7 @@
           <span class="section-tag">Empirical Benchmark & Load Verification</span>
           <h2 class="section-title">High-Throughput Load Testing & Performance Verification</h2>
           <p class="section-desc">
-            Empirical stress test results executed with <code>k6</code> and monitored in real-time via Prometheus TSDB and Grafana dashboards under simulated industrial traffic scaling up to 300 concurrent Virtual Users.
+            Empirical stress test results executed with <code>k6</code> and monitored in real-time via Prometheus TSDB and Grafana dashboards under simulated industrial traffic scaling up to 400 concurrent Virtual Users.
           </p>
         </div>
 
@@ -1564,26 +1564,28 @@
       <div class="container">
         <div class="section-header">
           <span class="section-tag">Application Interface Gallery</span>
-          <h2 class="section-title">System Interface Walkthrough</h2>
+          <h2 class="section-title">System Interface Walkthrough (18 Modules Coverage)</h2>
           <p class="section-desc">
-            High-resolution visual inspection of actual operational screens across executive dashboards, warehouse management, procurement grids, quality modals, and approval workflows.
+            High-resolution visual inspection of actual operational screens across all 18 enterprise modules, including executive dashboards, warehouse management, procurement grids, quality modals, manufacturing routing, and approval workflows.
           </p>
         </div>
 
         <div class="gallery-filter-bar">
-          <button class="gallery-filter-btn active" onclick="filterGallery('all')">All Screenshots (14)</button>
+          <button class="gallery-filter-btn active" onclick="filterGallery('all')">All Screenshots (24)</button>
           <button class="gallery-filter-btn" onclick="filterGallery('dashboards')">Dashboards & Holding</button>
           <button class="gallery-filter-btn" onclick="filterGallery('loadtest')">Load Test & Metrics</button>
-          <button class="gallery-filter-btn" onclick="filterGallery('warehouse')">Warehouse & Inventory</button>
-          <button class="gallery-filter-btn" onclick="filterGallery('procurement')">Procurement & Orders</button>
-          <button class="gallery-filter-btn" onclick="filterGallery('governance')">Governance & Logistics</button>
+          <button class="gallery-filter-btn" onclick="filterGallery('warehouse')">Warehouse & Logistics</button>
+          <button class="gallery-filter-btn" onclick="filterGallery('procurement')">Procurement & Sales</button>
+          <button class="gallery-filter-btn" onclick="filterGallery('manufacturing')">Manufacturing & QC</button>
+          <button class="gallery-filter-btn" onclick="filterGallery('finance')">Finance & HR</button>
+          <button class="gallery-filter-btn" onclick="filterGallery('governance')">Governance & Core</button>
         </div>
 
         <div class="gallery-grid" id="galleryGrid">
           <!-- Screenshot 0: Grafana Load Test -->
-          <div class="gallery-item" data-cat="loadtest" onclick="openLightbox('assets/images/grafana_load_test.png', 'Grafana 15-Panel Load Test Telemetry - 102K Requests, 770 RPS Peak, 67MB RAM at 300 Concurrent Users')">
+          <div class="gallery-item" data-cat="loadtest" onclick="openLightbox('assets/images/grafana-load test.png', 'Grafana 15-Panel Load Test Telemetry - 102K Requests, 770 RPS Peak, 67MB RAM at 300 Concurrent Users')">
             <div class="gallery-thumbnail">
-              <img src="assets/images/grafana_load_test.png" alt="Grafana Load Test Monitoring" loading="lazy" onerror="this.src='https://placehold.co/800x450?text=Grafana+Load+Test'" />
+              <img src="assets/images/grafana-load test.png" alt="Grafana Load Test Monitoring" loading="lazy" onerror="this.src='https://placehold.co/800x450/0f1523/6366f1?text=Grafana+Load+Test'" />
             </div>
             <div class="gallery-meta">
               <span class="gallery-tag">OBSERVABILITY / TELEMETRY</span>
@@ -1591,159 +1593,268 @@
               <div class="gallery-desc">Empirical telemetry covering 102K requests, 770 req/s peak, Go goroutine scaling, and sub-2ms latency.</div>
             </div>
           </div>
+          
           <!-- Screenshot 1: Executive Dashboard -->
-          <div class="gallery-item" data-cat="dashboards" onclick="openLightbox('assets/images/dashboard_after_login_1790353077024.png', 'Executive Dashboard - Real-time operational metrics and pending queue oversight')">
+          <div class="gallery-item" data-cat="dashboards" onclick="openLightbox('assets/images/dashboard.png', 'Executive Dashboard - Real-time operational metrics and pending queue oversight')">
             <div class="gallery-thumbnail">
-              <img src="assets/images/dashboard_after_login_1790353077024.png" alt="Executive Dashboard" loading="lazy" onerror="this.src='https://placehold.co/800x450?text=Dashboard+Overview'" />
+              <img src="assets/images/dashboard.png" alt="Executive Dashboard" loading="lazy" onerror="this.src='https://placehold.co/800x450/0f1523/6366f1?text=Dashboard+Overview'" />
             </div>
             <div class="gallery-meta">
-              <span class="gallery-tag">HOLDING / EXECUTIVE</span>
+              <span class="gallery-tag">MOD-17 DASHBOARDS</span>
               <div class="gallery-title">Executive Dashboard</div>
               <div class="gallery-desc">Consolidated enterprise KPI oversight, inventory turnover velocity, and branch status summaries.</div>
             </div>
           </div>
 
           <!-- Screenshot 2: Warehouse Supervisor Dashboard -->
-          <div class="gallery-item" data-cat="dashboards" onclick="openLightbox('assets/images/warehouse_supervisor_dashboard_1790352008004.png', 'Warehouse Supervisor Dashboard - Real-time staging queue and bin occupancy')">
+          <div class="gallery-item" data-cat="dashboards" onclick="openLightbox('assets/images/Status Infrastruktur.png', 'Infrastructure Status & Metrics')">
             <div class="gallery-thumbnail">
-              <img src="assets/images/warehouse_supervisor_dashboard_1790352008004.png" alt="Warehouse Supervisor Dashboard" loading="lazy" onerror="this.src='https://placehold.co/800x450?text=Supervisor+Dashboard'" />
+              <img src="assets/images/Status Infrastruktur.png" alt="Infrastructure Status" loading="lazy" onerror="this.src='https://placehold.co/800x450/0f1523/6366f1?text=System+Status'" />
             </div>
             <div class="gallery-meta">
-              <span class="gallery-tag">WAREHOUSE MANAGEMENT</span>
-              <div class="gallery-title">Supervisor Dashboard</div>
-              <div class="gallery-desc">Operational queue tracking for staging zones, stock replenishment schedules, and pending GRN signoffs.</div>
+              <span class="gallery-tag">MOD-17 DASHBOARDS</span>
+              <div class="gallery-title">Infrastructure Status</div>
+              <div class="gallery-desc">Real-time system health, connectivity, and database metric tracking.</div>
             </div>
           </div>
 
           <!-- Screenshot 3: Warehouse Staff Dashboard -->
-          <div class="gallery-item" data-cat="dashboards" onclick="openLightbox('assets/images/warehouse_staff_dashboard_1790351808375.png', 'Warehouse Staff Operations View - Task-focused operator screen')">
+          <div class="gallery-item" data-cat="dashboards" onclick="openLightbox('assets/images/dashboard-light.png', 'Dashboard Light Theme')">
             <div class="gallery-thumbnail">
-              <img src="assets/images/warehouse_staff_dashboard_1790351808375.png" alt="Warehouse Staff View" loading="lazy" onerror="this.src='https://placehold.co/800x450?text=Staff+Dashboard'" />
+              <img src="assets/images/dashboard-light.png" alt="Dashboard Light Mode" loading="lazy" onerror="this.src='https://placehold.co/800x450/0f1523/6366f1?text=Dashboard+Light'" />
             </div>
             <div class="gallery-meta">
-              <span class="gallery-tag">ROLE SPECIFIC: STAFF</span>
-              <div class="gallery-title">Staff Operations View</div>
-              <div class="gallery-desc">Streamlined interface scoped exclusively for pick, pack, receipt, and stock movement operators.</div>
+              <span class="gallery-tag">MOD-17 DASHBOARDS</span>
+              <div class="gallery-title">Dashboard (Light Mode)</div>
+              <div class="gallery-desc">Alternative light theme interface for bright environments and readability.</div>
             </div>
           </div>
 
           <!-- Screenshot 4: Perpetual Inventory Ledger -->
-          <div class="gallery-item" data-cat="warehouse" onclick="openLightbox('assets/images/inventory_page_1790352639779.png', 'Perpetual Inventory Ledger - SKU tracking, warehouse balances, and stock valuation')">
+          <div class="gallery-item" data-cat="warehouse" onclick="openLightbox('assets/images/Persediaan & Mutasi.png', 'Perpetual Inventory Ledger - SKU tracking, warehouse balances, and stock valuation')">
             <div class="gallery-thumbnail">
-              <img src="assets/images/inventory_page_1790352639779.png" alt="Inventory Ledger" loading="lazy" onerror="this.src='https://placehold.co/800x450?text=Inventory+Ledger'" />
+              <img src="assets/images/Persediaan & Mutasi.png" alt="Inventory Ledger" loading="lazy" onerror="this.src='https://placehold.co/800x450/0f1523/6366f1?text=Inventory+Ledger'" />
             </div>
             <div class="gallery-meta">
-              <span class="gallery-tag">INVENTORY & SCM</span>
+              <span class="gallery-tag">MOD-04 INVENTORY</span>
               <div class="gallery-title">Perpetual Inventory Ledger</div>
               <div class="gallery-desc">Bin-level item balances, reservation statuses, FIFO unit valuation, and reorder triggers.</div>
             </div>
           </div>
 
           <!-- Screenshot 5: PR List Page -->
-          <div class="gallery-item" data-cat="procurement" onclick="openLightbox('assets/images/pr_list_page_1790352955771.png', 'Procurement Management - Purchase Requisition tracking and multi-tier approval states')">
+          <div class="gallery-item" data-cat="procurement" onclick="openLightbox('assets/images/procurement P2P.png', 'Procurement Management - Purchase Requisition tracking and multi-tier approval states')">
             <div class="gallery-thumbnail">
-              <img src="assets/images/pr_list_page_1790352955771.png" alt="Purchase Requisition List" loading="lazy" onerror="this.src='https://placehold.co/800x450?text=Purchase+Requisitions'" />
+              <img src="assets/images/procurement P2P.png" alt="Purchase Requisition List" loading="lazy" onerror="this.src='https://placehold.co/800x450/0f1523/6366f1?text=Purchase+Requisitions'" />
             </div>
             <div class="gallery-meta">
-              <span class="gallery-tag">PROCUREMENT</span>
+              <span class="gallery-tag">MOD-05 PURCHASING</span>
               <div class="gallery-title">Purchase Requisition Grid</div>
               <div class="gallery-desc">Requisition status tracking with multi-stage approval indicators, budget limits, and PO generation.</div>
             </div>
           </div>
 
           <!-- Screenshot 6: GRN Form Modal -->
-          <div class="gallery-item" data-cat="procurement" onclick="openLightbox('assets/images/grn_modal_form_1790352211310.png', 'Goods Receipt Note - Inbound inspection form with QA checkpoints and lot validation')">
+          <div class="gallery-item" data-cat="procurement" onclick="openLightbox('assets/images/QAQC.png', 'Goods Receipt Note & QC - Inbound inspection form with QA checkpoints and lot validation')">
             <div class="gallery-thumbnail">
-              <img src="assets/images/grn_modal_form_1790352211310.png" alt="GRN Form" loading="lazy" onerror="this.src='https://placehold.co/800x450?text=GRN+Inspection+Form'" />
+              <img src="assets/images/QAQC.png" alt="GRN Form" loading="lazy" onerror="this.src='https://placehold.co/800x450/0f1523/6366f1?text=GRN+Inspection+Form'" />
             </div>
             <div class="gallery-meta">
-              <span class="gallery-tag">QUALITY CONTROL</span>
-              <div class="gallery-title">Inbound GRN Inspection Modal</div>
+              <span class="gallery-tag">MOD-10 QUALITY CONTROL</span>
+              <div class="gallery-title">Inbound GRN & QC Inspection</div>
               <div class="gallery-desc">Detailed receipt modal form with QA checkpoints, lot numbering, bin assignment, and discrepancy logs.</div>
             </div>
           </div>
 
           <!-- Screenshot 7: Approvals Page -->
-          <div class="gallery-item" data-cat="governance" onclick="openLightbox('assets/images/approvals_page_1790353148905.png', 'Workflow Approval Queue - Centralized multi-role authorization console')">
+          <div class="gallery-item" data-cat="governance" onclick="openLightbox('assets/images/pusat persetujuan.png', 'Workflow Approval Queue - Centralized multi-role authorization console')">
             <div class="gallery-thumbnail">
-              <img src="assets/images/approvals_page_1790353148905.png" alt="Approval Queue" loading="lazy" onerror="this.src='https://placehold.co/800x450?text=Approval+Queue'" />
+              <img src="assets/images/pusat persetujuan.png" alt="Approval Queue" loading="lazy" onerror="this.src='https://placehold.co/800x450/0f1523/6366f1?text=Approval+Queue'" />
             </div>
             <div class="gallery-meta">
-              <span class="gallery-tag">GOVERNANCE</span>
+              <span class="gallery-tag">MOD-16 WORKFLOW</span>
               <div class="gallery-title">Approval Workflow Console</div>
               <div class="gallery-desc">Centralized queue for managers to authorize PRs, POs, credit notes, and inventory adjustments.</div>
             </div>
           </div>
 
           <!-- Screenshot 8: Logistics Page -->
-          <div class="gallery-item" data-cat="governance" onclick="openLightbox('assets/images/logistics_page_1790353310980.png', 'Logistics Dispatch - Outbound delivery order tracking and trip manifests')">
+          <div class="gallery-item" data-cat="warehouse" onclick="openLightbox('assets/images/Logistic&Armada.png', 'Logistics Dispatch - Outbound delivery order tracking and trip manifests')">
             <div class="gallery-thumbnail">
-              <img src="assets/images/logistics_page_1790353310980.png" alt="Logistics Dispatch" loading="lazy" onerror="this.src='https://placehold.co/800x450?text=Logistics+Dispatch'" />
+              <img src="assets/images/Logistic&Armada.png" alt="Logistics Dispatch" loading="lazy" onerror="this.src='https://placehold.co/800x450/0f1523/6366f1?text=Logistics+Dispatch'" />
             </div>
             <div class="gallery-meta">
-              <span class="gallery-tag">LOGISTICS & FLEET</span>
+              <span class="gallery-tag">MOD-09 LOGISTICS</span>
               <div class="gallery-title">Outbound Logistics Dispatch</div>
               <div class="gallery-desc">Shipment planning, fleet vehicle loading manifests, delivery order status, and driver assignments.</div>
             </div>
           </div>
 
           <!-- Screenshot 9: Master Data Page -->
-          <div class="gallery-item" data-cat="governance" onclick="openLightbox('assets/images/master_data_page_1790353281386.png', 'Master Data Management - Core entity parameters and branch configuration')">
+          <div class="gallery-item" data-cat="governance" onclick="openLightbox('assets/images/pusat master data.png', 'Master Data Management - Core entity parameters and branch configuration')">
             <div class="gallery-thumbnail">
-              <img src="assets/images/master_data_page_1790353281386.png" alt="Master Data" loading="lazy" onerror="this.src='https://placehold.co/800x450?text=Master+Data'" />
+              <img src="assets/images/pusat master data.png" alt="Master Data" loading="lazy" onerror="this.src='https://placehold.co/800x450/0f1523/6366f1?text=Master+Data'" />
             </div>
             <div class="gallery-meta">
-              <span class="gallery-tag">SYSTEM CORE</span>
+              <span class="gallery-tag">MOD-02 MASTER DATA</span>
               <div class="gallery-title">Master Data Configuration</div>
               <div class="gallery-desc">Branch parameters, tax schedules, product categories, and unit of measure conversion rules.</div>
             </div>
           </div>
 
           <!-- Screenshot 10: Documents Page -->
-          <div class="gallery-item" data-cat="governance" onclick="openLightbox('assets/images/documents_page_1790353209875.png', 'Document Management - S3-compatible attachment registry and version control')">
+          <div class="gallery-item" data-cat="governance" onclick="openLightbox('assets/images/pusat dokument.png', 'Document Management - S3-compatible attachment registry and version control')">
             <div class="gallery-thumbnail">
-              <img src="assets/images/documents_page_1790353209875.png" alt="Document Storage" loading="lazy" onerror="this.src='https://placehold.co/800x450?text=Document+Storage'" />
+              <img src="assets/images/pusat dokument.png" alt="Document Storage" loading="lazy" onerror="this.src='https://placehold.co/800x450/0f1523/6366f1?text=Document+Storage'" />
             </div>
             <div class="gallery-meta">
-              <span class="gallery-tag">STORAGE & FLOCI</span>
+              <span class="gallery-tag">MOD-18 SYSTEM CORE</span>
               <div class="gallery-title">Document & Attachment Registry</div>
               <div class="gallery-desc">S3-compatible file storage registry linked directly to transaction records with audit metadata.</div>
             </div>
           </div>
 
           <!-- Screenshot 11: Returns Page -->
-          <div class="gallery-item" data-cat="warehouse" onclick="openLightbox('assets/images/returns_page_1790353350325.png', 'Returns Management - RMA processing and debit note logs')">
+          <div class="gallery-item" data-cat="warehouse" onclick="openLightbox('assets/images/Return&RMA.png', 'Returns Management - RMA processing and debit note logs')">
             <div class="gallery-thumbnail">
-              <img src="assets/images/returns_page_1790353350325.png" alt="Returns Management" loading="lazy" onerror="this.src='https://placehold.co/800x450?text=Returns+Management'" />
+              <img src="assets/images/Return&RMA.png" alt="Returns Management" loading="lazy" onerror="this.src='https://placehold.co/800x450/0f1523/6366f1?text=Returns+Management'" />
             </div>
             <div class="gallery-meta">
-              <span class="gallery-tag">AFTER-SALES & RMA</span>
+              <span class="gallery-tag">MOD-15 RETURNS</span>
               <div class="gallery-title">Returns & RMA Processing</div>
               <div class="gallery-desc">Customer return authorizations, quarantine inspection workflows, and vendor debit notes.</div>
             </div>
           </div>
 
-          <!-- Screenshot 12: Staff Logistics View -->
-          <div class="gallery-item" data-cat="governance" onclick="openLightbox('assets/images/warehouse_staff_logistics_1790351835233.png', 'Warehouse Staff Logistics - Delivery preparation and dispatch checklist')">
+          <!-- Screenshot 12: Seri Nomor -->
+          <div class="gallery-item" data-cat="governance" onclick="openLightbox('assets/images/Seri Nomor dan Profil Legal.png', 'Legal Profile & Document Numbering')">
             <div class="gallery-thumbnail">
-              <img src="assets/images/warehouse_staff_logistics_1790351835233.png" alt="Staff Logistics" loading="lazy" onerror="this.src='https://placehold.co/800x450?text=Staff+Logistics'" />
+              <img src="assets/images/Seri Nomor dan Profil Legal.png" alt="Legal Profile & Sequence" loading="lazy" onerror="this.src='https://placehold.co/800x450/0f1523/6366f1?text=Document+Sequence'" />
             </div>
             <div class="gallery-meta">
-              <span class="gallery-tag">ROLE SPECIFIC: STAFF</span>
-              <div class="gallery-title">Staff Dispatch Checklist</div>
-              <div class="gallery-desc">Task-oriented view for warehouse loading personnel to verify parcel counts against vehicle manifests.</div>
+              <span class="gallery-tag">MOD-02 MASTER DATA</span>
+              <div class="gallery-title">Document Series & Legal Profile</div>
+              <div class="gallery-desc">Configurable running numbers for operational documents and legal entity details.</div>
             </div>
           </div>
 
-          <!-- Screenshot 13: Staff Returns View -->
-          <div class="gallery-item" data-cat="warehouse" onclick="openLightbox('assets/images/warehouse_staff_returns_1790351855321.png', 'Warehouse Staff Returns - Inbound RMA intake and quarantine staging')">
+          <!-- Screenshot 13: Profil Keamanan -->
+          <div class="gallery-item" data-cat="governance" onclick="openLightbox('assets/images/profil&keamanan.png', 'User Profile & Security Settings')">
             <div class="gallery-thumbnail">
-              <img src="assets/images/warehouse_staff_returns_1790351855321.png" alt="Staff Returns" loading="lazy" onerror="this.src='https://placehold.co/800x450?text=Staff+Returns'" />
+              <img src="assets/images/profil&keamanan.png" alt="Profile Security" loading="lazy" onerror="this.src='https://placehold.co/800x450/0f1523/6366f1?text=Profile+Security'" />
             </div>
             <div class="gallery-meta">
-              <span class="gallery-tag">ROLE SPECIFIC: STAFF</span>
-              <div class="gallery-title">Staff RMA Quarantine Intake</div>
-              <div class="gallery-desc">Simplified inbound return receiving screen with damaged packaging logs and quarantine routing.</div>
+              <span class="gallery-tag">MOD-01 IAM</span>
+              <div class="gallery-title">Profile & Security Settings</div>
+              <div class="gallery-desc">User account configurations, password management, and active session monitoring.</div>
+            </div>
+          </div>
+
+          <!-- Screenshot 14: Sales & O2C View -->
+          <div class="gallery-item" data-cat="procurement" onclick="openLightbox('assets/images/PenjualanPiutang-O2C.png', 'Sales & O2C - Customer orders and credit limits')">
+            <div class="gallery-thumbnail">
+              <img src="assets/images/PenjualanPiutang-O2C.png" alt="Sales Order to Cash" loading="lazy" />
+            </div>
+            <div class="gallery-meta">
+              <span class="gallery-tag">MOD-06 SALES (O2C)</span>
+              <div class="gallery-title">Sales Orders & CRM</div>
+              <div class="gallery-desc">Customer order tracking, dynamic credit limit evaluation, and invoicing generation.</div>
+            </div>
+          </div>
+
+          <!-- Screenshot 15: Manufacturing BOM -->
+          <div class="gallery-item" data-cat="manufacturing" onclick="openLightbox('assets/images/Pabrikasi & Produksi.png', 'Manufacturing BOM - Multi-level bill of materials configuration')">
+            <div class="gallery-thumbnail">
+              <img src="assets/images/Pabrikasi & Produksi.png" alt="Manufacturing BOM" loading="lazy" />
+            </div>
+            <div class="gallery-meta">
+              <span class="gallery-tag">MOD-07 MANUFACTURING</span>
+              <div class="gallery-title">Multi-Level BOM Engineering</div>
+              <div class="gallery-desc">Complex product structure definitions, routing paths, and work center capacity planning.</div>
+            </div>
+          </div>
+
+          <!-- Screenshot 16: TPM Maintenance -->
+          <div class="gallery-item" data-cat="manufacturing" onclick="openLightbox('assets/images/Plant Maintanance.png', 'TPM Maintenance - Machine asset registries and preventive schedules')">
+            <div class="gallery-thumbnail">
+              <img src="assets/images/Plant Maintanance.png" alt="TPM Schedules" loading="lazy" />
+            </div>
+            <div class="gallery-meta">
+              <span class="gallery-tag">MOD-11 MAINTENANCE</span>
+              <div class="gallery-title">TPM & Asset Maintenance</div>
+              <div class="gallery-desc">Machine registry, MTBF analytics, and automated preventive maintenance work order generation.</div>
+            </div>
+          </div>
+
+          <!-- Screenshot 17: General Ledger -->
+          <div class="gallery-item" data-cat="finance" onclick="openLightbox('assets/images/Akuntansi&General Ledger.png', 'General Ledger - Standard COA and double-entry validations')">
+            <div class="gallery-thumbnail">
+              <img src="assets/images/Akuntansi&General Ledger.png" alt="General Ledger" loading="lazy" />
+            </div>
+            <div class="gallery-meta">
+              <span class="gallery-tag">MOD-03 ACCOUNTING</span>
+              <div class="gallery-title">General Ledger Operations</div>
+              <div class="gallery-desc">Chart of accounts hierarchy, manual journal entries, and real-time trial balance monitoring.</div>
+            </div>
+          </div>
+
+          <!-- Screenshot 18: Treasury & Cash -->
+          <div class="gallery-item" data-cat="finance" onclick="openLightbox('assets/images/kas&bank.png', 'Treasury & Cash - Multi-bank reconciliations')">
+            <div class="gallery-thumbnail">
+              <img src="assets/images/kas&bank.png" alt="Treasury Management" loading="lazy" onerror="this.src='https://placehold.co/800x450/0f1523/f59e0b?text=Treasury+Management'" />
+            </div>
+            <div class="gallery-meta">
+              <span class="gallery-tag">MOD-13 TREASURY</span>
+              <div class="gallery-title">Cash & Bank Management</div>
+              <div class="gallery-desc">Internal fund transfers, bank reconciliations, and petty cash disbursement logs.</div>
+            </div>
+          </div>
+
+          <!-- Screenshot 19: Fixed Assets -->
+          <div class="gallery-item" data-cat="finance" onclick="openLightbox('assets/images/Aktiva&Depresiasi.png', 'Fixed Assets - Monthly batch depreciation runs')">
+            <div class="gallery-thumbnail">
+              <img src="assets/images/Aktiva&Depresiasi.png" alt="Fixed Assets" loading="lazy" />
+            </div>
+            <div class="gallery-meta">
+              <span class="gallery-tag">MOD-12 FIXED ASSETS</span>
+              <div class="gallery-title">Fixed Asset Lifecycle</div>
+              <div class="gallery-desc">Asset registration, multi-method depreciation batch runs, and financial write-offs (PSAK 16).</div>
+            </div>
+          </div>
+
+          <!-- Screenshot 20: Taxation Engine -->
+          <div class="gallery-item" data-cat="finance" onclick="openLightbox('assets/images/pajak&efaktur.png', 'Taxation Engine - e-Faktur and PPN automation')">
+            <div class="gallery-thumbnail">
+              <img src="assets/images/pajak&efaktur.png" alt="Taxation Engine" loading="lazy" />
+            </div>
+            <div class="gallery-meta">
+              <span class="gallery-tag">MOD-14 TAXATION</span>
+              <div class="gallery-title">Corporate Taxation Engine</div>
+              <div class="gallery-desc">Automated e-Faktur Pajak calculation, PPN 11%/12% postings, and SPT reporting.</div>
+            </div>
+          </div>
+
+          <!-- Screenshot 21: HRM & Payroll -->
+          <div class="gallery-item" data-cat="finance" onclick="openLightbox('assets/images/sdm&payroll.png', 'HRM & Payroll - Employee profiles and biometric sync')">
+            <div class="gallery-thumbnail">
+              <img src="assets/images/sdm&payroll.png" alt="HRM Module" loading="lazy" onerror="this.src='https://placehold.co/800x450/0f1523/8b5cf6?text=HRM+Payroll'" />
+            </div>
+            <div class="gallery-meta">
+              <span class="gallery-tag">MOD-08 HRM</span>
+              <div class="gallery-title">HR & Payroll Sync</div>
+              <div class="gallery-desc">Biometric IoT attendance synchronization, leave balances, and automated e-Payroll.</div>
+            </div>
+          </div>
+          
+          <!-- Screenshot 22: IAM Security -->
+          <div class="gallery-item" data-cat="governance" onclick="openLightbox('assets/images/IAM.png', 'IAM - RBAC Matrix and user lifecycles')">
+            <div class="gallery-thumbnail">
+              <img src="assets/images/IAM.png" alt="IAM Matrix" loading="lazy" />
+            </div>
+            <div class="gallery-meta">
+              <span class="gallery-tag">MOD-01 IAM</span>
+              <div class="gallery-title">Identity & Access Matrix</div>
+              <div class="gallery-desc">Granular control over 102 permissions across 18 modules, mapped to roles and branch tenants.</div>
             </div>
           </div>
         </div>
