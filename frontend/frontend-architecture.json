@@ -1,0 +1,56 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "ERP Frontend Architecture",
+    "output": "frontend-architecture.html",
+    "quality_profile": "showcase"
+  },
+  "layout": {
+    "mode": "grid",
+    "origin": [40, 40],
+    "cols": 4,
+    "gapX": 100,
+    "gapY": 80,
+    "cellW": 160,
+    "cellH": 60
+  },
+  "components": [
+    { "id": "browser", "type": "external", "label": "Web Browser", "sublabel": "User Interface", "col": 0, "row": 1 },
+    { "id": "shadcn", "type": "frontend", "label": "shadcn/ui", "sublabel": "Tailwind & Radix", "col": 1, "row": 0 },
+    { "id": "app_router", "type": "backend", "label": "Next.js App", "sublabel": "Server & Client Comps", "col": 1, "row": 1 },
+    { "id": "data_table", "type": "frontend", "label": "TanStack Table", "sublabel": "Data Grids", "col": 1, "row": 2 },
+    
+    { "id": "forms", "type": "frontend", "label": "RHF & Zod", "sublabel": "Forms & Validation", "col": 2, "row": 0 },
+    { "id": "zustand", "type": "database", "label": "Zustand Stores", "sublabel": "Client State", "col": 2, "row": 1 },
+    
+    { "id": "api_client", "type": "backend", "label": "API Client", "sublabel": "Axios & JWT", "col": 3, "row": 1 },
+    { "id": "backend", "type": "backend", "label": "Go API", "sublabel": "REST Services", "col": 3, "row": 2 }
+  ],
+  "boundaries": [
+    {
+      "kind": "region",
+      "label": "Next.js Frontend Service",
+      "wraps": ["shadcn", "app_router", "data_table", "forms", "zustand", "api_client"]
+    }
+  ],
+  "connections": [
+    { "id": "b_app", "from": "browser", "to": "app_router", "label": "visits" },
+    { "id": "app_shad", "from": "app_router", "to": "shadcn", "label": "styles" },
+    
+    { "id": "app_form", "from": "app_router", "to": "forms", "label": "validates" },
+    { "id": "app_zus", "from": "app_router", "to": "zustand", "label": "state", "labelDy": 24 },
+    { "id": "app_tbl", "from": "app_router", "to": "data_table", "label": "renders", "labelDy": 24 },
+    
+    { "id": "form_api", "from": "forms", "to": "api_client", "label": "mutate" },
+    { "id": "zus_api", "from": "zustand", "to": "api_client", "label": "sync", "labelDy": 24 },
+    
+    { "id": "api_back", "from": "api_client", "to": "backend", "label": "REST", "labelDy": 24 }
+  ],
+  "cards": [
+    { "dot": "emerald", "title": "Next.js 15", "items": ["App Router", "Server Components (RSC)", "Route Groups (auth, dashboard)"] },
+    { "dot": "cyan", "title": "Presentation", "items": ["shadcn/ui (Radix Primitives)", "Tailwind CSS", "TanStack Table v8"] },
+    { "dot": "amber", "title": "Client Logic", "items": ["React Hook Form", "Zod Validation", "Zustand State (auth, ui)"] },
+    { "dot": "rose", "title": "Data Fetching", "items": ["Custom API Client (lib/api-client.ts)", "JWT Bearer Interceptors"] }
+  ]
+}

@@ -1,0 +1,1685 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Enterprise ERP Showcase | Golang & Next.js Industrial Architecture</title>
+  <meta name="description" content="Technical showcase and architectural overview of an industrial-grade ERP system built with Golang 1.22+ Modular Monolith and Next.js 15 App Router." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg-primary: #0a0d14;
+      --bg-secondary: #0f1523;
+      --bg-tertiary: #161e31;
+      --bg-card: rgba(18, 26, 44, 0.75);
+      --border-color: rgba(255, 255, 255, 0.08);
+      --border-hover: rgba(99, 102, 241, 0.45);
+      --text-main: #f1f5f9;
+      --text-muted: #94a3b8;
+      --text-dim: #64748b;
+      --accent-primary: #6366f1;
+      --accent-secondary: #06b6d4;
+      --accent-success: #10b981;
+      --accent-warning: #f59e0b;
+      --card-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+      --glow-indigo: 0 0 40px -10px rgba(99, 102, 241, 0.25);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background-color: var(--bg-primary);
+      color: var(--text-main);
+      line-height: 1.6;
+    }
+
+    body {
+      background: radial-gradient(circle at 50% 0%, rgba(99, 102, 241, 0.12) 0%, transparent 50%),
+                  radial-gradient(circle at 100% 40%, rgba(6, 182, 212, 0.08) 0%, transparent 40%),
+                  var(--bg-primary);
+      background-attachment: fixed;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* Top Navigation */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      background: rgba(10, 13, 20, 0.85);
+      border-bottom: 1px solid var(--border-color);
+      transition: all 0.3s ease;
+    }
+
+    .nav-container {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 1rem 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      text-decoration: none;
+      color: var(--text-main);
+      font-weight: 700;
+      font-size: 1.1rem;
+      letter-spacing: -0.02em;
+    }
+
+    .brand-badge {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      background: rgba(99, 102, 241, 0.15);
+      color: #818cf8;
+      border: 1px solid rgba(99, 102, 241, 0.3);
+      padding: 0.2rem 0.5rem;
+      border-radius: 4px;
+      font-weight: 600;
+    }
+
+    nav ul {
+      display: flex;
+      list-style: none;
+      gap: 1.5rem;
+      align-items: center;
+    }
+
+    nav a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+
+    nav a:hover {
+      color: var(--text-main);
+    }
+
+    .nav-actions {
+      display: flex;
+      gap: 0.75rem;
+      align-items: center;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.55rem 1.1rem;
+      border-radius: 6px;
+      font-size: 0.875rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.2s ease;
+      cursor: pointer;
+      border: 1px solid transparent;
+      white-space: nowrap;
+    }
+
+    .btn-primary {
+      background: var(--accent-primary);
+      color: #ffffff;
+      box-shadow: 0 2px 10px rgba(99, 102, 241, 0.3);
+    }
+
+    .btn-primary:hover {
+      background: #4f46e5;
+      transform: translateY(-1px);
+    }
+
+    .btn-outline {
+      background: rgba(255, 255, 255, 0.03);
+      border-color: var(--border-color);
+      color: var(--text-main);
+    }
+
+    .btn-outline:hover {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .btn-cyan {
+      background: rgba(6, 182, 212, 0.15);
+      border-color: rgba(6, 182, 212, 0.3);
+      color: #38bdf8;
+    }
+
+    .btn-cyan:hover {
+      background: rgba(6, 182, 212, 0.25);
+    }
+
+    /* Container */
+    .container {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+    }
+
+    /* Hero Section */
+    .hero {
+      padding: 5rem 0 3.5rem;
+      text-align: center;
+    }
+
+    .hero-badge-container {
+      display: inline-flex;
+      margin-bottom: 1.5rem;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.35rem 0.9rem;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border-color);
+      border-radius: 9999px;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    .pulse-dot {
+      width: 7px;
+      height: 7px;
+      background-color: var(--accent-success);
+      border-radius: 50%;
+      box-shadow: 0 0 8px var(--accent-success);
+    }
+
+    .hero h1 {
+      font-size: clamp(2.2rem, 4.5vw, 3.8rem);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.15;
+      margin-bottom: 1.25rem;
+      color: #ffffff;
+    }
+
+    .hero h1 span {
+      background: linear-gradient(135deg, #818cf8 0%, #38bdf8 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero p {
+      max-width: 820px;
+      margin: 0 auto 2.5rem;
+      font-size: 1.125rem;
+      color: var(--text-muted);
+      line-height: 1.7;
+    }
+
+    .hero-actions {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+      margin-bottom: 3.5rem;
+    }
+
+    .hero-stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+      gap: 1.25rem;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .stat-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      padding: 1.25rem;
+      border-radius: 8px;
+      backdrop-filter: blur(12px);
+      text-align: left;
+    }
+
+    .stat-label {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-dim);
+      font-family: 'JetBrains Mono', monospace;
+      margin-bottom: 0.35rem;
+    }
+
+    .stat-value {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    /* Section Styles */
+    section {
+      padding: 4.5rem 0;
+      border-top: 1px solid var(--border-color);
+    }
+
+    .section-header {
+      margin-bottom: 3rem;
+    }
+
+    .section-tag {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.8rem;
+      color: #818cf8;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 0.5rem;
+      display: block;
+    }
+
+    .section-title {
+      font-size: 2rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: #ffffff;
+      margin-bottom: 0.75rem;
+    }
+
+    .section-desc {
+      font-size: 1rem;
+      color: var(--text-muted);
+      max-width: 760px;
+    }
+
+    /* Architecture Visual Cards */
+    .arch-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .arch-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 1.75rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      backdrop-filter: blur(12px);
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .arch-card:hover {
+      border-color: var(--border-hover);
+      transform: translateY(-3px);
+      box-shadow: var(--card-shadow), var(--glow-indigo);
+    }
+
+    .arch-card-badge {
+      display: inline-block;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      padding: 0.2rem 0.5rem;
+      background: rgba(99, 102, 241, 0.1);
+      border: 1px solid rgba(99, 102, 241, 0.25);
+      color: #818cf8;
+      border-radius: 4px;
+      margin-bottom: 1rem;
+      width: fit-content;
+    }
+
+    .arch-card h3 {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 0.75rem;
+    }
+
+    .arch-card p {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      margin-bottom: 1.5rem;
+      flex-grow: 1;
+      line-height: 1.6;
+    }
+
+    .arch-features-list {
+      list-style: none;
+      margin-bottom: 1.5rem;
+      padding-top: 1rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .arch-features-list li {
+      font-size: 0.825rem;
+      color: var(--text-muted);
+      margin-bottom: 0.4rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .arch-features-list li::before {
+      content: "";
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: var(--accent-secondary);
+    }
+
+    /* Tech Stack Grid */
+    .stack-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .stack-category {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 1.5rem;
+    }
+
+    .stack-category-header {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 1.25rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .stack-category-header h4 {
+      font-size: 1rem;
+      font-weight: 600;
+      color: #ffffff;
+    }
+
+    .stack-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      padding: 0.6rem 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+    }
+
+    .stack-item:last-child {
+      border-bottom: none;
+    }
+
+    .stack-item-name {
+      font-weight: 600;
+      font-size: 0.875rem;
+      color: var(--text-main);
+    }
+
+    .stack-item-desc {
+      font-size: 0.75rem;
+      color: var(--text-dim);
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    /* Business Invariants Section */
+    .invariants-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+      gap: 1.25rem;
+    }
+
+    .invariant-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-left: 3px solid var(--accent-primary);
+      border-radius: 6px;
+      padding: 1.25rem 1.5rem;
+    }
+
+    .invariant-card.cyan {
+      border-left-color: var(--accent-secondary);
+    }
+
+    .invariant-card.green {
+      border-left-color: var(--accent-success);
+    }
+
+    .invariant-card.amber {
+      border-left-color: var(--accent-warning);
+    }
+
+    .invariant-header {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .invariant-num {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--text-dim);
+    }
+
+    .invariant-card h4 {
+      font-size: 1rem;
+      font-weight: 600;
+      color: #ffffff;
+    }
+
+    .invariant-card p {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      line-height: 1.55;
+    }
+
+    /* 18 Modules Section */
+    .module-filter-bar {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      margin-bottom: 2rem;
+    }
+
+    .module-filter-btn {
+      padding: 0.45rem 0.95rem;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      color: var(--text-muted);
+      font-size: 0.825rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .module-filter-btn:hover,
+    .module-filter-btn.active {
+      background: rgba(99, 102, 241, 0.15);
+      border-color: rgba(99, 102, 241, 0.4);
+      color: #ffffff;
+    }
+
+    .modules-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+      gap: 1.25rem;
+    }
+
+    .module-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 1.35rem;
+      display: flex;
+      flex-direction: column;
+      transition: all 0.25s ease;
+    }
+
+    .module-card:hover {
+      border-color: var(--border-hover);
+      transform: translateY(-2px);
+    }
+
+    .module-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 0.6rem;
+    }
+
+    .module-code {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.725rem;
+      color: #818cf8;
+      background: rgba(99, 102, 241, 0.1);
+      border: 1px solid rgba(99, 102, 241, 0.2);
+      padding: 0.15rem 0.45rem;
+      border-radius: 4px;
+    }
+
+    .module-category-tag {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--text-dim);
+      text-transform: uppercase;
+    }
+
+    .module-card h4 {
+      font-size: 1rem;
+      font-weight: 600;
+      color: #ffffff;
+      margin-bottom: 0.5rem;
+    }
+
+    .module-card p {
+      font-size: 0.825rem;
+      color: var(--text-muted);
+      line-height: 1.55;
+      flex-grow: 1;
+      margin-bottom: 0.85rem;
+    }
+
+    .module-highlights {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.35rem;
+      padding-top: 0.75rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .module-chip {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      padding: 0.15rem 0.45rem;
+      background: rgba(255, 255, 255, 0.04);
+      color: #94a3b8;
+      border-radius: 3px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    /* Screenshots Gallery */
+    .gallery-filter-bar {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      margin-bottom: 2rem;
+    }
+
+    .gallery-filter-btn {
+      padding: 0.45rem 0.95rem;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      color: var(--text-muted);
+      font-size: 0.825rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .gallery-filter-btn:hover,
+    .gallery-filter-btn.active {
+      background: rgba(6, 182, 212, 0.15);
+      color: #38bdf8;
+      border-color: rgba(6, 182, 212, 0.4);
+    }
+
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .gallery-item {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .gallery-item:hover {
+      border-color: rgba(99, 102, 241, 0.4);
+      transform: translateY(-2px);
+      box-shadow: var(--card-shadow);
+    }
+
+    .gallery-thumbnail {
+      width: 100%;
+      height: 220px;
+      background: #05070c;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .gallery-thumbnail img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: top;
+      transition: transform 0.3s ease;
+    }
+
+    .gallery-item:hover .gallery-thumbnail img {
+      transform: scale(1.03);
+    }
+
+    .gallery-meta {
+      padding: 1rem 1.25rem;
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .gallery-tag {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      color: #38bdf8;
+      margin-bottom: 0.35rem;
+    }
+
+    .gallery-title {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: #ffffff;
+      margin-bottom: 0.25rem;
+    }
+
+    .gallery-desc {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      line-height: 1.45;
+    }
+
+    /* Lightbox Modal */
+    .lightbox {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(5, 7, 12, 0.94);
+      backdrop-filter: blur(10px);
+      z-index: 1000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
+
+    .lightbox.active {
+      display: flex;
+    }
+
+    .lightbox-content {
+      max-width: 95vw;
+      max-height: 92vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+    }
+
+    .lightbox-content img {
+      max-width: 100%;
+      max-height: 82vh;
+      object-fit: contain;
+      border-radius: 6px;
+      border: 1px solid var(--border-color);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.85);
+    }
+
+    .lightbox-caption {
+      margin-top: 1rem;
+      text-align: center;
+      color: var(--text-main);
+      font-size: 0.95rem;
+    }
+
+    .lightbox-close {
+      position: absolute;
+      top: -2.5rem;
+      right: 0;
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-size: 1.75rem;
+      cursor: pointer;
+    }
+
+    .lightbox-close:hover {
+      color: #ffffff;
+    }
+
+    /* Footer */
+    footer {
+      border-top: 1px solid var(--border-color);
+      padding: 3.5rem 0;
+      background: rgba(10, 13, 20, 0.95);
+      color: var(--text-dim);
+      font-size: 0.85rem;
+    }
+
+    .footer-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 1.5rem;
+      list-style: none;
+    }
+
+    .footer-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+    }
+
+    .footer-links a:hover {
+      color: var(--text-main);
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      nav ul {
+        display: none;
+      }
+      .hero {
+        padding: 3.5rem 0 2rem;
+      }
+      .gallery-grid, .modules-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Navigation -->
+  <header>
+    <div class="nav-container">
+      <a href="#" class="brand">
+        <span>INDUSTRIAL ERP</span>
+        <span class="brand-badge">GOLANG + NEXT.JS</span>
+      </a>
+      <nav>
+        <ul>
+          <li><a href="#overview">Overview</a></li>
+          <li><a href="#architecture">Architecture</a></li>
+          <li><a href="#stack">Tech Stack</a></li>
+          <li><a href="#invariants">Invariants</a></li>
+          <li><a href="#modules">18 Modules</a></li>
+          <li><a href="#screens">Screenshots</a></li>
+        </ul>
+      </nav>
+      <div class="nav-actions">
+        <a href="./architecture/erp-architecture.html" target="_blank" class="btn btn-outline">Architecture Viewer</a>
+      </div>
+    </div>
+  </header>
+
+  <main id="overview">
+    <!-- Hero Section -->
+    <section class="hero">
+      <div class="container">
+        <div class="hero-badge-container">
+          <div class="hero-badge">
+            <span class="pulse-dot"></span>
+            <span>Enterprise Monolith with Domain-Driven Clean Architecture</span>
+          </div>
+        </div>
+
+        <h1>
+          Modular Industrial ERP Engine<br />
+          <span>Built for High-Throughput Operations</span>
+        </h1>
+
+        <p>
+          A unified enterprise resource planning platform engineered with Golang 1.22+ and Next.js 15 App Router.
+          Structured across 18 Clean Architecture domain modules, double-entry accounting invariants, perpetual inventory tracking, and multi-branch governance.
+        </p>
+
+        <div class="hero-actions">
+          <a href="./architecture/erp-architecture.html" target="_blank" class="btn btn-primary">
+            Explore System Architecture
+          </a>
+          <a href="./backend/backend-architecture.html" target="_blank" class="btn btn-cyan">
+            Backend Engine Specs
+          </a>
+          <a href="./frontend/frontend-architecture.html" target="_blank" class="btn btn-outline">
+            Frontend UI Specs
+          </a>
+        </div>
+
+        <div class="hero-stats">
+          <div class="stat-card">
+            <div class="stat-label">Core Runtime</div>
+            <div class="stat-value">Golang 1.22+</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Web Client</div>
+            <div class="stat-value">Next.js 15 (RSC)</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Domain Modules</div>
+            <div class="stat-value">18 Modules</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Database & SQL</div>
+            <div class="stat-value">PostgreSQL + sqlc</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Async Workers</div>
+            <div class="stat-value">Valkey + Asynq</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Accounting Standard</div>
+            <div class="stat-value">PSAK 65 / IFRS 10</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Architecture Section -->
+    <section id="architecture">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-tag">System Design & Specifications</span>
+          <h2 class="section-title">Interactive Architecture Models</h2>
+          <p class="section-desc">
+            Explore detailed architectural models covering system workflows, backend clean architecture layers, and frontend state topology.
+          </p>
+        </div>
+
+        <div class="arch-grid">
+          <!-- Card 1: Master System Architecture -->
+          <div class="arch-card">
+            <div>
+              <span class="arch-card-badge">SYSTEM TOPOLOGY</span>
+              <h3>Enterprise System Architecture</h3>
+              <p>
+                Comprehensive view of gateway routing, domain modules, asynchronous task pipelines, local S3 object storage, and PostgreSQL relational clusters.
+              </p>
+              <ul class="arch-features-list">
+                <li>Caddy Reverse Proxy with Auto-HTTPS termination</li>
+                <li>Modular Monolith domain engine boundary isolation</li>
+                <li>Valkey queue engine with Asynq distributed workers</li>
+                <li>Floci S3-compatible local object storage adapter</li>
+              </ul>
+            </div>
+            <a href="./architecture/erp-architecture.html" target="_blank" class="btn btn-primary">
+              Open System Architecture Model
+            </a>
+          </div>
+
+          <!-- Card 2: Backend Architecture -->
+          <div class="arch-card">
+            <div>
+              <span class="arch-card-badge">GO CLEAN ARCHITECTURE</span>
+              <h3>Backend Engine & Services</h3>
+              <p>
+                Strict Ports and Adapters layer segregation. Type-safe SQL execution using sqlc and pgx/v5 driver, zero reflection on hot paths, and unified error mapping.
+              </p>
+              <ul class="arch-features-list">
+                <li>Chi HTTP router with granular RBAC middleware</li>
+                <li>Pure DDL database migrations with goose</li>
+                <li>Deterministic seed CLI runner</li>
+                <li>OpenAPI 3.0 interactive documentation contract</li>
+              </ul>
+            </div>
+            <a href="./backend/backend-architecture.html" target="_blank" class="btn btn-cyan">
+              Open Backend Architecture Model
+            </a>
+          </div>
+
+          <!-- Card 3: Frontend Architecture -->
+          <div class="arch-card">
+            <div>
+              <span class="arch-card-badge">NEXT.JS 15 APP ROUTER</span>
+              <h3>Frontend Architecture & Client</h3>
+              <p>
+                Enterprise React architecture utilizing Server Components for high performance, TanStack Table v8 for massive data grids, and Zustand stores for state management.
+              </p>
+              <ul class="arch-features-list">
+                <li>Strict TypeScript type safety with Zod schemas</li>
+                <li>React Hook Form integrated with shadcn/ui components</li>
+                <li>Multi-branch tenant context isolation</li>
+                <li>Role-based dynamic sidebar navigation</li>
+              </ul>
+            </div>
+            <a href="./frontend/frontend-architecture.html" target="_blank" class="btn btn-outline">
+              Open Frontend Architecture Model
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Tech Stack Section -->
+    <section id="stack">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-tag">Engineering Foundation</span>
+          <h2 class="section-title">Technology Stack</h2>
+          <p class="section-desc">
+            Carefully curated technical stack optimized for latency, type safety, operational simplicity, and determinism.
+          </p>
+        </div>
+
+        <div class="stack-grid">
+          <!-- Backend -->
+          <div class="stack-category">
+            <div class="stack-category-header">
+              <h4>Backend & Runtime</h4>
+            </div>
+            <div class="stack-item">
+              <span class="stack-item-name">Golang 1.22+</span>
+              <span class="stack-item-desc">Core Language</span>
+            </div>
+            <div class="stack-item">
+              <span class="stack-item-name">Chi Router</span>
+              <span class="stack-item-desc">HTTP Engine</span>
+            </div>
+            <div class="stack-item">
+              <span class="stack-item-name">sqlc + pgx/v5</span>
+              <span class="stack-item-desc">Type-Safe SQL</span>
+            </div>
+            <div class="stack-item">
+              <span class="stack-item-name">goose</span>
+              <span class="stack-item-desc">Pure DDL Migrations</span>
+            </div>
+            <div class="stack-item">
+              <span class="stack-item-name">OpenAPI 3.0</span>
+              <span class="stack-item-desc">API Contract</span>
+            </div>
+          </div>
+
+          <!-- Frontend -->
+          <div class="stack-category">
+            <div class="stack-category-header">
+              <h4>Frontend Client</h4>
+            </div>
+            <div class="stack-item">
+              <span class="stack-item-name">Next.js 15</span>
+              <span class="stack-item-desc">App Router (RSC)</span>
+            </div>
+            <div class="stack-item">
+              <span class="stack-item-name">TypeScript 5</span>
+              <span class="stack-item-desc">Strict Typing</span>
+            </div>
+            <div class="stack-item">
+              <span class="stack-item-name">Tailwind CSS</span>
+              <span class="stack-item-desc">Utility Styling</span>
+            </div>
+            <div class="stack-item">
+              <span class="stack-item-name">shadcn/ui</span>
+              <span class="stack-item-desc">Accessible UI Primitives</span>
+            </div>
+            <div class="stack-item">
+              <span class="stack-item-name">TanStack Table v8</span>
+              <span class="stack-item-desc">High-Scale Data Grids</span>
+            </div>
+          </div>
+
+          <!-- Infrastructure -->
+          <div class="stack-category">
+            <div class="stack-category-header">
+              <h4>Data & Async Infrastructure</h4>
+            </div>
+            <div class="stack-item">
+              <span class="stack-item-name">PostgreSQL 16</span>
+              <span class="stack-item-desc">Primary Relational DB</span>
+            </div>
+            <div class="stack-item">
+              <span class="stack-item-name">Valkey 7.2+</span>
+              <span class="stack-item-desc">In-Memory Cache & Broker</span>
+            </div>
+            <div class="stack-item">
+              <span class="stack-item-name">Asynq</span>
+              <span class="stack-item-desc">Distributed Task Queue</span>
+            </div>
+            <div class="stack-item">
+              <span class="stack-item-name">Floci</span>
+              <span class="stack-item-desc">S3-Compatible Local Storage</span>
+            </div>
+            <div class="stack-item">
+              <span class="stack-item-name">Caddy & Docker</span>
+              <span class="stack-item-desc">Reverse Proxy & Containers</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Business Invariants Section -->
+    <section id="invariants">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-tag">Enterprise Guarantees</span>
+          <h2 class="section-title">Business Invariants & Integrity Rules</h2>
+          <p class="section-desc">
+            Core engineering constraints enforced at database and application layers to prevent financial drift, stock discrepancies, and unauthorized operations.
+          </p>
+        </div>
+
+        <div class="invariants-grid">
+          <div class="invariant-card">
+            <div class="invariant-header">
+              <span class="invariant-num">INV-01</span>
+              <h4>Double-Entry Accounting Balance</h4>
+            </div>
+            <p>
+              Every financial transaction enforces <code>SUM(debit) == SUM(credit)</code>. Unbalanced journal entries are rejected by service validation and PostgreSQL check constraints.
+            </p>
+          </div>
+
+          <div class="invariant-card cyan">
+            <div class="invariant-header">
+              <span class="invariant-num">INV-02</span>
+              <h4>Perpetual Stock Ledger</h4>
+            </div>
+            <p>
+              Every stock movement (inbound GRN, outbound dispatch, inter-warehouse transfer, or physical count adjustment) writes an immutable transaction log record.
+            </p>
+          </div>
+
+          <div class="invariant-card green">
+            <div class="invariant-header">
+              <span class="invariant-num">INV-03</span>
+              <h4>Multi-Branch Isolation & Governance</h4>
+            </div>
+            <p>
+              Operational mutations and queries are strictly scoped by <code>branch_id</code> and verified against user membership tables. Inter-branch movements generate bilateral clearing entries according to PSAK 65 / IFRS 10.
+            </p>
+          </div>
+
+          <div class="invariant-card amber">
+            <div class="invariant-header">
+              <span class="invariant-num">INV-04</span>
+              <h4>Granular RBAC & Permission Matrix</h4>
+            </div>
+            <p>
+              Access control checks every API mutation against a strict <code>module:action</code> permission matrix (102 permissions across 17 modules and 6 actions), enforced both in Chi backend middleware and Next.js layout routes.
+            </p>
+          </div>
+
+          <div class="invariant-card">
+            <div class="invariant-header">
+              <span class="invariant-num">INV-05</span>
+              <h4>Comprehensive Audit Trail</h4>
+            </div>
+            <p>
+              Mutations capture structured audit logs containing <code>actor_id</code>, <code>branch_id</code>, <code>action</code>, <code>resource</code>, pre-state, post-state JSON diffs, and precise UTC timestamps.
+            </p>
+          </div>
+
+          <div class="invariant-card cyan">
+            <div class="invariant-header">
+              <span class="invariant-num">INV-06</span>
+              <h4>Pure DDL Database Migrations</h4>
+            </div>
+            <p>
+              Goose migration scripts contain only DDL statements (<code>CREATE</code>, <code>ALTER</code>, <code>INDEX</code>). Seed data and initial enterprise fixtures are isolated in a standalone Go CLI runner.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 18 Modules Section -->
+    <section id="modules">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-tag">Complete Domain Coverage</span>
+          <h2 class="section-title">18 Clean Architecture Domain Modules</h2>
+          <p class="section-desc">
+            The platform is structured into 18 decoupled domain modules with explicit boundary isolation, dedicated use cases, repositories, and handlers.
+          </p>
+        </div>
+
+        <div class="module-filter-bar">
+          <button class="module-filter-btn active" onclick="filterModules('all')">All 18 Modules</button>
+          <button class="module-filter-btn" onclick="filterModules('scm')">Supply Chain & Operations</button>
+          <button class="module-filter-btn" onclick="filterModules('finance')">Financials, Tax & Assets</button>
+          <button class="module-filter-btn" onclick="filterModules('mfg')">Manufacturing & Maintenance</button>
+          <button class="module-filter-btn" onclick="filterModules('gov')">Governance, HR & System</button>
+        </div>
+
+        <div class="modules-grid" id="modulesGrid">
+          <!-- Module 1: IAM -->
+          <div class="module-card" data-cat="gov">
+            <div class="module-header">
+              <span class="module-code">MOD-01</span>
+              <span class="module-category-tag">Governance</span>
+            </div>
+            <h4>Identity & Access Management (IAM)</h4>
+            <p>Authentication, JWT rotation via secure HttpOnly cookies, RBAC permission matrix (102 actions), user lifecycle, and UserBranches tenant mapping.</p>
+            <div class="module-highlights">
+              <span class="module-chip">JWT Auth</span>
+              <span class="module-chip">RBAC Matrix</span>
+              <span class="module-chip">UserBranches</span>
+            </div>
+          </div>
+
+          <!-- Module 2: Master Data -->
+          <div class="module-card" data-cat="gov">
+            <div class="module-header">
+              <span class="module-code">MOD-02</span>
+              <span class="module-category-tag">Core Foundation</span>
+            </div>
+            <h4>Master Data Management</h4>
+            <p>Branch hierarchies, standard Chart of Accounts (COA PSAK), multi-currency tables, Unit of Measure (UoM) conversions, tax categories, and business partners.</p>
+            <div class="module-highlights">
+              <span class="module-chip">Branches</span>
+              <span class="module-chip">COA Standard</span>
+              <span class="module-chip">Currencies</span>
+              <span class="module-chip">UoM</span>
+            </div>
+          </div>
+
+          <!-- Module 3: Accounting -->
+          <div class="module-card" data-cat="finance">
+            <div class="module-header">
+              <span class="module-code">MOD-03</span>
+              <span class="module-category-tag">Financials</span>
+            </div>
+            <h4>General Ledger & Accounting</h4>
+            <p>Strict double-entry balance validation (Debit == Credit), automated operational journal postings, inter-branch clearing accounts (PSAK 65 / IFRS 10), and financial reporting.</p>
+            <div class="module-highlights">
+              <span class="module-chip">Double-Entry</span>
+              <span class="module-chip">PSAK 65</span>
+              <span class="module-chip">Trial Balance</span>
+            </div>
+          </div>
+
+          <!-- Module 4: Inventory -->
+          <div class="module-card" data-cat="scm">
+            <div class="module-header">
+              <span class="module-code">MOD-04</span>
+              <span class="module-category-tag">Supply Chain</span>
+            </div>
+            <h4>Perpetual Inventory & Warehousing</h4>
+            <p>Real-time perpetual stock ledger (FIFO valuation), multi-warehouse bin hierarchies, stock transfers, reservations, reorder triggers, and physical stock opname.</p>
+            <div class="module-highlights">
+              <span class="module-chip">FIFO Ledger</span>
+              <span class="module-chip">Multi-Bin</span>
+              <span class="module-chip">Stock Opname</span>
+            </div>
+          </div>
+
+          <!-- Module 5: Purchasing -->
+          <div class="module-card" data-cat="scm">
+            <div class="module-header">
+              <span class="module-code">MOD-05</span>
+              <span class="module-category-tag">Supply Chain</span>
+            </div>
+            <h4>Purchasing & Procurement</h4>
+            <p>Purchase Requisitions (PR), Request for Quotation (RFQ), Purchase Orders (PO), Goods Receipt verification, and automated 3-way invoice matching.</p>
+            <div class="module-highlights">
+              <span class="module-chip">PR / PO</span>
+              <span class="module-chip">RFQ</span>
+              <span class="module-chip">3-Way Match</span>
+            </div>
+          </div>
+
+          <!-- Module 6: Sales -->
+          <div class="module-card" data-cat="scm">
+            <div class="module-header">
+              <span class="module-code">MOD-06</span>
+              <span class="module-category-tag">Supply Chain</span>
+            </div>
+            <h4>Sales & Order-to-Cash (O2C)</h4>
+            <p>Sales quotations, customer orders, credit limit validation, picking slips, delivery dispatch manifests, customer invoicing, and accounts receivable settlements.</p>
+            <div class="module-highlights">
+              <span class="module-chip">Quotations</span>
+              <span class="module-chip">Sales Orders</span>
+              <span class="module-chip">Credit Limits</span>
+            </div>
+          </div>
+
+          <!-- Module 7: Manufacturing -->
+          <div class="module-card" data-cat="mfg">
+            <div class="module-header">
+              <span class="module-code">MOD-07</span>
+              <span class="module-category-tag">Manufacturing</span>
+            </div>
+            <h4>Manufacturing & Production (MRP)</h4>
+            <p>Multi-level Bill of Materials (BOM), work centers, routing operations, SPK Work Orders, bill-of-operations scheduling, and actual job order costing.</p>
+            <div class="module-highlights">
+              <span class="module-chip">Multi-level BOM</span>
+              <span class="module-chip">SPK Orders</span>
+              <span class="module-chip">Job Costing</span>
+            </div>
+          </div>
+
+          <!-- Module 8: HRM -->
+          <div class="module-card" data-cat="gov">
+            <div class="module-header">
+              <span class="module-code">MOD-08</span>
+              <span class="module-category-tag">Human Resources</span>
+            </div>
+            <h4>HRM & Biometric Payroll</h4>
+            <p>Employee directory, biometric IoT attendance synchronization, leave balance tracking, overtime calculations, and automated monthly e-Payroll slip generation.</p>
+            <div class="module-highlights">
+              <span class="module-chip">Employee Master</span>
+              <span class="module-chip">IoT Biometrics</span>
+              <span class="module-chip">e-Payroll</span>
+            </div>
+          </div>
+
+          <!-- Module 9: Logistics -->
+          <div class="module-card" data-cat="scm">
+            <div class="module-header">
+              <span class="module-code">MOD-09</span>
+              <span class="module-category-tag">Supply Chain</span>
+            </div>
+            <h4>Logistics & Fleet Dispatch</h4>
+            <p>Fleet vehicle registry, driver assignments, SPJ trip manifests, route dispatching, and digital Proof of Delivery (POD) confirmations.</p>
+            <div class="module-highlights">
+              <span class="module-chip">Fleet Vehicles</span>
+              <span class="module-chip">SPJ Trips</span>
+              <span class="module-chip">POD Signatures</span>
+            </div>
+          </div>
+
+          <!-- Module 10: Quality -->
+          <div class="module-card" data-cat="mfg">
+            <div class="module-header">
+              <span class="module-code">MOD-10</span>
+              <span class="module-category-tag">Quality Control</span>
+            </div>
+            <h4>Quality Assurance & QC</h4>
+            <p>Inbound Quality Control (IQC) at GRN, In-Process QC (IPQC) on shop floor, Certificate of Analysis (CoA) generation, and Non-Conformance Report (NCR) ticketing.</p>
+            <div class="module-highlights">
+              <span class="module-chip">IQC / IPQC</span>
+              <span class="module-chip">CoA Certs</span>
+              <span class="module-chip">NCR Tickets</span>
+            </div>
+          </div>
+
+          <!-- Module 11: Maintenance -->
+          <div class="module-card" data-cat="mfg">
+            <div class="module-header">
+              <span class="module-code">MOD-11</span>
+              <span class="module-category-tag">Maintenance</span>
+            </div>
+            <h4>Total Productive Maintenance (TPM)</h4>
+            <p>Machine asset registry, MTBF/MTTR analytics, preventive maintenance schedules, spare parts consumption, and breakdown repair work orders.</p>
+            <div class="module-highlights">
+              <span class="module-chip">TPM Assets</span>
+              <span class="module-chip">Preventive Plans</span>
+              <span class="module-chip">MTBF / MTTR</span>
+            </div>
+          </div>
+
+          <!-- Module 12: Fixed Assets -->
+          <div class="module-card" data-cat="finance">
+            <div class="module-header">
+              <span class="module-code">MOD-12</span>
+              <span class="module-category-tag">Financials</span>
+            </div>
+            <h4>Fixed Assets (PSAK 16)</h4>
+            <p>Asset classification, automated monthly depreciation batch calculation (Straight-Line & Declining Balance), asset revaluations, and disposal write-offs.</p>
+            <div class="module-highlights">
+              <span class="module-chip">PSAK 16</span>
+              <span class="module-chip">Depreciation</span>
+              <span class="module-chip">Disposals</span>
+            </div>
+          </div>
+
+          <!-- Module 13: Treasury -->
+          <div class="module-card" data-cat="finance">
+            <div class="module-header">
+              <span class="module-code">MOD-13</span>
+              <span class="module-category-tag">Financials</span>
+            </div>
+            <h4>Cash & Treasury Management</h4>
+            <p>Multi-bank account tracking, cash advances, internal fund transfers, petty cash disbursement logs, and automated bank reconciliation statements.</p>
+            <div class="module-highlights">
+              <span class="module-chip">Bank Accounts</span>
+              <span class="module-chip">Fund Transfers</span>
+              <span class="module-chip">Reconciliations</span>
+            </div>
+          </div>
+
+          <!-- Module 14: Taxation -->
+          <div class="module-card" data-cat="finance">
+            <div class="module-header">
+              <span class="module-code">MOD-14</span>
+              <span class="module-category-tag">Taxation</span>
+            </div>
+            <h4>Taxation & Compliance</h4>
+            <p>Indonesian tax engine, inbound & outbound e-Faktur Pajak calculation, PPN 11%/12% automated VAT posting, and periodic SPT reporting exports.</p>
+            <div class="module-highlights">
+              <span class="module-chip">e-Faktur</span>
+              <span class="module-chip">PPN 11%/12%</span>
+              <span class="module-chip">SPT Exports</span>
+            </div>
+          </div>
+
+          <!-- Module 15: Returns -->
+          <div class="module-card" data-cat="scm">
+            <div class="module-header">
+              <span class="module-code">MOD-15</span>
+              <span class="module-category-tag">Supply Chain</span>
+            </div>
+            <h4>Returns & RMA Management</h4>
+            <p>Customer return authorization (RMA), quarantine inspection sorting, warranty validation, and vendor debit note financial adjustments.</p>
+            <div class="module-highlights">
+              <span class="module-chip">RMA Processing</span>
+              <span class="module-chip">Quarantine</span>
+              <span class="module-chip">Debit Notes</span>
+            </div>
+          </div>
+
+          <!-- Module 16: Workflow -->
+          <div class="module-card" data-cat="gov">
+            <div class="module-header">
+              <span class="module-code">MOD-16</span>
+              <span class="module-category-tag">Governance</span>
+            </div>
+            <h4>Multi-Tier Approval Engine</h4>
+            <p>Configurable approval workflows based on transactional thresholds, managerial hierarchies, departmental routing, and immutable signoff logs.</p>
+            <div class="module-highlights">
+              <span class="module-chip">Multi-Tier</span>
+              <span class="module-chip">Threshold Rules</span>
+              <span class="module-chip">Audit Routing</span>
+            </div>
+          </div>
+
+          <!-- Module 17: Dashboard -->
+          <div class="module-card" data-cat="gov">
+            <div class="module-header">
+              <span class="module-code">MOD-17</span>
+              <span class="module-category-tag">Analytics</span>
+            </div>
+            <h4>Holding & Department Analytics</h4>
+            <p>Centralized holding consolidated overview vs department-isolated operational dashboards (Fabrication, Warehouse, Purchasing, Sales, HR, Finance).</p>
+            <div class="module-highlights">
+              <span class="module-chip">Holding View</span>
+              <span class="module-chip">Dept Scopes</span>
+              <span class="module-chip">Real-Time KPIs</span>
+            </div>
+          </div>
+
+          <!-- Module 18: System -->
+          <div class="module-card" data-cat="gov">
+            <div class="module-header">
+              <span class="module-code">MOD-18</span>
+              <span class="module-category-tag">System Core</span>
+            </div>
+            <h4>System Core & Governance</h4>
+            <p>Immutable audit trail logging (diff_before, diff_after, actor_id, branch_id), system configuration variables, and Floci S3-compatible document storage.</p>
+            <div class="module-highlights">
+              <span class="module-chip">Audit Logs</span>
+              <span class="module-chip">Floci S3</span>
+              <span class="module-chip">System Settings</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- UI Screenshots Gallery Section -->
+    <section id="screens">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-tag">Application Interface Gallery</span>
+          <h2 class="section-title">System Interface Walkthrough</h2>
+          <p class="section-desc">
+            High-resolution visual inspection of actual operational screens across executive dashboards, warehouse management, procurement grids, quality modals, and approval workflows.
+          </p>
+        </div>
+
+        <div class="gallery-filter-bar">
+          <button class="gallery-filter-btn active" onclick="filterGallery('all')">All Screenshots (13)</button>
+          <button class="gallery-filter-btn" onclick="filterGallery('dashboards')">Dashboards & Holding</button>
+          <button class="gallery-filter-btn" onclick="filterGallery('warehouse')">Warehouse & Inventory</button>
+          <button class="gallery-filter-btn" onclick="filterGallery('procurement')">Procurement & Orders</button>
+          <button class="gallery-filter-btn" onclick="filterGallery('governance')">Governance & Logistics</button>
+        </div>
+
+        <div class="gallery-grid" id="galleryGrid">
+          <!-- Screenshot 1: Executive Dashboard -->
+          <div class="gallery-item" data-cat="dashboards" onclick="openLightbox('assets/images/dashboard_after_login_1790353077024.png', 'Executive Dashboard - Real-time operational metrics and pending queue oversight')">
+            <div class="gallery-thumbnail">
+              <img src="assets/images/dashboard_after_login_1790353077024.png" alt="Executive Dashboard" loading="lazy" onerror="this.src='https://placehold.co/800x450?text=Dashboard+Overview'" />
+            </div>
+            <div class="gallery-meta">
+              <span class="gallery-tag">HOLDING / EXECUTIVE</span>
+              <div class="gallery-title">Executive Dashboard</div>
+              <div class="gallery-desc">Consolidated enterprise KPI oversight, inventory turnover velocity, and branch status summaries.</div>
+            </div>
+          </div>
+
+          <!-- Screenshot 2: Warehouse Supervisor Dashboard -->
+          <div class="gallery-item" data-cat="dashboards" onclick="openLightbox('assets/images/warehouse_supervisor_dashboard_1790352008004.png', 'Warehouse Supervisor Dashboard - Real-time staging queue and bin occupancy')">
+            <div class="gallery-thumbnail">
+              <img src="assets/images/warehouse_supervisor_dashboard_1790352008004.png" alt="Warehouse Supervisor Dashboard" loading="lazy" onerror="this.src='https://placehold.co/800x450?text=Supervisor+Dashboard'" />
+            </div>
+            <div class="gallery-meta">
+              <span class="gallery-tag">WAREHOUSE MANAGEMENT</span>
+              <div class="gallery-title">Supervisor Dashboard</div>
+              <div class="gallery-desc">Operational queue tracking for staging zones, stock replenishment schedules, and pending GRN signoffs.</div>
+            </div>
+          </div>
+
+          <!-- Screenshot 3: Warehouse Staff Dashboard -->
+          <div class="gallery-item" data-cat="dashboards" onclick="openLightbox('assets/images/warehouse_staff_dashboard_1790351808375.png', 'Warehouse Staff Operations View - Task-focused operator screen')">
+            <div class="gallery-thumbnail">
+              <img src="assets/images/warehouse_staff_dashboard_1790351808375.png" alt="Warehouse Staff View" loading="lazy" onerror="this.src='https://placehold.co/800x450?text=Staff+Dashboard'" />
+            </div>
+            <div class="gallery-meta">
+              <span class="gallery-tag">ROLE SPECIFIC: STAFF</span>
+              <div class="gallery-title">Staff Operations View</div>
+              <div class="gallery-desc">Streamlined interface scoped exclusively for pick, pack, receipt, and stock movement operators.</div>
+            </div>
+          </div>
+
+          <!-- Screenshot 4: Perpetual Inventory Ledger -->
+          <div class="gallery-item" data-cat="warehouse" onclick="openLightbox('assets/images/inventory_page_1790352639779.png', 'Perpetual Inventory Ledger - SKU tracking, warehouse balances, and stock valuation')">
+            <div class="gallery-thumbnail">
+              <img src="assets/images/inventory_page_1790352639779.png" alt="Inventory Ledger" loading="lazy" onerror="this.src='https://placehold.co/800x450?text=Inventory+Ledger'" />
+            </div>
+            <div class="gallery-meta">
+              <span class="gallery-tag">INVENTORY & SCM</span>
+              <div class="gallery-title">Perpetual Inventory Ledger</div>
+              <div class="gallery-desc">Bin-level item balances, reservation statuses, FIFO unit valuation, and reorder triggers.</div>
+            </div>
+          </div>
+
+          <!-- Screenshot 5: PR List Page -->
+          <div class="gallery-item" data-cat="procurement" onclick="openLightbox('assets/images/pr_list_page_1790352955771.png', 'Procurement Management - Purchase Requisition tracking and multi-tier approval states')">
+            <div class="gallery-thumbnail">
+              <img src="assets/images/pr_list_page_1790352955771.png" alt="Purchase Requisition List" loading="lazy" onerror="this.src='https://placehold.co/800x450?text=Purchase+Requisitions'" />
+            </div>
+            <div class="gallery-meta">
+              <span class="gallery-tag">PROCUREMENT</span>
+              <div class="gallery-title">Purchase Requisition Grid</div>
+              <div class="gallery-desc">Requisition status tracking with multi-stage approval indicators, budget limits, and PO generation.</div>
+            </div>
+          </div>
+
+          <!-- Screenshot 6: GRN Form Modal -->
+          <div class="gallery-item" data-cat="procurement" onclick="openLightbox('assets/images/grn_modal_form_1790352211310.png', 'Goods Receipt Note - Inbound inspection form with QA checkpoints and lot validation')">
+            <div class="gallery-thumbnail">
+              <img src="assets/images/grn_modal_form_1790352211310.png" alt="GRN Form" loading="lazy" onerror="this.src='https://placehold.co/800x450?text=GRN+Inspection+Form'" />
+            </div>
+            <div class="gallery-meta">
+              <span class="gallery-tag">QUALITY CONTROL</span>
+              <div class="gallery-title">Inbound GRN Inspection Modal</div>
+              <div class="gallery-desc">Detailed receipt modal form with QA checkpoints, lot numbering, bin assignment, and discrepancy logs.</div>
+            </div>
+          </div>
+
+          <!-- Screenshot 7: Approvals Page -->
+          <div class="gallery-item" data-cat="governance" onclick="openLightbox('assets/images/approvals_page_1790353148905.png', 'Workflow Approval Queue - Centralized multi-role authorization console')">
+            <div class="gallery-thumbnail">
+              <img src="assets/images/approvals_page_1790353148905.png" alt="Approval Queue" loading="lazy" onerror="this.src='https://placehold.co/800x450?text=Approval+Queue'" />
+            </div>
+            <div class="gallery-meta">
+              <span class="gallery-tag">GOVERNANCE</span>
+              <div class="gallery-title">Approval Workflow Console</div>
+              <div class="gallery-desc">Centralized queue for managers to authorize PRs, POs, credit notes, and inventory adjustments.</div>
+            </div>
+          </div>
+
+          <!-- Screenshot 8: Logistics Page -->
+          <div class="gallery-item" data-cat="governance" onclick="openLightbox('assets/images/logistics_page_1790353310980.png', 'Logistics Dispatch - Outbound delivery order tracking and trip manifests')">
+            <div class="gallery-thumbnail">
+              <img src="assets/images/logistics_page_1790353310980.png" alt="Logistics Dispatch" loading="lazy" onerror="this.src='https://placehold.co/800x450?text=Logistics+Dispatch'" />
+            </div>
+            <div class="gallery-meta">
+              <span class="gallery-tag">LOGISTICS & FLEET</span>
+              <div class="gallery-title">Outbound Logistics Dispatch</div>
+              <div class="gallery-desc">Shipment planning, fleet vehicle loading manifests, delivery order status, and driver assignments.</div>
+            </div>
+          </div>
+
+          <!-- Screenshot 9: Master Data Page -->
+          <div class="gallery-item" data-cat="governance" onclick="openLightbox('assets/images/master_data_page_1790353281386.png', 'Master Data Management - Core entity parameters and branch configuration')">
+            <div class="gallery-thumbnail">
+              <img src="assets/images/master_data_page_1790353281386.png" alt="Master Data" loading="lazy" onerror="this.src='https://placehold.co/800x450?text=Master+Data'" />
+            </div>
+            <div class="gallery-meta">
+              <span class="gallery-tag">SYSTEM CORE</span>
+              <div class="gallery-title">Master Data Configuration</div>
+              <div class="gallery-desc">Branch parameters, tax schedules, product categories, and unit of measure conversion rules.</div>
+            </div>
+          </div>
+
+          <!-- Screenshot 10: Documents Page -->
+          <div class="gallery-item" data-cat="governance" onclick="openLightbox('assets/images/documents_page_1790353209875.png', 'Document Management - S3-compatible attachment registry and version control')">
+            <div class="gallery-thumbnail">
+              <img src="assets/images/documents_page_1790353209875.png" alt="Document Storage" loading="lazy" onerror="this.src='https://placehold.co/800x450?text=Document+Storage'" />
+            </div>
+            <div class="gallery-meta">
+              <span class="gallery-tag">STORAGE & FLOCI</span>
+              <div class="gallery-title">Document & Attachment Registry</div>
+              <div class="gallery-desc">S3-compatible file storage registry linked directly to transaction records with audit metadata.</div>
+            </div>
+          </div>
+
+          <!-- Screenshot 11: Returns Page -->
+          <div class="gallery-item" data-cat="warehouse" onclick="openLightbox('assets/images/returns_page_1790353350325.png', 'Returns Management - RMA processing and debit note logs')">
+            <div class="gallery-thumbnail">
+              <img src="assets/images/returns_page_1790353350325.png" alt="Returns Management" loading="lazy" onerror="this.src='https://placehold.co/800x450?text=Returns+Management'" />
+            </div>
+            <div class="gallery-meta">
+              <span class="gallery-tag">AFTER-SALES & RMA</span>
+              <div class="gallery-title">Returns & RMA Processing</div>
+              <div class="gallery-desc">Customer return authorizations, quarantine inspection workflows, and vendor debit notes.</div>
+            </div>
+          </div>
+
+          <!-- Screenshot 12: Staff Logistics View -->
+          <div class="gallery-item" data-cat="governance" onclick="openLightbox('assets/images/warehouse_staff_logistics_1790351835233.png', 'Warehouse Staff Logistics - Delivery preparation and dispatch checklist')">
+            <div class="gallery-thumbnail">
+              <img src="assets/images/warehouse_staff_logistics_1790351835233.png" alt="Staff Logistics" loading="lazy" onerror="this.src='https://placehold.co/800x450?text=Staff+Logistics'" />
+            </div>
+            <div class="gallery-meta">
+              <span class="gallery-tag">ROLE SPECIFIC: STAFF</span>
+              <div class="gallery-title">Staff Dispatch Checklist</div>
+              <div class="gallery-desc">Task-oriented view for warehouse loading personnel to verify parcel counts against vehicle manifests.</div>
+            </div>
+          </div>
+
+          <!-- Screenshot 13: Staff Returns View -->
+          <div class="gallery-item" data-cat="warehouse" onclick="openLightbox('assets/images/warehouse_staff_returns_1790351855321.png', 'Warehouse Staff Returns - Inbound RMA intake and quarantine staging')">
+            <div class="gallery-thumbnail">
+              <img src="assets/images/warehouse_staff_returns_1790351855321.png" alt="Staff Returns" loading="lazy" onerror="this.src='https://placehold.co/800x450?text=Staff+Returns'" />
+            </div>
+            <div class="gallery-meta">
+              <span class="gallery-tag">ROLE SPECIFIC: STAFF</span>
+              <div class="gallery-title">Staff RMA Quarantine Intake</div>
+              <div class="gallery-desc">Simplified inbound return receiving screen with damaged packaging logs and quarantine routing.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Lightbox Modal -->
+  <div id="lightbox" class="lightbox" onclick="closeLightbox(event)">
+    <div class="lightbox-content" onclick="event.stopPropagation()">
+      <button class="lightbox-close" onclick="closeLightbox(event)">&times;</button>
+      <img id="lightbox-img" src="" alt="Enlarged view" />
+      <div id="lightbox-caption" class="lightbox-caption"></div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container footer-content">
+      <div>
+        <p><strong>Industrial ERP Architecture Showcase</strong></p>
+        <p>Built with Golang 1.22+ and Next.js 15 App Router. Zero Slop Engineering.</p>
+      </div>
+      <ul class="footer-links">
+        <li><a href="./architecture/erp-architecture.html" target="_blank">System Architecture</a></li>
+        <li><a href="./backend/backend-architecture.html" target="_blank">Backend Clean Architecture</a></li>
+        <li><a href="./frontend/frontend-architecture.html" target="_blank">Frontend App Router</a></li>
+      </ul>
+    </div>
+  </footer>
+
+  <script>
+    // Module Category Filter
+    function filterModules(category) {
+      const buttons = document.querySelectorAll('.module-filter-btn');
+      buttons.forEach(btn => btn.classList.remove('active'));
+      event.target.classList.add('active');
+
+      const cards = document.querySelectorAll('.module-card');
+      cards.forEach(card => {
+        if (category === 'all' || card.getAttribute('data-cat') === category) {
+          card.style.display = 'flex';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    }
+
+    // Gallery Category Filter
+    function filterGallery(category) {
+      const buttons = document.querySelectorAll('.gallery-filter-btn');
+      buttons.forEach(btn => btn.classList.remove('active'));
+      event.target.classList.add('active');
+
+      const items = document.querySelectorAll('.gallery-item');
+      items.forEach(item => {
+        if (category === 'all' || item.getAttribute('data-cat') === category) {
+          item.style.display = 'flex';
+        } else {
+          item.style.display = 'none';
+        }
+      });
+    }
+
+    // Lightbox Modal
+    function openLightbox(src, caption) {
+      const lightbox = document.getElementById('lightbox');
+      const img = document.getElementById('lightbox-img');
+      const cap = document.getElementById('lightbox-caption');
+      
+      img.src = src;
+      cap.textContent = caption || '';
+      lightbox.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeLightbox(e) {
+      const lightbox = document.getElementById('lightbox');
+      lightbox.classList.remove('active');
+      document.body.style.overflow = 'auto';
+    }
+
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        closeLightbox();
+      }
+    });
+  </script>
+</body>
+</html>
