@@ -809,6 +809,7 @@
           <li><a href="#stack">Tech Stack</a></li>
           <li><a href="#invariants">Invariants</a></li>
           <li><a href="#modules">18 Modules</a></li>
+          <li><a href="#performance">Performance</a></li>
           <li><a href="#screens">Screenshots</a></li>
         </ul>
       </nav>
@@ -1420,6 +1421,144 @@
       </div>
     </section>
 
+    <!-- Performance & Load Test Benchmark Section -->
+    <section id="performance">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-tag">Empirical Benchmark & Load Verification</span>
+          <h2 class="section-title">High-Throughput Load Testing & Performance Verification</h2>
+          <p class="section-desc">
+            Empirical stress test results executed with <code>k6</code> and monitored in real-time via Prometheus TSDB and Grafana dashboards under simulated industrial traffic scaling up to 300 concurrent Virtual Users.
+          </p>
+        </div>
+
+        <!-- Benchmark Highlight Stats -->
+        <div class="hero-stats" style="margin-bottom: 2.5rem;">
+          <div class="stat-card" style="border-left: 3px solid #10b981;">
+            <div class="stat-label">Total Volume Tested</div>
+            <div class="stat-value">102,000+ Req</div>
+            <div style="font-size: 0.75rem; color: var(--text-dim); margin-top: 0.25rem;">5-minute stepped stress cycle</div>
+          </div>
+          <div class="stat-card" style="border-left: 3px solid #06b6d4;">
+            <div class="stat-label">Peak Throughput</div>
+            <div class="stat-value">770 req/s</div>
+            <div style="font-size: 0.75rem; color: var(--text-dim); margin-top: 0.25rem;">643 req/s steady-state average</div>
+          </div>
+          <div class="stat-card" style="border-left: 3px solid #6366f1;">
+            <div class="stat-label">Average API Latency</div>
+            <div class="stat-value">&lt; 2.0 ms</div>
+            <div style="font-size: 0.75rem; color: var(--text-dim); margin-top: 0.25rem;">Across core business domain routes</div>
+          </div>
+          <div class="stat-card" style="border-left: 3px solid #8b5cf6;">
+            <div class="stat-label">Memory Footprint</div>
+            <div class="stat-value">67.2 MiB Heap</div>
+            <div style="font-size: 0.75rem; color: var(--text-dim); margin-top: 0.25rem;">Sub-100MB RAM at 300 concurrent VU</div>
+          </div>
+          <div class="stat-card" style="border-left: 3px solid #10b981;">
+            <div class="stat-label">Failure Rate</div>
+            <div class="stat-value">0.00% Error</div>
+            <div style="font-size: 0.75rem; color: var(--text-dim); margin-top: 0.25rem;">100% HTTP 200 OK success rate</div>
+          </div>
+        </div>
+
+        <!-- Grafana Full Dashboard Showcase Card -->
+        <div style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; overflow: hidden; padding: 1.5rem; backdrop-filter: blur(12px); box-shadow: var(--card-shadow); margin-bottom: 2.5rem;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; flex-wrap: wrap; gap: 0.75rem;">
+            <div>
+              <span class="arch-card-badge" style="margin-bottom: 0.35rem;">GRAFANA LIVE OBSERVABILITY</span>
+              <h3 style="font-size: 1.25rem; font-weight: 700; color: #ffffff;">Real-Time Concurrency Telemetry & Resource Profiling</h3>
+            </div>
+            <span style="font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; color: #38bdf8; background: rgba(6, 182, 212, 0.1); padding: 0.3rem 0.7rem; border-radius: 4px; border: 1px solid rgba(6, 182, 212, 0.25);">
+              Click Image to Enlarge (HD Lightbox)
+            </span>
+          </div>
+
+          <div style="cursor: pointer; border-radius: 8px; overflow: hidden; border: 1px solid var(--border-color); background: #000; position: relative;" onclick="openLightbox('assets/images/grafana_load_test.png', 'Grafana 15-Panel Load Test Telemetry - 102K Requests, 770 RPS Peak, 67MB RAM, 0% Errors at 300 Virtual Users')">
+            <img src="assets/images/grafana_load_test.png" alt="Grafana Load Test Monitoring Dashboard" style="width: 100%; height: auto; display: block; transition: transform 0.3s ease;" onmouseover="this.style.transform='scale(1.01)'" onmouseout="this.style.transform='scale(1)'" />
+          </div>
+
+          <!-- Telemetry Breakdown Grid -->
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem; margin-top: 1.5rem; padding-top: 1.25rem; border-top: 1px solid rgba(255, 255, 255, 0.06);">
+            <div>
+              <h5 style="font-size: 0.85rem; font-weight: 600; color: #818cf8; margin-bottom: 0.35rem;">1. Live Executive KPIs</h5>
+              <p style="font-size: 0.8rem; color: var(--text-muted); line-height: 1.5;">Total 102K requests processed smoothly at 643-770 req/s with 0% error rate and 316 active goroutines.</p>
+            </div>
+            <div>
+              <h5 style="font-size: 0.85rem; font-weight: 600; color: #38bdf8; margin-bottom: 0.35rem;">2. Latency per Endpoint</h5>
+              <p style="font-size: 0.8rem; color: var(--text-muted); line-height: 1.5;">Inventory: 1.64ms, Purchasing: 1.46ms, Master Data: 1.31ms, Accounts: 1.72ms, Auth JWT: 6.98ms.</p>
+            </div>
+            <div>
+              <h5 style="font-size: 0.85rem; font-weight: 600; color: #10b981; margin-bottom: 0.35rem;">3. Go Runtime Profiling</h5>
+              <p style="font-size: 0.8rem; color: var(--text-muted); line-height: 1.5;">Heap memory bounded at 67.2 MiB (126 MiB total OS RAM), 786K objects, and 1.29 GC cycles/sec.</p>
+            </div>
+            <div>
+              <h5 style="font-size: 0.85rem; font-weight: 600; color: #f59e0b; margin-bottom: 0.35rem;">4. PostgreSQL DB Pool</h5>
+              <p style="font-size: 0.8rem; color: var(--text-muted); line-height: 1.5;">Average 1-5 connections acquired simultaneously out of 50 capacity, leaving massive headroom.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Empirical Performance Table -->
+        <div style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 8px; overflow-x: auto;">
+          <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.825rem;">
+            <thead>
+              <tr style="background: rgba(255, 255, 255, 0.03); border-bottom: 1px solid var(--border-color); color: var(--text-dim); font-family: 'JetBrains Mono', monospace; font-size: 0.75rem;">
+                <th style="padding: 0.85rem 1.25rem;">ENDPOINT / ROUTE</th>
+                <th style="padding: 0.85rem 1.25rem;">HTTP METHOD</th>
+                <th style="padding: 0.85rem 1.25rem;">AVG LATENCY</th>
+                <th style="padding: 0.85rem 1.25rem;">PEAK THROUGHPUT</th>
+                <th style="padding: 0.85rem 1.25rem;">SUCCESS RATE</th>
+              </tr>
+            </thead>
+            <tbody style="color: var(--text-main);">
+              <tr style="border-bottom: 1px solid rgba(255, 255, 255, 0.03);">
+                <td style="padding: 0.85rem 1.25rem; font-family: 'JetBrains Mono', monospace; color: #818cf8;">/api/inventory/items</td>
+                <td style="padding: 0.85rem 1.25rem;"><span style="font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; background: rgba(16, 185, 129, 0.1); color: #10b981; padding: 0.15rem 0.45rem; border-radius: 4px;">GET</span></td>
+                <td style="padding: 0.85rem 1.25rem; font-weight: 600;">1.64 ms</td>
+                <td style="padding: 0.85rem 1.25rem;">159 req/s</td>
+                <td style="padding: 0.85rem 1.25rem; color: #10b981; font-weight: 600;">100.00%</td>
+              </tr>
+              <tr style="border-bottom: 1px solid rgba(255, 255, 255, 0.03);">
+                <td style="padding: 0.85rem 1.25rem; font-family: 'JetBrains Mono', monospace; color: #818cf8;">/api/inventory/warehouses</td>
+                <td style="padding: 0.85rem 1.25rem;"><span style="font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; background: rgba(16, 185, 129, 0.1); color: #10b981; padding: 0.15rem 0.45rem; border-radius: 4px;">GET</span></td>
+                <td style="padding: 0.85rem 1.25rem; font-weight: 600;">1.35 ms</td>
+                <td style="padding: 0.85rem 1.25rem;">159 req/s</td>
+                <td style="padding: 0.85rem 1.25rem; color: #10b981; font-weight: 600;">100.00%</td>
+              </tr>
+              <tr style="border-bottom: 1px solid rgba(255, 255, 255, 0.03);">
+                <td style="padding: 0.85rem 1.25rem; font-family: 'JetBrains Mono', monospace; color: #818cf8;">/api/purchasing/orders</td>
+                <td style="padding: 0.85rem 1.25rem;"><span style="font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; background: rgba(16, 185, 129, 0.1); color: #10b981; padding: 0.15rem 0.45rem; border-radius: 4px;">GET</span></td>
+                <td style="padding: 0.85rem 1.25rem; font-weight: 600;">1.42 ms</td>
+                <td style="padding: 0.85rem 1.25rem;">124 req/s</td>
+                <td style="padding: 0.85rem 1.25rem; color: #10b981; font-weight: 600;">100.00%</td>
+              </tr>
+              <tr style="border-bottom: 1px solid rgba(255, 255, 255, 0.03);">
+                <td style="padding: 0.85rem 1.25rem; font-family: 'JetBrains Mono', monospace; color: #818cf8;">/api/purchasing/requisitions</td>
+                <td style="padding: 0.85rem 1.25rem;"><span style="font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; background: rgba(16, 185, 129, 0.1); color: #10b981; padding: 0.15rem 0.45rem; border-radius: 4px;">GET</span></td>
+                <td style="padding: 0.85rem 1.25rem; font-weight: 600;">1.46 ms</td>
+                <td style="padding: 0.85rem 1.25rem;">124 req/s</td>
+                <td style="padding: 0.85rem 1.25rem; color: #10b981; font-weight: 600;">100.00%</td>
+              </tr>
+              <tr style="border-bottom: 1px solid rgba(255, 255, 255, 0.03);">
+                <td style="padding: 0.85rem 1.25rem; font-family: 'JetBrains Mono', monospace; color: #818cf8;">/api/master/branches</td>
+                <td style="padding: 0.85rem 1.25rem;"><span style="font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; background: rgba(16, 185, 129, 0.1); color: #10b981; padding: 0.15rem 0.45rem; border-radius: 4px;">GET</span></td>
+                <td style="padding: 0.85rem 1.25rem; font-weight: 600;">1.31 ms</td>
+                <td style="padding: 0.85rem 1.25rem;">80.9 req/s</td>
+                <td style="padding: 0.85rem 1.25rem; color: #10b981; font-weight: 600;">100.00%</td>
+              </tr>
+              <tr>
+                <td style="padding: 0.85rem 1.25rem; font-family: 'JetBrains Mono', monospace; color: #818cf8;">/api/auth/me</td>
+                <td style="padding: 0.85rem 1.25rem;"><span style="font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; background: rgba(16, 185, 129, 0.1); color: #10b981; padding: 0.15rem 0.45rem; border-radius: 4px;">GET</span></td>
+                <td style="padding: 0.85rem 1.25rem; font-weight: 600;">6.98 ms</td>
+                <td style="padding: 0.85rem 1.25rem;">42.5 req/s</td>
+                <td style="padding: 0.85rem 1.25rem; color: #10b981; font-weight: 600;">100.00%</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
     <!-- UI Screenshots Gallery Section -->
     <section id="screens">
       <div class="container">
@@ -1432,14 +1571,26 @@
         </div>
 
         <div class="gallery-filter-bar">
-          <button class="gallery-filter-btn active" onclick="filterGallery('all')">All Screenshots (13)</button>
+          <button class="gallery-filter-btn active" onclick="filterGallery('all')">All Screenshots (14)</button>
           <button class="gallery-filter-btn" onclick="filterGallery('dashboards')">Dashboards & Holding</button>
+          <button class="gallery-filter-btn" onclick="filterGallery('loadtest')">Load Test & Metrics</button>
           <button class="gallery-filter-btn" onclick="filterGallery('warehouse')">Warehouse & Inventory</button>
           <button class="gallery-filter-btn" onclick="filterGallery('procurement')">Procurement & Orders</button>
           <button class="gallery-filter-btn" onclick="filterGallery('governance')">Governance & Logistics</button>
         </div>
 
         <div class="gallery-grid" id="galleryGrid">
+          <!-- Screenshot 0: Grafana Load Test -->
+          <div class="gallery-item" data-cat="loadtest" onclick="openLightbox('assets/images/grafana_load_test.png', 'Grafana 15-Panel Load Test Telemetry - 102K Requests, 770 RPS Peak, 67MB RAM at 300 Concurrent Users')">
+            <div class="gallery-thumbnail">
+              <img src="assets/images/grafana_load_test.png" alt="Grafana Load Test Monitoring" loading="lazy" onerror="this.src='https://placehold.co/800x450?text=Grafana+Load+Test'" />
+            </div>
+            <div class="gallery-meta">
+              <span class="gallery-tag">OBSERVABILITY / TELEMETRY</span>
+              <div class="gallery-title">Live Grafana Load Test Suite</div>
+              <div class="gallery-desc">Empirical telemetry covering 102K requests, 770 req/s peak, Go goroutine scaling, and sub-2ms latency.</div>
+            </div>
+          </div>
           <!-- Screenshot 1: Executive Dashboard -->
           <div class="gallery-item" data-cat="dashboards" onclick="openLightbox('assets/images/dashboard_after_login_1790353077024.png', 'Executive Dashboard - Real-time operational metrics and pending queue oversight')">
             <div class="gallery-thumbnail">
