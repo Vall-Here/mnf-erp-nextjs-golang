@@ -6,7 +6,6 @@ Technical showcase website and interactive architecture specifications for an in
 - **Overall System Architecture**: Multi-tier architecture covering Caddy reverse proxy, domain modules, Valkey task queues, Floci S3 storage, and PostgreSQL relational clusters.
 - **Backend Clean Architecture**: Ports & Adapters layer segregation, type-safe SQL with `sqlc`, pure DDL migrations with `goose`, and OpenAPI 3.0 contracts.
 - **Frontend Architecture**: Next.js 15 App Router, React Server Components (RSC), TanStack Table v8, Zustand state stores, and Tailwind CSS / shadcn/ui design tokens.
-- **Operational UI Walkthrough**: High-resolution interface captures across warehouse operations, procurement workflows, QA inspection modals, and multi-tier approval consoles.
 
 ## Interactive Models
 - [System Architecture Model](./architecture/erp-architecture.html)
