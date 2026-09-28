@@ -1,0 +1,83 @@
+{
+  "schema_version": 2,
+  "diagram_type": "workflow",
+  "meta": {
+    "title": "Manufacturing Execution & Real-Time Job Costing Workflow",
+    "output": "mfg-job-costing-flow.html",
+    "animation": "trace",
+    "visual_preset": "signal-flow",
+    "quality_profile": "showcase",
+    "views": [
+      {
+        "id": "planning-and-pick",
+        "label": "BOM Planning & FEFO Pick",
+        "focus": ["bom_plan", "wo_release", "fefo_issue"],
+        "note": "Production order released from BOM and raw materials issued via FEFO."
+      },
+      {
+        "id": "execution-and-costing",
+        "label": "Floor Execution & Job Costing",
+        "focus": ["shop_floor", "qc_inspect", "costing_calc", "variance_gl"],
+        "note": "Machine run, quality inspection, direct labor & overhead absorption, and variance GL posting."
+      }
+    ]
+  },
+  "lanes": [
+    { "id": "planning", "label": "PPIC & BOM Engineering" },
+    { "id": "warehouse", "label": "Warehouse & Raw Material Staging" },
+    { "id": "shopfloor", "label": "Shop Floor & Quality (IQC)" },
+    { "id": "costing", "label": "Cost Accounting & General Ledger" }
+  ],
+  "phases": [
+    { "id": "prep_phase", "label": "Planning & Material Issue", "fromCol": 0, "toCol": 1 },
+    { "id": "exec_phase", "label": "Shop Floor & QC Pass", "fromCol": 2, "toCol": 3, "variant": "emphasis" },
+    { "id": "cost_phase", "label": "Job Costing & GL Variance", "fromCol": 4, "toCol": 5, "variant": "dashed" }
+  ],
+  "mainPath": ["bom_plan", "wo_release", "fefo_issue", "shop_floor", "qc_inspect", "costing_calc", "variance_gl"],
+  "nodes": [
+    { "id": "bom_plan", "lane": "planning", "col": 0, "type": "frontend", "label": "BOM Engineering", "sublabel": "formula & standard cost", "width": 120 },
+    { "id": "wo_release", "lane": "planning", "col": 1, "type": "backend", "label": "Work Order (SPK)", "sublabel": "target scheduled", "width": 120 },
+    { "id": "fefo_issue", "lane": "warehouse", "col": 1, "type": "database", "label": "FEFO Pick Issue", "sublabel": "lot & rack issue", "tag": "Pick List", "width": 120 },
+    { "id": "shop_floor", "lane": "shopfloor", "col": 2, "type": "backend", "label": "Shop Floor Run", "sublabel": "machine & labor hours", "width": 120 },
+    { "id": "qc_inspect", "lane": "shopfloor", "col": 3, "type": "security", "label": "QC & CoA Release", "sublabel": "pass / fail / scrap", "tag": "ISO 9001", "width": 120 },
+    { "id": "costing_calc", "lane": "costing", "col": 4, "type": "backend", "label": "Job Cost Sheet", "sublabel": "DM + DL + BOP", "width": 120 },
+    { "id": "variance_gl", "lane": "costing", "col": 5, "type": "database", "label": "Variance GL Post", "sublabel": "Dr FG / Cr WIP & Var", "tag": "SUM(D)==SUM(C)", "width": 120 }
+  ],
+  "edges": [
+    { "id": "e1", "from": "bom_plan", "to": "wo_release", "label": "release SPK", "variant": "emphasis" },
+    { "id": "e2", "from": "wo_release", "to": "fefo_issue", "label": "allocate raw mat", "variant": "emphasis" },
+    { "id": "e3", "from": "fefo_issue", "to": "shop_floor", "label": "feed lines", "variant": "emphasis" },
+    { "id": "e4", "from": "shop_floor", "to": "qc_inspect", "label": "output batch", "variant": "emphasis" },
+    { "id": "e5", "from": "qc_inspect", "to": "costing_calc", "label": "calculate HPP", "variant": "emphasis" },
+    { "id": "e6", "from": "costing_calc", "to": "variance_gl", "label": "post inventory FG", "variant": "emphasis" }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "BOM & Material Control",
+      "items": [
+        "Multi-level BOM formulas define standard raw materials and scrap tolerances",
+        "FEFO pick list automatically selects closest expiry batch to minimize inventory loss",
+        "Picking slips require multi-tier signatures before raw material release"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "Shop Floor & Quality Assurance",
+      "items": [
+        "Tracks actual machine run hours, direct labor, and scrap quantities",
+        "Quality inspection gates finished products before inventory admission",
+        "Certified batches receive digital Certificate of Analysis (CoA)"
+      ]
+    },
+    {
+      "dot": "violet",
+      "title": "Real-Time Job Costing & GL",
+      "items": [
+        "Actual costs itemized into Direct Materials, Direct Labor, and Overhead (BOP)",
+        "Variance analysis highlights favorable and unfavorable cost deviations vs BOM",
+        "Automated journal posts WIP completion directly into Finished Goods inventory"
+      ]
+    }
+  ]
+}

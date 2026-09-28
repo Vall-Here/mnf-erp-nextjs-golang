@@ -1,0 +1,83 @@
+{
+  "schema_version": 2,
+  "diagram_type": "workflow",
+  "meta": {
+    "title": "Industrial ERP Procure-to-Pay Workflow",
+    "output": "procure-to-pay-workflow.html",
+    "animation": "trace",
+    "visual_preset": "signal-flow",
+    "quality_profile": "showcase",
+    "views": [
+      {
+        "id": "pr-and-po",
+        "label": "Requisition & Purchase Order",
+        "focus": ["pr_create", "rfq_bid", "po_approval"],
+        "note": "Internal department requisition, competitive vendor RFQ, and multi-tier approval."
+      },
+      {
+        "id": "grn-and-matching",
+        "label": "Receipt & 3-Way Matching",
+        "focus": ["grn_inspect", "vendor_bill", "three_way_match", "ap_journal"],
+        "note": "Warehouse IQC receipt, supplier bill registration, and 3-way matching validation."
+      }
+    ]
+  },
+  "lanes": [
+    { "id": "procurement", "label": "Procurement & Purchasing" },
+    { "id": "warehouse", "label": "Warehouse & Quality (IQC)" },
+    { "id": "governance", "label": "3-Way Match & Audit", "variant": "exception" },
+    { "id": "finance", "label": "Finance & Accounts Payable" }
+  ],
+  "phases": [
+    { "id": "req_phase", "label": "Requisition & RFQ", "fromCol": 0, "toCol": 1 },
+    { "id": "po_phase", "label": "PO & Receipt", "fromCol": 2, "toCol": 3, "variant": "emphasis" },
+    { "id": "match_phase", "label": "3-Way Match & GL", "fromCol": 4, "toCol": 5, "variant": "dashed" }
+  ],
+  "mainPath": ["pr_create", "rfq_bid", "po_approval", "grn_inspect", "vendor_bill", "three_way_match", "ap_journal"],
+  "nodes": [
+    { "id": "pr_create", "lane": "procurement", "col": 0, "type": "frontend", "label": "Purchase Req", "sublabel": "department request", "width": 120 },
+    { "id": "rfq_bid", "lane": "procurement", "col": 1, "type": "backend", "label": "Vendor RFQ", "sublabel": "bid comparison", "width": 120 },
+    { "id": "po_approval", "lane": "procurement", "col": 2, "type": "security", "label": "PO Multi-Tier", "sublabel": "SPV -> Mgr -> BOD", "tag": "Threshold", "width": 120 },
+    { "id": "grn_inspect", "lane": "warehouse", "col": 3, "type": "database", "label": "Goods Receipt", "sublabel": "IQC & perpetual", "width": 120 },
+    { "id": "vendor_bill", "lane": "finance", "col": 4, "type": "backend", "label": "Vendor Bill", "sublabel": "invoice entry", "width": 120 },
+    { "id": "three_way_match", "lane": "governance", "col": 4, "type": "security", "label": "3-Way Matching", "sublabel": "PO vs GRN vs Bill", "tag": "Tolerance", "width": 120 },
+    { "id": "ap_journal", "lane": "finance", "col": 5, "type": "database", "label": "Post AP Journal", "sublabel": "Dr Inv / Cr AP", "tag": "SUM(D)==SUM(C)", "width": 120 }
+  ],
+  "edges": [
+    { "id": "e1", "from": "pr_create", "to": "rfq_bid", "label": "tender", "variant": "emphasis" },
+    { "id": "e2", "from": "rfq_bid", "to": "po_approval", "label": "issue PO", "variant": "emphasis" },
+    { "id": "e3", "from": "po_approval", "to": "grn_inspect", "label": "receive goods", "variant": "emphasis" },
+    { "id": "e4", "from": "grn_inspect", "to": "vendor_bill", "label": "bill received", "variant": "emphasis" },
+    { "id": "e5", "from": "vendor_bill", "to": "three_way_match", "label": "verify match", "variant": "security" },
+    { "id": "e6", "from": "three_way_match", "to": "ap_journal", "label": "matched & post", "variant": "emphasis" }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "Procurement Governance",
+      "items": [
+        "Requisitions are validated against budget and inventory reorder points",
+        "RFQ bid evaluation compares price, payment terms, and delivery SLA",
+        "Multi-tier approval enforces financial limits before vendor commitment"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "Warehouse & Quality Control",
+      "items": [
+        "Goods receipt triggers incoming QC sampling before acceptance",
+        "Perpetual inventory records item balance and recalculates moving average cost",
+        "Items are placed directly into warehouse rack and bin locations"
+      ]
+    },
+    {
+      "dot": "violet",
+      "title": "3-Way Matching & Settlement",
+      "items": [
+        "Discrepancies in quantity or unit price between PO, GRN, and Bill are held",
+        "Verified bills post directly to Accounts Payable ledger with double-entry balance",
+        "Tax withholding (PPh 23) and PPN input VAT are automatically allocated"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,93 @@
+{
+  "schema_version": 1,
+  "diagram_type": "sequence",
+  "meta": {
+    "title": "Accounting Double-Entry Journal Posting Sequence",
+    "output": "double-entry-posting.html",
+    "viewBox": [960, 920],
+    "column_fit": "spread",
+    "animation": "trace",
+    "visual_preset": "signal-flow",
+    "quality_profile": "showcase",
+    "views": [
+      {
+        "id": "ingress-and-auth",
+        "label": "Ingress & RBAC Authorization",
+        "focus": ["client", "router_mw", "acct_handler"],
+        "note": "Bearer token and branch scoping verified before entering handler."
+      },
+      {
+        "id": "invariant-and-tx",
+        "label": "Double-Entry Balance & ACID Tx",
+        "focus": ["acct_handler", "acct_service", "pg_pool", "gl_ledger"],
+        "note": "SUM(debit) == SUM(credit) is asserted before atomic database commit."
+      },
+      {
+        "id": "audit-and-receipt",
+        "label": "Audit Logging & ISO Response",
+        "focus": ["acct_service", "audit_trail", "client"],
+        "note": "Immutable audit record created and document print payload returned."
+      }
+    ]
+  },
+  "participants": [
+    { "id": "client", "type": "frontend", "label": "Web Client", "sublabel": "Next.js UI" },
+    { "id": "router_mw", "type": "security", "label": "Chi Router", "sublabel": "JWT & Branch" },
+    { "id": "acct_handler", "type": "backend", "label": "API Handler", "sublabel": "HTTP Controller" },
+    { "id": "acct_service", "type": "backend", "label": "GL Service", "sublabel": "Double-Entry Engine" },
+    { "id": "pg_pool", "type": "database", "label": "pgx/v5 Pool", "sublabel": "PostgreSQL 16" },
+    { "id": "gl_ledger", "type": "database", "label": "GL Ledger", "sublabel": "journal lines" },
+    { "id": "audit_trail", "type": "security", "label": "Audit Engine", "sublabel": "diff logger" }
+  ],
+  "segments": [
+    { "from": 150, "to": 288, "label": "Ingress & RBAC Guard" },
+    { "from": 306, "to": 538, "label": "Invariant Check & Atomic Commit" },
+    { "from": 554, "to": 800, "label": "Audit Trail & Document Response" }
+  ],
+  "messages": [
+    { "from": "client", "to": "router_mw", "y": 180, "label": "POST /api/v1/accounting/journals", "variant": "emphasis" },
+    { "from": "router_mw", "to": "acct_handler", "y": 230, "label": "forward authenticated context", "variant": "emphasis" },
+    { "from": "acct_handler", "to": "acct_service", "y": 320, "label": "PostJournalEntry(ctx, input)", "variant": "emphasis" },
+    { "from": "acct_service", "to": "pg_pool", "y": 380, "label": "BeginTx(pgx.TxOptions)", "variant": "emphasis" },
+    { "from": "acct_service", "to": "gl_ledger", "y": 430, "label": "INSERT journal_entries & lines", "variant": "emphasis" },
+    { "from": "acct_service", "to": "pg_pool", "y": 480, "label": "CommitTx()", "variant": "emphasis" },
+    { "from": "acct_service", "to": "audit_trail", "y": 570, "label": "RecordAuditDiff(actor, diff)", "variant": "dashed" },
+    { "from": "audit_trail", "to": "acct_service", "y": 615, "label": "audit saved", "variant": "return" },
+    { "from": "acct_service", "to": "acct_handler", "y": 660, "label": "JournalEntry entity", "variant": "return" },
+    { "from": "acct_handler", "to": "client", "y": 720, "label": "201 Created + JV Document Payload", "variant": "return" }
+  ],
+  "activations": [
+    { "participant": "router_mw", "from": 175, "to": 240, "type": "security" },
+    { "participant": "acct_handler", "from": 225, "to": 730, "type": "backend" },
+    { "participant": "acct_service", "from": 315, "to": 670, "type": "backend" },
+    { "participant": "pg_pool", "from": 375, "to": 490, "type": "database" },
+    { "participant": "gl_ledger", "from": 425, "to": 465, "type": "database" },
+    { "participant": "audit_trail", "from": 565, "to": 625, "type": "security" }
+  ],
+  "cards": [
+    {
+      "dot": "emerald",
+      "title": "Double-Entry Invariant",
+      "items": [
+        "Zero tolerance for unbalanced entries; rejected at service layer before SQL execution",
+        "Multi-currency lines converted with JISDOR/BI effective exchange rate"
+      ]
+    },
+    {
+      "dot": "cyan",
+      "title": "Atomic Persistence",
+      "items": [
+        "Executed inside pgx.Tx isolation level with row-level locks on fiscal periods",
+        "Strict prevention of modifications against locked fiscal months"
+      ]
+    },
+    {
+      "dot": "violet",
+      "title": "Compliance & Traceability",
+      "items": [
+        "Audit trail logs user identity, branch scope, IP address, and JSON diff",
+        "Official ISO A4 Voucher generated with digital signature verification hash"
+      ]
+    }
+  ]
+}

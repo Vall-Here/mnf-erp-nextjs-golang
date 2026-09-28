@@ -1,0 +1,91 @@
+{
+  "schema_version": 2,
+  "diagram_type": "workflow",
+  "meta": {
+    "title": "Industrial ERP Order-to-Cash Workflow",
+    "output": "order-to-cash-workflow.html",
+    "animation": "trace",
+    "visual_preset": "signal-flow",
+    "quality_profile": "showcase",
+    "views": [
+      {
+        "id": "order-intake",
+        "label": "Order Intake & Approval",
+        "focus": ["quotation", "so_create", "so_approval"],
+        "note": "Commercial agreement confirmed and routed through multi-tier approval matrix."
+      },
+      {
+        "id": "fulfillment",
+        "label": "FEFO & Fleet Dispatch",
+        "focus": ["fefo_pick", "spj_dispatch", "pod_verify"],
+        "note": "Warehouse picking by expiration date, fleet dispatch, and digital POD signature."
+      },
+      {
+        "id": "settlement",
+        "label": "Invoicing & GL Posting",
+        "focus": ["pod_verify", "sales_invoice", "gl_journal"],
+        "note": "Invoice generation and automated balanced double-entry GL journal posting."
+      }
+    ]
+  },
+  "lanes": [
+    { "id": "commercial", "label": "Sales & Commercial" },
+    { "id": "governance", "label": "Approval Governance" },
+    { "id": "logistics", "label": "Warehouse & Fleet Logistics" },
+    { "id": "finance", "label": "Finance & General Ledger" }
+  ],
+  "phases": [
+    { "id": "order_phase", "label": "Order & Approval", "fromCol": 0, "toCol": 1 },
+    { "id": "fulfill_phase", "label": "Fulfillment & POD", "fromCol": 2, "toCol": 3, "variant": "emphasis" },
+    { "id": "finance_phase", "label": "Billing & General Ledger", "fromCol": 4, "toCol": 5, "variant": "dashed" }
+  ],
+  "mainPath": ["quotation", "so_create", "so_approval", "fefo_pick", "spj_dispatch", "pod_verify", "sales_invoice", "gl_journal"],
+  "nodes": [
+    { "id": "quotation", "lane": "commercial", "col": 0, "type": "frontend", "label": "Quotation", "sublabel": "customer quote", "width": 130 },
+    { "id": "so_create", "lane": "commercial", "col": 1, "type": "backend", "label": "Sales Order", "sublabel": "SO confirmed", "width": 130 },
+    { "id": "so_approval", "lane": "governance", "col": 1, "type": "security", "label": "Multi-Tier Approval", "sublabel": "matrix sign", "tag": "Threshold", "width": 130 },
+    { "id": "fefo_pick", "lane": "logistics", "col": 2, "type": "database", "label": "FEFO Pick List", "sublabel": "batch & rack", "width": 130 },
+    { "id": "spj_dispatch", "lane": "logistics", "col": 3, "type": "cloud", "label": "Fleet SPJ", "sublabel": "truck dispatch", "width": 130 },
+    { "id": "pod_verify", "lane": "logistics", "col": 4, "type": "external", "label": "POD Verification", "sublabel": "photo + sign", "tag": "ISO 9001", "width": 130 },
+    { "id": "sales_invoice", "lane": "commercial", "col": 4, "type": "backend", "label": "Sales Invoice", "sublabel": "AR billing", "width": 130 },
+    { "id": "gl_journal", "lane": "finance", "col": 5, "type": "database", "label": "Double-Entry GL", "sublabel": "Dr AR / Cr Sales", "tag": "SUM(D)==SUM(C)", "width": 130 }
+  ],
+  "edges": [
+    { "id": "e1", "from": "quotation", "to": "so_create", "label": "convert", "variant": "emphasis" },
+    { "id": "e2", "from": "so_create", "to": "so_approval", "label": "submit", "variant": "security" },
+    { "id": "e3", "from": "so_approval", "to": "fefo_pick", "label": "approved", "variant": "emphasis" },
+    { "id": "e4", "from": "fefo_pick", "to": "spj_dispatch", "label": "pack", "variant": "emphasis" },
+    { "id": "e5", "from": "spj_dispatch", "to": "pod_verify", "label": "deliver", "variant": "emphasis" },
+    { "id": "e6", "from": "pod_verify", "to": "sales_invoice", "label": "trigger bill", "variant": "emphasis" },
+    { "id": "e7", "from": "sales_invoice", "to": "gl_journal", "label": "post GL", "variant": "emphasis" }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "Commercial & Approval Governance",
+      "items": [
+        "Quotations convert directly into binding Sales Orders",
+        "Multi-tier approval enforces credit limits and discount policies",
+        "Digital signature hashes guarantee legal auditability"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "Perpetual Logistics & Quality",
+      "items": [
+        "FEFO lot allocations eliminate expiration waste",
+        "Fleet dispatch tracks fuel, toll, and driver allowances",
+        "Photo and signature POD unlocks immediate customer invoicing"
+      ]
+    },
+    {
+      "dot": "violet",
+      "title": "Financial Integrity & Settlement",
+      "items": [
+        "Automated double-entry posting guarantees trial balance equality",
+        "Electronic bank statement parser automates cash reconciliation",
+        "Full audit trail tracks actor, timestamp, and entity diffs"
+      ]
+    }
+  ]
+}

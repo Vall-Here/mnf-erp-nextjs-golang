@@ -1,0 +1,73 @@
+{
+  "schema_version": 1,
+  "diagram_type": "lifecycle",
+  "meta": {
+    "title": "Document Multi-Tier Approval Lifecycle",
+    "output": "approval-matrix-lifecycle.html",
+    "viewBox": [980, 680],
+    "animation": "trace",
+    "visual_preset": "signal-flow",
+    "quality_profile": "showcase",
+    "views": [
+      {
+        "id": "main-lifecycle",
+        "label": "Document Promotion Rail",
+        "focus": ["draft", "submitted", "evaluating", "approved", "posted"],
+        "note": "Follow the document from creation to legal posting."
+      },
+      {
+        "id": "exception-and-revision",
+        "label": "Exceptions and Revision",
+        "focus": ["evaluating", "revision", "rejected"],
+        "note": "Review where documents can be returned for amendments or terminated."
+      }
+    ]
+  },
+  "lanes": [
+    { "id": "main", "label": "Document Progression" },
+    { "id": "waiting", "label": "Review & Amendments" },
+    { "id": "terminal", "label": "Terminal Exits" }
+  ],
+  "states": [
+    { "id": "draft", "type": "start", "label": "Draft", "sublabel": "authoring", "lane": "main", "col": 0, "step": "01", "tag": "maker" },
+    { "id": "submitted", "type": "active", "label": "Submitted", "sublabel": "in workflow", "lane": "main", "col": 1, "step": "02", "tag": "locked" },
+    { "id": "evaluating", "type": "decision", "label": "Reviewing", "sublabel": "tier evaluation", "lane": "main", "col": 2, "step": "03", "tag": "matrix" },
+    { "id": "approved", "type": "waiting", "label": "Approved", "sublabel": "authorized", "lane": "main", "col": 3, "step": "04", "tag": "sealed" },
+    { "id": "posted", "type": "success", "label": "Posted", "sublabel": "GL committed", "lane": "main", "col": 4, "step": "05", "tag": "immutable" },
+    { "id": "revision", "type": "waiting", "label": "Need Revision", "sublabel": "amendments required", "lane": "waiting", "col": 0, "tag": "rework" },
+    { "id": "rejected", "type": "failure", "label": "Rejected", "sublabel": "authorization denied", "lane": "terminal", "col": 0, "tag": "terminal" }
+  ],
+  "transitions": [
+    { "from": "evaluating", "to": "revision", "variant": "dashed", "route": "straight", "fromSide": "bottom", "toSide": "top" },
+    { "from": "revision", "to": "rejected", "variant": "security", "route": "straight", "fromSide": "bottom", "toSide": "top" }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "Progressive Authorization",
+      "items": [
+        "Documents advance through configured N-tier matrices based on nominal value",
+        "Each stage records digital signature hash, actor role, and timestamp",
+        "Final approved documents lock content against tampering"
+      ]
+    },
+    {
+      "dot": "amber",
+      "title": "Exception Routing",
+      "items": [
+        "Reviewers can request explicit revisions with feedback comments",
+        "Revisions unlock the draft for the author without losing audit history",
+        "Terminal rejection irrevocably cancels the operational transaction"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "General Ledger Posting",
+      "items": [
+        "Only fully approved documents trigger downstream financial mutations",
+        "Posted status renders official ISO compliant printable sheets",
+        "All mutations produce immutable audit log diff records"
+      ]
+    }
+  ]
+}

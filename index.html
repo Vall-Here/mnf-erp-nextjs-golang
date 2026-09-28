@@ -215,6 +215,7 @@
     .hero h1 span {
       background: linear-gradient(135deg, #818cf8 0%, #38bdf8 100%);
       -webkit-background-clip: text;
+      background-clip: text;
       -webkit-text-fill-color: transparent;
     }
 
@@ -779,6 +780,172 @@
       color: var(--text-main);
     }
 
+    /* SDD & ERD Matrix Section */
+    .sdd-viewer-container {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: var(--card-shadow);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .sdd-module-nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      padding: 1.25rem 1.5rem;
+      background: rgba(10, 13, 20, 0.85);
+      border-bottom: 1px solid var(--border-color);
+      max-height: 220px;
+      overflow-y: auto;
+    }
+
+    .sdd-module-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      padding: 0.4rem 0.85rem;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      color: var(--text-muted);
+      font-size: 0.8rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+    }
+
+    .sdd-module-pill:hover {
+      background: rgba(99, 102, 241, 0.12);
+      border-color: rgba(99, 102, 241, 0.35);
+      color: var(--text-main);
+    }
+
+    .sdd-module-pill.active {
+      background: rgba(99, 102, 241, 0.2);
+      border-color: var(--accent-primary);
+      color: #ffffff;
+      font-weight: 600;
+      box-shadow: 0 0 12px rgba(99, 102, 241, 0.3);
+    }
+
+    .sdd-module-pill .pill-code {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem;
+      color: #818cf8;
+      background: rgba(99, 102, 241, 0.15);
+      padding: 0.1rem 0.35rem;
+      border-radius: 3px;
+    }
+
+    .sdd-module-pill.active .pill-code {
+      background: var(--accent-primary);
+      color: #ffffff;
+    }
+
+    .sdd-control-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+      padding: 1rem 1.5rem;
+      background: rgba(18, 26, 44, 0.9);
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .sdd-tab-group {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    .sdd-tab-btn {
+      padding: 0.45rem 1rem;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      color: var(--text-muted);
+      font-size: 0.825rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .sdd-tab-btn:hover {
+      background: rgba(6, 182, 212, 0.12);
+      border-color: rgba(6, 182, 212, 0.3);
+      color: var(--text-main);
+    }
+
+    .sdd-tab-btn.active {
+      background: rgba(6, 182, 212, 0.2);
+      border-color: var(--accent-secondary);
+      color: #38bdf8;
+      font-weight: 600;
+    }
+
+    .sdd-actions {
+      display: flex;
+      gap: 0.75rem;
+      align-items: center;
+    }
+
+    .sdd-active-header {
+      padding: 1.25rem 1.5rem 0.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+    }
+
+    .sdd-active-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #ffffff;
+    }
+
+    .sdd-active-subtitle {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-top: 0.2rem;
+    }
+
+    .sdd-diagram-viewport {
+      padding: 1.5rem;
+      min-height: 480px;
+      background: #080c16;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow-x: auto;
+      overflow-y: auto;
+      position: relative;
+    }
+
+    .sdd-diagram-viewport svg {
+      max-width: 100%;
+      height: auto;
+      filter: drop-shadow(0 4px 20px rgba(0, 0, 0, 0.3));
+    }
+
+    .sdd-source-view {
+      width: 100%;
+      background: #05070c;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 1.25rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.825rem;
+      color: #cbd5e1;
+      white-space: pre-wrap;
+      overflow-x: auto;
+      max-height: 500px;
+    }
+
     /* Responsive */
     @media (max-width: 768px) {
       nav ul {
@@ -806,11 +973,9 @@
         <ul>
           <li><a href="#overview">Overview</a></li>
           <li><a href="#architecture">Architecture</a></li>
-          <li><a href="#stack">Tech Stack</a></li>
-          <li><a href="#invariants">Invariants</a></li>
           <li><a href="#modules">18 Modules</a></li>
-          <li><a href="#performance">Performance</a></li>
-          <li><a href="#screens">Screenshots</a></li>
+          <li><a href="#sdd-erd">SDD & ERDs</a></li>
+          <li><a href="#screens">Showcase</a></li>
         </ul>
       </nav>
       <div class="nav-actions">
@@ -826,13 +991,13 @@
         <div class="hero-badge-container">
           <div class="hero-badge">
             <span class="pulse-dot"></span>
-            <span>Enterprise Monolith with Domain-Driven Clean Architecture</span>
+            <span>Single Repo Monolith with Domain-Driven Clean Architecture</span>
           </div>
         </div>
 
         <h1>
-          Modular Industrial ERP Engine<br />
-          <span>Built for High-Throughput Operations</span>
+          Showcase Industrial ERP Engine<br />
+          <span>Desing by Ahmad Noval</span>
         </h1>
 
         <p>
@@ -950,6 +1115,106 @@
             </div>
             <a href="./frontend/frontend-architecture.html" target="_blank" class="btn btn-outline">
               Open Frontend Architecture Model
+            </a>
+          </div>
+
+          <!-- Card 4: Order-to-Cash Workflow -->
+          <div class="arch-card">
+            <div>
+              <span class="arch-card-badge">END-TO-END WORKFLOW</span>
+              <h3>Order-to-Cash Process Model</h3>
+              <p>
+                Visualizes the complete commercial lifecycle: customer quotations, multi-tier order approval, FEFO batch picking, fleet SPJ delivery, POD signature, invoicing, and automated GL posting.
+              </p>
+              <ul class="arch-features-list">
+                <li>Dynamic multi-tier approval matrix</li>
+                <li>FEFO expiration-aware picking list</li>
+                <li>Digital signature and photo POD validation</li>
+                <li>Automated double-entry revenue journal</li>
+              </ul>
+            </div>
+            <a href="./sdd/archify/order-to-cash-workflow.html" target="_blank" class="btn btn-primary">
+              Open Order-to-Cash Model
+            </a>
+          </div>
+
+          <!-- Card 5: Procure-to-Pay Workflow -->
+          <div class="arch-card">
+            <div>
+              <span class="arch-card-badge">PROCURE-TO-PAY</span>
+              <h3>Procurement & 3-Way Match</h3>
+              <p>
+                Complete procurement lifecycle: internal purchase requisitions, competitive vendor RFQ bidding, multi-tier PO approval, warehouse IQC goods receipt, and 3-way matching validation.
+              </p>
+              <ul class="arch-features-list">
+                <li>Automated PR conversion & tender RFQ</li>
+                <li>Goods Receipt Note (GRN) with IQC pass gate</li>
+                <li>3-Way Matching tolerance enforcement</li>
+                <li>Automated Accounts Payable GL journal</li>
+              </ul>
+            </div>
+            <a href="./sdd/archify/procure-to-pay-workflow.html" target="_blank" class="btn btn-cyan">
+              Open Procure-to-Pay Model
+            </a>
+          </div>
+
+          <!-- Card 6: Double-Entry Posting Sequence -->
+          <div class="arch-card">
+            <div>
+              <span class="arch-card-badge">FINANCIAL INTEGRITY</span>
+              <h3>Double-Entry Posting Sequence</h3>
+              <p>
+                Step-by-step trace of request ingress, JWT branch guard verification, invariant assertion SUM(debit) == SUM(credit), pgx transaction isolation, and audit trail diff logging.
+              </p>
+              <ul class="arch-features-list">
+                <li>Zero-tolerance double-entry verification</li>
+                <li>Atomic pgx.Tx database transaction</li>
+                <li>Row-level locks on fiscal periods</li>
+                <li>Immutable audit diff snapshot</li>
+              </ul>
+            </div>
+            <a href="./sdd/archify/double-entry-posting.html" target="_blank" class="btn btn-outline">
+              Open Journal Sequence Model
+            </a>
+          </div>
+
+          <!-- Card 7: Approval Matrix Lifecycle -->
+          <div class="arch-card">
+            <div>
+              <span class="arch-card-badge">STATE TRANSITION</span>
+              <h3>Approval Matrix Lifecycle</h3>
+              <p>
+                State progression model from Draft authoring, workflow submission, tier evaluation, revision requests, terminal rejections, to final sealed approval and immutable GL posting.
+              </p>
+              <ul class="arch-features-list">
+                <li>N-tier progressive state promotion</li>
+                <li>Non-destructive revision request loop</li>
+                <li>Digital signature hash timestamping</li>
+                <li>Immutable post-approval state lock</li>
+              </ul>
+            </div>
+            <a href="./sdd/archify/approval-matrix-lifecycle.html" target="_blank" class="btn btn-primary">
+              Open Approval Lifecycle Model
+            </a>
+          </div>
+
+          <!-- Card 8: Manufacturing & Job Costing Flow -->
+          <div class="arch-card">
+            <div>
+              <span class="arch-card-badge">MANUFACTURING EXECUTION</span>
+              <h3>Manufacturing & Job Costing</h3>
+              <p>
+                Production lifecycle from BOM formula definition, Work Order release, FEFO raw material staging, shop floor machine execution, ISO quality release, to actual HPP variance costing.
+              </p>
+              <ul class="arch-features-list">
+                <li>Multi-level BOM formula decomposition</li>
+                <li>Real-time Direct Material, Labor & BOP breakdown</li>
+                <li>Standard cost variance calculation</li>
+                <li>Certificate of Analysis (CoA) release gate</li>
+              </ul>
+            </div>
+            <a href="./sdd/archify/mfg-job-costing-flow.html" target="_blank" class="btn btn-cyan">
+              Open Manufacturing Flow Model
             </a>
           </div>
         </div>
@@ -1421,6 +1686,53 @@
       </div>
     </section>
 
+    <!-- Software Design Documents (SDD) & Relational ERD Matrix -->
+    <section id="sdd-erd">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-tag">Software Design Documents & Schemas</span>
+          <h2 class="section-title">Module SDD & Relational ERD Matrix</h2>
+          <p class="section-desc">
+            Explore comprehensive use cases, operational activity workflows, API sequence diagrams, and relational database ERDs with PostgreSQL types and foreign key constraints across all 18 enterprise modules.
+          </p>
+        </div>
+
+        <div class="sdd-viewer-container">
+          <!-- Module Navigation Pills -->
+          <div class="sdd-module-nav" id="sddModuleNav">
+            <!-- Rendered dynamically by JS -->
+          </div>
+
+          <!-- Diagram Type Controls -->
+          <div class="sdd-control-bar">
+            <div class="sdd-tab-group" id="sddTabGroup">
+              <button class="sdd-tab-btn active" data-tab="erd" onclick="switchSddTab('erd')">ERD (Database Schema)</button>
+              <button class="sdd-tab-btn" data-tab="useCase" onclick="switchSddTab('useCase')">Use Case Diagram</button>
+              <button class="sdd-tab-btn" data-tab="activity" onclick="switchSddTab('activity')">Activity Flow Diagram</button>
+              <button class="sdd-tab-btn" data-tab="sequence" onclick="switchSddTab('sequence')">Sequence Diagram</button>
+              <button class="sdd-tab-btn" data-tab="source" onclick="switchSddTab('source')">Mermaid Source</button>
+            </div>
+          </div>
+
+          <!-- Active Module Header Info -->
+          <div class="sdd-active-header">
+            <div>
+              <div class="sdd-active-title" id="sddActiveTitle">MOD-01 Accounting & General Ledger</div>
+              <div class="sdd-active-subtitle" id="sddActiveDesc">Prinsip double-entry bookkeeping dengan invarian SUM(debit) == SUM(credit)</div>
+            </div>
+            <div id="sddTypeBadge" class="brand-badge" style="background: rgba(6, 182, 212, 0.15); color: #38bdf8; border-color: rgba(6, 182, 212, 0.3);">
+              RELATIONAL ERD
+            </div>
+          </div>
+
+          <!-- Diagram Viewport / Canvas -->
+          <div class="sdd-diagram-viewport" id="sddViewport">
+            <div class="sdd-loading">Loading diagram schema...</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- Performance & Load Test Benchmark Section -->
     <section id="performance">
       <div class="container">
@@ -1876,7 +2188,7 @@
     <div class="container footer-content">
       <div>
         <p><strong>Industrial ERP Architecture Showcase</strong></p>
-        <p>Built with Golang 1.22+ and Next.js 15 App Router. Zero Slop Engineering.</p>
+        <p>Built with Golang 1.22+ and Next.js 15 App Router by Ahmad Noval</p>
       </div>
       <ul class="footer-links">
         <li><a href="./architecture/erp-architecture.html" target="_blank">System Architecture</a></li>
@@ -1942,6 +2254,135 @@
         closeLightbox();
       }
     });
+  </script>
+
+  <!-- SDD Matrix Data & Mermaid Engine -->
+  <script src="assets/js/sdd-data.js"></script>
+  <script type="module">
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+    
+    mermaid.initialize({
+      startOnLoad: false,
+      theme: 'dark',
+      themeVariables: {
+        darkMode: true,
+        background: '#080c16',
+        primaryColor: '#6366f1',
+        primaryTextColor: '#f1f5f9',
+        primaryBorderColor: '#818cf8',
+        lineColor: '#38bdf8',
+        secondaryColor: '#1e293b',
+        tertiaryColor: '#0a0d14'
+      }
+    });
+
+    window.mermaid = mermaid;
+
+    let currentModuleIndex = 0;
+    let currentDiagramTab = 'erd';
+    let renderCounter = 0;
+
+    function initSddViewer() {
+      const nav = document.getElementById('sddModuleNav');
+      if (!nav || !window.ERP_SDD_MODULES) return;
+
+      nav.innerHTML = '';
+      window.ERP_SDD_MODULES.forEach((mod, idx) => {
+        const pill = document.createElement('button');
+        pill.className = 'sdd-module-pill' + (idx === 0 ? ' active' : '');
+        pill.innerHTML = `<span class="pill-code">${mod.code}</span> <span>${mod.title}</span>`;
+        pill.onclick = () => selectSddModule(idx);
+        nav.appendChild(pill);
+      });
+
+      renderCurrentDiagram();
+    }
+
+    function selectSddModule(idx) {
+      currentModuleIndex = idx;
+      const pills = document.querySelectorAll('.sdd-module-pill');
+      pills.forEach((p, i) => {
+        if (i === idx) p.classList.add('active');
+        else p.classList.remove('active');
+      });
+      renderCurrentDiagram();
+    }
+
+    window.switchSddTab = function(tab) {
+      currentDiagramTab = tab;
+      const buttons = document.querySelectorAll('#sddTabGroup .sdd-tab-btn');
+      buttons.forEach(btn => {
+        if (btn.getAttribute('data-tab') === tab) btn.classList.add('active');
+        else btn.classList.remove('active');
+      });
+      renderCurrentDiagram();
+    };
+
+    window.selectSddModule = selectSddModule;
+
+    async function renderCurrentDiagram() {
+      if (!window.ERP_SDD_MODULES || !window.ERP_SDD_MODULES[currentModuleIndex]) return;
+      const mod = window.ERP_SDD_MODULES[currentModuleIndex];
+      
+      const titleElem = document.getElementById('sddActiveTitle');
+      const descElem = document.getElementById('sddActiveDesc');
+      const linkElem = document.getElementById('sddDocLink');
+      const badgeElem = document.getElementById('sddTypeBadge');
+      const viewport = document.getElementById('sddViewport');
+
+      if (titleElem) titleElem.textContent = `${mod.code} ${mod.title}`;
+      if (descElem) descElem.textContent = `Software Design Document: ./docs/sdd/${mod.file}`;
+      if (linkElem) linkElem.href = `./sdd/${mod.file}`;
+
+      const tabTitles = {
+        erd: 'RELATIONAL ERD',
+        useCase: 'USE CASE DIAGRAM',
+        activity: 'ACTIVITY FLOW',
+        sequence: 'SEQUENCE TRACE',
+        source: 'MERMAID CODE'
+      };
+      if (badgeElem) badgeElem.textContent = tabTitles[currentDiagramTab] || 'DIAGRAM';
+
+      let diagramCode = mod[currentDiagramTab] || '';
+
+      if (currentDiagramTab === 'source') {
+        viewport.innerHTML = `<pre class="sdd-source-view"><code>${escapeHtml(mod.erd || '')}</code></pre>`;
+        return;
+      }
+
+      if (!diagramCode) {
+        viewport.innerHTML = `<div style="color: var(--text-dim); padding: 2rem;">Diagram not available for this tab.</div>`;
+        return;
+      }
+
+      viewport.innerHTML = `<div class="sdd-loading">Rendering ${tabTitles[currentDiagramTab]}...</div>`;
+
+      renderCounter++;
+      const renderId = 'mermaid-render-' + renderCounter;
+
+      try {
+        const { svg } = await window.mermaid.render(renderId, diagramCode);
+        viewport.innerHTML = svg;
+      } catch (err) {
+        console.error('Mermaid render error:', err);
+        viewport.innerHTML = `
+          <div style="text-align: left; width: 100%;">
+            <div style="color: #ef4444; font-size: 0.85rem; margin-bottom: 0.75rem;">Diagram preview rendering note. Raw definition:</div>
+            <pre class="sdd-source-view"><code>${escapeHtml(diagramCode)}</code></pre>
+          </div>
+        `;
+      }
+    }
+
+    function escapeHtml(str) {
+      return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initSddViewer);
+    } else {
+      initSddViewer();
+    }
   </script>
 </body>
 </html>
