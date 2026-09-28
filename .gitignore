@@ -1,0 +1,5 @@
+# Graphify Generated Large Datasets
+graphify/*.json
+graphify/graph.html
+graphify/.graphify_detect.json
+graphify/obsidian/
