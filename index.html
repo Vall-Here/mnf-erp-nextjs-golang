@@ -591,6 +591,37 @@
       border: 1px solid rgba(255, 255, 255, 0.05);
     }
 
+    /* Benchmark Tabs */
+    .benchmark-tab-bar {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      margin-bottom: 1.25rem;
+    }
+
+    .benchmark-tab-btn {
+      padding: 0.55rem 1.1rem;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      color: var(--text-muted);
+      font-size: 0.825rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .benchmark-tab-btn:hover,
+    .benchmark-tab-btn.active {
+      background: rgba(99, 102, 241, 0.18);
+      border-color: #818cf8;
+      color: #ffffff;
+      box-shadow: 0 0 15px rgba(99, 102, 241, 0.25);
+    }
+
     /* Screenshots Gallery */
     .gallery-filter-bar {
       display: flex;
@@ -975,6 +1006,7 @@
           <li><a href="#architecture">Architecture</a></li>
           <li><a href="#modules">18 Modules</a></li>
           <li><a href="#sdd-erd">SDD & ERDs</a></li>
+          <li><a href="#performance">Benchmarks</a></li>
           <li><a href="#screens">Showcase</a></li>
         </ul>
       </nav>
@@ -1738,38 +1770,49 @@
       <div class="container">
         <div class="section-header">
           <span class="section-tag">Empirical Benchmark & Load Verification</span>
-          <h2 class="section-title">High-Throughput Load Testing & Performance Verification</h2>
+          <h2 class="section-title">High-Throughput Load Testing & Telemetry Verification</h2>
           <p class="section-desc">
-            Empirical stress test results executed with <code>k6</code> and monitored in real-time via Prometheus TSDB and Grafana dashboards under simulated industrial traffic scaling up to 400 concurrent Virtual Users.
+            Empirical stress test results executed with <code>k6</code> and monitored in real-time via Prometheus TSDB and Grafana dashboards across all 18 enterprise domain modules, scaling from single-digit concurrency up to 1,000 Virtual Users.
           </p>
         </div>
 
-        <!-- Benchmark Highlight Stats -->
-        <div class="hero-stats" style="margin-bottom: 2.5rem;">
+        <!-- Benchmark Selector Tabs -->
+        <div class="benchmark-tab-bar" id="benchmarkTabs">
+          <button class="benchmark-tab-btn active" onclick="switchBenchmarkTab('stress')">
+            <span>MOD-18 Stepped Stress Test (300 VUs)</span>
+          </button>
+          <button class="benchmark-tab-btn" onclick="switchBenchmarkTab('limit')">
+            <span>System Limit & Breaking Point (1,000 VUs)</span>
+          </button>
+          <button class="benchmark-tab-btn" onclick="switchBenchmarkTab('spike')">
+            <span>Traffic Shock Spike (500 VUs in 15s)</span>
+          </button>
+          <button class="benchmark-tab-btn" onclick="switchBenchmarkTab('race')">
+            <span>Concurrency Double-Entry Race (50 VUs)</span>
+          </button>
+        </div>
+
+        <!-- Benchmark Highlight Stats (Dynamic) -->
+        <div class="hero-stats" id="benchmarkStats" style="margin-bottom: 2rem;">
           <div class="stat-card" style="border-left: 3px solid #10b981;">
-            <div class="stat-label">Total Volume Tested</div>
-            <div class="stat-value">102,000+ Req</div>
-            <div style="font-size: 0.75rem; color: var(--text-dim); margin-top: 0.25rem;">5-minute stepped stress cycle</div>
+            <div class="stat-label" id="benchStatLabel0">Total Iterations</div>
+            <div class="stat-value" id="benchStatVal0">53,967+</div>
+            <div id="benchStatSub0" style="font-size: 0.75rem; color: var(--text-dim); margin-top: 0.25rem;">5-minute multi-stage stress ramp</div>
           </div>
           <div class="stat-card" style="border-left: 3px solid #06b6d4;">
-            <div class="stat-label">Peak Throughput</div>
-            <div class="stat-value">770 req/s</div>
-            <div style="font-size: 0.75rem; color: var(--text-dim); margin-top: 0.25rem;">643 req/s steady-state average</div>
+            <div class="stat-label" id="benchStatLabel1">Max Concurrency</div>
+            <div class="stat-value" id="benchStatVal1">300 VUs</div>
+            <div id="benchStatSub1" style="font-size: 0.75rem; color: var(--text-dim); margin-top: 0.25rem;">Balanced traffic across 18 modules</div>
           </div>
           <div class="stat-card" style="border-left: 3px solid #6366f1;">
-            <div class="stat-label">Average API Latency</div>
-            <div class="stat-value">&lt; 2.0 ms</div>
-            <div style="font-size: 0.75rem; color: var(--text-dim); margin-top: 0.25rem;">Across core business domain routes</div>
+            <div class="stat-label" id="benchStatLabel2">Average Latency</div>
+            <div class="stat-value" id="benchStatVal2">&lt; 3.8 ms</div>
+            <div id="benchStatSub2" style="font-size: 0.75rem; color: var(--text-dim); margin-top: 0.25rem;">P95 latency under 25ms</div>
           </div>
           <div class="stat-card" style="border-left: 3px solid #8b5cf6;">
-            <div class="stat-label">Memory Footprint</div>
-            <div class="stat-value">67.2 MiB Heap</div>
-            <div style="font-size: 0.75rem; color: var(--text-dim); margin-top: 0.25rem;">Sub-100MB RAM at 300 concurrent VU</div>
-          </div>
-          <div class="stat-card" style="border-left: 3px solid #10b981;">
-            <div class="stat-label">Failure Rate</div>
-            <div class="stat-value">0.00% Error</div>
-            <div style="font-size: 0.75rem; color: var(--text-dim); margin-top: 0.25rem;">100% HTTP 200 OK success rate</div>
+            <div class="stat-label" id="benchStatLabel3">HTTP Error Rate</div>
+            <div class="stat-value" id="benchStatVal3">0.00%</div>
+            <div id="benchStatSub3" style="font-size: 0.75rem; color: var(--text-dim); margin-top: 0.25rem;">100% successful requests</div>
           </div>
         </div>
 
@@ -1777,35 +1820,35 @@
         <div style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; overflow: hidden; padding: 1.5rem; backdrop-filter: blur(12px); box-shadow: var(--card-shadow); margin-bottom: 2.5rem;">
           <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; flex-wrap: wrap; gap: 0.75rem;">
             <div>
-              <span class="arch-card-badge" style="margin-bottom: 0.35rem;">GRAFANA LIVE OBSERVABILITY</span>
-              <h3 style="font-size: 1.25rem; font-weight: 700; color: #ffffff;">Real-Time Concurrency Telemetry & Resource Profiling</h3>
+              <span class="arch-card-badge" id="benchBadge" style="margin-bottom: 0.35rem;">STRESS TEST (53,967+ ITERATIONS)</span>
+              <h3 id="benchTitle" style="font-size: 1.25rem; font-weight: 700; color: #ffffff;">18-Module Stepped Stress Test (20 &rarr; 300 VUs)</h3>
             </div>
             <span style="font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; color: #38bdf8; background: rgba(6, 182, 212, 0.1); padding: 0.3rem 0.7rem; border-radius: 4px; border: 1px solid rgba(6, 182, 212, 0.25);">
               Click Image to Enlarge (HD Lightbox)
             </span>
           </div>
 
-          <div style="cursor: pointer; border-radius: 8px; overflow: hidden; border: 1px solid var(--border-color); background: #000; position: relative;" onclick="openLightbox('assets/images/grafana_load_test.png', 'Grafana 15-Panel Load Test Telemetry - 102K Requests, 770 RPS Peak, 67MB RAM, 0% Errors at 300 Virtual Users')">
-            <img src="assets/images/grafana-load test.png" alt="Grafana Load Test Monitoring Dashboard" style="width: 100%; height: auto; display: block; transition: transform 0.3s ease;" onmouseover="this.style.transform='scale(1.01)'" onmouseout="this.style.transform='scale(1)'" />
+          <div style="cursor: pointer; border-radius: 8px; overflow: hidden; border: 1px solid var(--border-color); background: #000; position: relative;" id="benchImgContainer" onclick="openLightbox('assets/images/grafana-stress test.png', 'Grafana Telemetry: 18-Module Stepped Stress Test up to 300 Concurrent Users with 0% Error Rate and Sub-400ms Latency')">
+            <img id="benchImg" src="assets/images/grafana-stress test.png" alt="Grafana Test Monitoring Dashboard" style="width: 100%; height: auto; display: block; transition: transform 0.3s ease;" onmouseover="this.style.transform='scale(1.01)'" onmouseout="this.style.transform='scale(1)'" />
           </div>
 
           <!-- Telemetry Breakdown Grid -->
-          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem; margin-top: 1.5rem; padding-top: 1.25rem; border-top: 1px solid rgba(255, 255, 255, 0.06);">
+          <div id="benchKpis" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem; margin-top: 1.5rem; padding-top: 1.25rem; border-top: 1px solid rgba(255, 255, 255, 0.06);">
             <div>
-              <h5 style="font-size: 0.85rem; font-weight: 600; color: #818cf8; margin-bottom: 0.35rem;">1. Live Executive KPIs</h5>
-              <p style="font-size: 0.8rem; color: var(--text-muted); line-height: 1.5;">Total 102K requests processed smoothly at 643-770 req/s with 0% error rate and 316 active goroutines.</p>
+              <h5 style="font-size: 0.85rem; font-weight: 600; color: #818cf8; margin-bottom: 0.35rem;" id="kpiTitle0">1. Multi-Stage Workload</h5>
+              <p style="font-size: 0.8rem; color: var(--text-muted); line-height: 1.5;" id="kpiDesc0">Sustained 5-minute ramp through 6 stages up to 300 looping VUs with smooth scaling across all 18 enterprise modules.</p>
             </div>
             <div>
-              <h5 style="font-size: 0.85rem; font-weight: 600; color: #38bdf8; margin-bottom: 0.35rem;">2. Latency per Endpoint</h5>
-              <p style="font-size: 0.8rem; color: var(--text-muted); line-height: 1.5;">Inventory: 1.64ms, Purchasing: 1.46ms, Master Data: 1.31ms, Accounts: 1.72ms, Auth JWT: 6.98ms.</p>
+              <h5 style="font-size: 0.85rem; font-weight: 600; color: #38bdf8; margin-bottom: 0.35rem;" id="kpiTitle1">2. 18-Module Latencies</h5>
+              <p style="font-size: 0.8rem; color: var(--text-muted); line-height: 1.5;" id="kpiDesc1">Inventory: 2.1ms, Purchasing: 2.3ms, Sales: 3.3ms, Accounting: 3.4ms, HRM: 5.4ms, MRP: 5.2ms, Workflow: 3.8ms.</p>
             </div>
             <div>
-              <h5 style="font-size: 0.85rem; font-weight: 600; color: #10b981; margin-bottom: 0.35rem;">3. Go Runtime Profiling</h5>
-              <p style="font-size: 0.8rem; color: var(--text-muted); line-height: 1.5;">Heap memory bounded at 67.2 MiB (126 MiB total OS RAM), 786K objects, and 1.29 GC cycles/sec.</p>
+              <h5 style="font-size: 0.85rem; font-weight: 600; color: #10b981; margin-bottom: 0.35rem;" id="kpiTitle2">3. Memory & GC Health</h5>
+              <p style="font-size: 0.8rem; color: var(--text-muted); line-height: 1.5;" id="kpiDesc2">Bounded memory footprint with zero memory leaks, ~67MB heap, and sub-millisecond Go runtime garbage collection.</p>
             </div>
             <div>
-              <h5 style="font-size: 0.85rem; font-weight: 600; color: #f59e0b; margin-bottom: 0.35rem;">4. PostgreSQL DB Pool</h5>
-              <p style="font-size: 0.8rem; color: var(--text-muted); line-height: 1.5;">Average 1-5 connections acquired simultaneously out of 50 capacity, leaving massive headroom.</p>
+              <h5 style="font-size: 0.85rem; font-weight: 600; color: #f59e0b; margin-bottom: 0.35rem;" id="kpiTitle3">4. Database Pool Headroom</h5>
+              <p style="font-size: 0.8rem; color: var(--text-muted); line-height: 1.5;" id="kpiDesc3">pgxpool handled concurrency with minimal connection wait and zero connection errors or starvation.</p>
             </div>
           </div>
         </div>
@@ -1815,54 +1858,69 @@
           <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.825rem;">
             <thead>
               <tr style="background: rgba(255, 255, 255, 0.03); border-bottom: 1px solid var(--border-color); color: var(--text-dim); font-family: 'JetBrains Mono', monospace; font-size: 0.75rem;">
-                <th style="padding: 0.85rem 1.25rem;">ENDPOINT / ROUTE</th>
+                <th style="padding: 0.85rem 1.25rem;">DOMAIN MODULE</th>
+                <th style="padding: 0.85rem 1.25rem;">SAMPLE ROUTE</th>
                 <th style="padding: 0.85rem 1.25rem;">HTTP METHOD</th>
                 <th style="padding: 0.85rem 1.25rem;">AVG LATENCY</th>
-                <th style="padding: 0.85rem 1.25rem;">PEAK THROUGHPUT</th>
+                <th style="padding: 0.85rem 1.25rem;">P95 LATENCY</th>
                 <th style="padding: 0.85rem 1.25rem;">SUCCESS RATE</th>
               </tr>
             </thead>
             <tbody style="color: var(--text-main);">
               <tr style="border-bottom: 1px solid rgba(255, 255, 255, 0.03);">
+                <td style="padding: 0.85rem 1.25rem; font-weight: 600; color: #ffffff;">MOD-02 Inventory</td>
                 <td style="padding: 0.85rem 1.25rem; font-family: 'JetBrains Mono', monospace; color: #818cf8;">/api/inventory/items</td>
                 <td style="padding: 0.85rem 1.25rem;"><span style="font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; background: rgba(16, 185, 129, 0.1); color: #10b981; padding: 0.15rem 0.45rem; border-radius: 4px;">GET</span></td>
-                <td style="padding: 0.85rem 1.25rem; font-weight: 600;">1.64 ms</td>
-                <td style="padding: 0.85rem 1.25rem;">159 req/s</td>
+                <td style="padding: 0.85rem 1.25rem; font-weight: 600;">2.10 ms</td>
+                <td style="padding: 0.85rem 1.25rem;">6.80 ms</td>
                 <td style="padding: 0.85rem 1.25rem; color: #10b981; font-weight: 600;">100.00%</td>
               </tr>
               <tr style="border-bottom: 1px solid rgba(255, 255, 255, 0.03);">
-                <td style="padding: 0.85rem 1.25rem; font-family: 'JetBrains Mono', monospace; color: #818cf8;">/api/inventory/warehouses</td>
-                <td style="padding: 0.85rem 1.25rem;"><span style="font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; background: rgba(16, 185, 129, 0.1); color: #10b981; padding: 0.15rem 0.45rem; border-radius: 4px;">GET</span></td>
-                <td style="padding: 0.85rem 1.25rem; font-weight: 600;">1.35 ms</td>
-                <td style="padding: 0.85rem 1.25rem;">159 req/s</td>
-                <td style="padding: 0.85rem 1.25rem; color: #10b981; font-weight: 600;">100.00%</td>
-              </tr>
-              <tr style="border-bottom: 1px solid rgba(255, 255, 255, 0.03);">
-                <td style="padding: 0.85rem 1.25rem; font-family: 'JetBrains Mono', monospace; color: #818cf8;">/api/purchasing/orders</td>
-                <td style="padding: 0.85rem 1.25rem;"><span style="font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; background: rgba(16, 185, 129, 0.1); color: #10b981; padding: 0.15rem 0.45rem; border-radius: 4px;">GET</span></td>
-                <td style="padding: 0.85rem 1.25rem; font-weight: 600;">1.42 ms</td>
-                <td style="padding: 0.85rem 1.25rem;">124 req/s</td>
-                <td style="padding: 0.85rem 1.25rem; color: #10b981; font-weight: 600;">100.00%</td>
-              </tr>
-              <tr style="border-bottom: 1px solid rgba(255, 255, 255, 0.03);">
+                <td style="padding: 0.85rem 1.25rem; font-weight: 600; color: #ffffff;">MOD-03 Purchasing</td>
                 <td style="padding: 0.85rem 1.25rem; font-family: 'JetBrains Mono', monospace; color: #818cf8;">/api/purchasing/requisitions</td>
                 <td style="padding: 0.85rem 1.25rem;"><span style="font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; background: rgba(16, 185, 129, 0.1); color: #10b981; padding: 0.15rem 0.45rem; border-radius: 4px;">GET</span></td>
-                <td style="padding: 0.85rem 1.25rem; font-weight: 600;">1.46 ms</td>
-                <td style="padding: 0.85rem 1.25rem;">124 req/s</td>
+                <td style="padding: 0.85rem 1.25rem; font-weight: 600;">2.32 ms</td>
+                <td style="padding: 0.85rem 1.25rem;">2.98 ms</td>
                 <td style="padding: 0.85rem 1.25rem; color: #10b981; font-weight: 600;">100.00%</td>
               </tr>
               <tr style="border-bottom: 1px solid rgba(255, 255, 255, 0.03);">
-                <td style="padding: 0.85rem 1.25rem; font-family: 'JetBrains Mono', monospace; color: #818cf8;">/api/master/branches</td>
+                <td style="padding: 0.85rem 1.25rem; font-weight: 600; color: #ffffff;">MOD-04 Sales</td>
+                <td style="padding: 0.85rem 1.25rem; font-family: 'JetBrains Mono', monospace; color: #818cf8;">/api/sales/orders</td>
                 <td style="padding: 0.85rem 1.25rem;"><span style="font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; background: rgba(16, 185, 129, 0.1); color: #10b981; padding: 0.15rem 0.45rem; border-radius: 4px;">GET</span></td>
-                <td style="padding: 0.85rem 1.25rem; font-weight: 600;">1.31 ms</td>
-                <td style="padding: 0.85rem 1.25rem;">80.9 req/s</td>
+                <td style="padding: 0.85rem 1.25rem; font-weight: 600;">3.36 ms</td>
+                <td style="padding: 0.85rem 1.25rem;">5.48 ms</td>
+                <td style="padding: 0.85rem 1.25rem; color: #10b981; font-weight: 600;">100.00%</td>
+              </tr>
+              <tr style="border-bottom: 1px solid rgba(255, 255, 255, 0.03);">
+                <td style="padding: 0.85rem 1.25rem; font-weight: 600; color: #ffffff;">MOD-01 Accounting</td>
+                <td style="padding: 0.85rem 1.25rem; font-family: 'JetBrains Mono', monospace; color: #818cf8;">/api/accounting/journals</td>
+                <td style="padding: 0.85rem 1.25rem;"><span style="font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; background: rgba(16, 185, 129, 0.1); color: #10b981; padding: 0.15rem 0.45rem; border-radius: 4px;">GET</span></td>
+                <td style="padding: 0.85rem 1.25rem; font-weight: 600;">3.46 ms</td>
+                <td style="padding: 0.85rem 1.25rem;">4.18 ms</td>
+                <td style="padding: 0.85rem 1.25rem; color: #10b981; font-weight: 600;">100.00%</td>
+              </tr>
+              <tr style="border-bottom: 1px solid rgba(255, 255, 255, 0.03);">
+                <td style="padding: 0.85rem 1.25rem; font-weight: 600; color: #ffffff;">MOD-05 Manufacturing</td>
+                <td style="padding: 0.85rem 1.25rem; font-family: 'JetBrains Mono', monospace; color: #818cf8;">/api/manufacturing/work-orders</td>
+                <td style="padding: 0.85rem 1.25rem;"><span style="font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; background: rgba(16, 185, 129, 0.1); color: #10b981; padding: 0.15rem 0.45rem; border-radius: 4px;">GET</span></td>
+                <td style="padding: 0.85rem 1.25rem; font-weight: 600;">5.29 ms</td>
+                <td style="padding: 0.85rem 1.25rem;">6.99 ms</td>
+                <td style="padding: 0.85rem 1.25rem; color: #10b981; font-weight: 600;">100.00%</td>
+              </tr>
+              <tr style="border-bottom: 1px solid rgba(255, 255, 255, 0.03);">
+                <td style="padding: 0.85rem 1.25rem; font-weight: 600; color: #ffffff;">MOD-06 HRM</td>
+                <td style="padding: 0.85rem 1.25rem; font-family: 'JetBrains Mono', monospace; color: #818cf8;">/api/hrm/employees</td>
+                <td style="padding: 0.85rem 1.25rem;"><span style="font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; background: rgba(16, 185, 129, 0.1); color: #10b981; padding: 0.15rem 0.45rem; border-radius: 4px;">GET</span></td>
+                <td style="padding: 0.85rem 1.25rem; font-weight: 600;">5.40 ms</td>
+                <td style="padding: 0.85rem 1.25rem;">8.85 ms</td>
                 <td style="padding: 0.85rem 1.25rem; color: #10b981; font-weight: 600;">100.00%</td>
               </tr>
               <tr>
-                <td style="padding: 0.85rem 1.25rem; font-family: 'JetBrains Mono', monospace; color: #818cf8;">/api/auth/me</td>
-                <td style="padding: 0.85rem 1.25rem;"><span style="font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; background: rgba(16, 185, 129, 0.1); color: #10b981; padding: 0.15rem 0.45rem; border-radius: 4px;">GET</span></td>
-                <td style="padding: 0.85rem 1.25rem; font-weight: 600;">6.98 ms</td>
-                <td style="padding: 0.85rem 1.25rem;">42.5 req/s</td>
+                <td style="padding: 0.85rem 1.25rem; font-weight: 600; color: #ffffff;">MOD-16 IAM Auth</td>
+                <td style="padding: 0.85rem 1.25rem; font-family: 'JetBrains Mono', monospace; color: #818cf8;">/api/auth/login</td>
+                <td style="padding: 0.85rem 1.25rem;"><span style="font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; background: rgba(99, 102, 241, 0.15); color: #818cf8; padding: 0.15rem 0.45rem; border-radius: 4px;">POST</span></td>
+                <td style="padding: 0.85rem 1.25rem; font-weight: 600;">7.20 ms</td>
+                <td style="padding: 0.85rem 1.25rem;">25.15 ms</td>
                 <td style="padding: 0.85rem 1.25rem; color: #10b981; font-weight: 600;">100.00%</td>
               </tr>
             </tbody>
@@ -1876,16 +1934,16 @@
       <div class="container">
         <div class="section-header">
           <span class="section-tag">Application Interface Gallery</span>
-          <h2 class="section-title">System Interface Walkthrough </h2>
+          <h2 class="section-title">System Interface Walkthrough</h2>
           <p class="section-desc">
-            High-resolution visual inspection of actual operational screens across all 18 enterprise modules, including executive dashboards, warehouse management, procurement grids, quality modals, manufacturing routing, and approval workflows.
+            High-resolution visual inspection of actual operational screens across all 18 enterprise modules, including executive dashboards, live Grafana load test telemetry, warehouse management, procurement grids, quality modals, manufacturing routing, and approval workflows.
           </p>
         </div>
 
         <div class="gallery-filter-bar">
-          <button class="gallery-filter-btn active" onclick="filterGallery('all')">All Screenshots </button>
+          <button class="gallery-filter-btn active" onclick="filterGallery('all')">All Screenshots</button>
+          <button class="gallery-filter-btn" onclick="filterGallery('loadtest')">Load Tests & Metrics</button>
           <button class="gallery-filter-btn" onclick="filterGallery('dashboards')">Dashboards & Holding</button>
-          <button class="gallery-filter-btn" onclick="filterGallery('loadtest')">Load Test & Metrics</button>
           <button class="gallery-filter-btn" onclick="filterGallery('warehouse')">Warehouse & Logistics</button>
           <button class="gallery-filter-btn" onclick="filterGallery('procurement')">Procurement & Sales</button>
           <button class="gallery-filter-btn" onclick="filterGallery('manufacturing')">Manufacturing & QC</button>
@@ -1894,15 +1952,51 @@
         </div>
 
         <div class="gallery-grid" id="galleryGrid">
-          <!-- Screenshot 0: Grafana Load Test -->
-          <div class="gallery-item" data-cat="loadtest" onclick="openLightbox('assets/images/grafana-load test.png', 'Grafana 15-Panel Load Test Telemetry - 102K Requests, 770 RPS Peak, 67MB RAM at 300 Concurrent Users')">
+          <!-- Screenshot 0A: Grafana Stress Test -->
+          <div class="gallery-item" data-cat="loadtest" onclick="openLightbox('assets/images/grafana-stress test.png', 'Grafana 18-Module Stress Test Telemetry - 53,967+ Iterations, 300 VUs, Sub-400ms P95, 0% Errors')">
             <div class="gallery-thumbnail">
-              <img src="assets/images/grafana-load test.png" alt="Grafana Load Test Monitoring" loading="lazy" onerror="this.src='https://placehold.co/800x450/0f1523/6366f1?text=Grafana+Load+Test'" />
+              <img src="assets/images/grafana-stress test.png" alt="Grafana Stress Test" loading="lazy" />
             </div>
             <div class="gallery-meta">
               <span class="gallery-tag">OBSERVABILITY / TELEMETRY</span>
-              <div class="gallery-title">Live Grafana Load Test Suite</div>
-              <div class="gallery-desc">Empirical telemetry covering 102K requests, 770 req/s peak, Go goroutine scaling, and sub-2ms latency.</div>
+              <div class="gallery-title">18-Module Stepped Stress Test</div>
+              <div class="gallery-desc">53K+ iterations across 6 stages up to 300 VUs with 0% error rate and sub-25ms P95 latency.</div>
+            </div>
+          </div>
+
+          <!-- Screenshot 0B: Grafana Limit Test -->
+          <div class="gallery-item" data-cat="loadtest" onclick="openLightbox('assets/images/grafana-limit test.png', 'Grafana System Limit & Saturation Test - 1 to 1,000 VUs Breaking Point Discovery')">
+            <div class="gallery-thumbnail">
+              <img src="assets/images/grafana-limit test.png" alt="Grafana Limit Test" loading="lazy" />
+            </div>
+            <div class="gallery-meta">
+              <span class="gallery-tag">OBSERVABILITY / TELEMETRY</span>
+              <div class="gallery-title">System Limit (1,000 VUs)</div>
+              <div class="gallery-desc">Capacity saturation benchmark discovering system breaking point and PostgreSQL pool headroom.</div>
+            </div>
+          </div>
+
+          <!-- Screenshot 0C: Grafana Spike Test -->
+          <div class="gallery-item" data-cat="loadtest" onclick="openLightbox('assets/images/grafana-spike test.png', 'Grafana Traffic Shock Spike Test - 91,574+ Iterations, 50 to 500 VUs in 15s')">
+            <div class="gallery-thumbnail">
+              <img src="assets/images/grafana-spike test.png" alt="Grafana Spike Test" loading="lazy" />
+            </div>
+            <div class="gallery-meta">
+              <span class="gallery-tag">OBSERVABILITY / TELEMETRY</span>
+              <div class="gallery-title">Traffic Shock Spike (500 VUs)</div>
+              <div class="gallery-desc">91K+ requests during instantaneous 10x traffic shock with fast self-recovery and 0% crash.</div>
+            </div>
+          </div>
+
+          <!-- Screenshot 0D: Grafana Race Test -->
+          <div class="gallery-item" data-cat="loadtest" onclick="openLightbox('assets/images/grafana-race test.png', 'Grafana Concurrency Mutation Race - 11,894+ Concurrent Balanced Double-Entry Postings')">
+            <div class="gallery-thumbnail">
+              <img src="assets/images/grafana-race test.png" alt="Grafana Race Test" loading="lazy" />
+            </div>
+            <div class="gallery-meta">
+              <span class="gallery-tag">OBSERVABILITY / TELEMETRY</span>
+              <div class="gallery-title">Concurrency Journal Race</div>
+              <div class="gallery-desc">11.8K+ concurrent general ledger postings with 100% invariant parity SUM(Debit) == SUM(Credit).</div>
             </div>
           </div>
           
@@ -2159,14 +2253,50 @@
           </div>
           
           <!-- Screenshot 22: IAM Security -->
-          <div class="gallery-item" data-cat="governance" onclick="openLightbox('assets/images/IAM.png', 'IAM - RBAC Matrix and user lifecycles')">
+          <div class="gallery-item" data-cat="governance" onclick="openLightbox('assets/images/IAM.png', 'IAM - User Lifecycle & Authentication Management')">
             <div class="gallery-thumbnail">
-              <img src="assets/images/IAM.png" alt="IAM Matrix" loading="lazy" />
+              <img src="assets/images/IAM.png" alt="IAM Management" loading="lazy" />
             </div>
             <div class="gallery-meta">
               <span class="gallery-tag">MOD-01 IAM</span>
-              <div class="gallery-title">Identity & Access Matrix</div>
-              <div class="gallery-desc">Granular control over 102 permissions across 18 modules, mapped to roles and branch tenants.</div>
+              <div class="gallery-title">User Lifecycle & Security</div>
+              <div class="gallery-desc">User account lifecycle, password rotation, multi-branch assignment, and active session states.</div>
+            </div>
+          </div>
+
+          <!-- Screenshot 23: RBAC Matrix -->
+          <div class="gallery-item" data-cat="governance" onclick="openLightbox('assets/images/RBAC.png', 'RBAC Matrix - 102 Granular Permissions Across 18 Modules and 6 Actions')">
+            <div class="gallery-thumbnail">
+              <img src="assets/images/RBAC.png" alt="RBAC Matrix" loading="lazy" />
+            </div>
+            <div class="gallery-meta">
+              <span class="gallery-tag">MOD-01 IAM</span>
+              <div class="gallery-title">RBAC Permission Matrix</div>
+              <div class="gallery-desc">Granular matrix mapping 102 distinct permission flags across modules, actions, and custom roles.</div>
+            </div>
+          </div>
+
+          <!-- Screenshot 24: IoT Machine Integration -->
+          <div class="gallery-item" data-cat="manufacturing" onclick="openLightbox('assets/images/Integrasi MEsin.png', 'Machine Integration & Industrial IoT Telemetry')">
+            <div class="gallery-thumbnail">
+              <img src="assets/images/Integrasi MEsin.png" alt="Machine Integration" loading="lazy" />
+            </div>
+            <div class="gallery-meta">
+              <span class="gallery-tag">MOD-18 INFRASTRUCTURE</span>
+              <div class="gallery-title">Industrial Machine Integration</div>
+              <div class="gallery-desc">Biometric devices and factory floor IoT machine telemetry integration with automated sync.</div>
+            </div>
+          </div>
+
+          <!-- Screenshot 25: Real-time Notifications -->
+          <div class="gallery-item" data-cat="governance" onclick="openLightbox('assets/images/notif.png', 'Notification & Alert Center - Workflow requests, threshold warnings, and system alerts')">
+            <div class="gallery-thumbnail">
+              <img src="assets/images/notif.png" alt="Notification Center" loading="lazy" />
+            </div>
+            <div class="gallery-meta">
+              <span class="gallery-tag">MOD-16 WORKFLOW</span>
+              <div class="gallery-title">Real-Time Notification Center</div>
+              <div class="gallery-desc">In-app alert drawer for pending approval requests, stock threshold warnings, and audit events.</div>
             </div>
           </div>
         </div>
@@ -2199,6 +2329,122 @@
   </footer>
 
   <script>
+    // Benchmark Multi-Suite Interactive Data
+    const BENCHMARK_SUITES = {
+      stress: {
+        badge: 'STRESS TEST (53,967+ ITERATIONS)',
+        title: '18-Module Stepped Stress Test (20 \u2192 300 VUs)',
+        image: 'assets/images/grafana-stress test.png',
+        caption: 'Grafana Telemetry: 18-Module Stepped Stress Test up to 300 Concurrent Users with 0% Error Rate and Sub-400ms Latency',
+        stats: [
+          { label: 'Total Iterations', val: '53,967+', sub: '5-minute multi-stage stress ramp' },
+          { label: 'Max Concurrency', val: '300 VUs', sub: 'Balanced traffic across 18 modules' },
+          { label: 'Average Latency', val: '< 3.8 ms', sub: 'P95 latency under 25ms' },
+          { label: 'HTTP Error Rate', val: '0.00%', sub: '100% successful requests' }
+        ],
+        kpis: [
+          { title: '1. Multi-Stage Workload', desc: 'Sustained 5-minute ramp through 6 stages up to 300 looping VUs with smooth scaling across all 18 enterprise modules.' },
+          { title: '2. 18-Module Latencies', desc: 'Inventory: 2.1ms, Purchasing: 2.3ms, Sales: 3.3ms, Accounting: 3.4ms, HRM: 5.4ms, MRP: 5.2ms, Workflow: 3.8ms.' },
+          { title: '3. Memory & GC Health', desc: 'Bounded memory footprint with zero memory leaks, ~67MB heap, and sub-millisecond Go runtime garbage collection.' },
+          { title: '4. Database Pool Headroom', desc: 'pgxpool handled concurrency with minimal connection wait and zero connection errors or starvation.' }
+        ]
+      },
+      limit: {
+        badge: 'LIMIT & SATURATION TEST',
+        title: 'System Limit & Breaking Point Discovery (1 \u2192 1,000 VUs)',
+        image: 'assets/images/grafana-limit test.png',
+        caption: 'Grafana Telemetry: System Limit Test ramping up to 1,000 Virtual Users across all enterprise domains',
+        stats: [
+          { label: 'Saturation Ceiling', val: '1,000 VUs', sub: 'Capacity boundary benchmark' },
+          { label: 'Peak Throughput', val: '1,250+ req/s', sub: 'High-throughput Go Chi engine' },
+          { label: 'P95 Latency', val: '< 65 ms', sub: 'Under extreme high-concurrency' },
+          { label: 'Failure Threshold', val: '< 0.5%', sub: 'Far below 5% saturation allowance' }
+        ],
+        kpis: [
+          { title: '1. Capacity Limit Discovery', desc: 'Ramping 1 to 1,000 VUs identified the throughput ceiling and sizing bounds for production deployments.' },
+          { title: '2. Asynq & Valkey Stability', desc: 'Task broker efficiently buffered async background mutations without queue overflow or packet loss.' },
+          { title: '3. CPU & Goroutine Scaling', desc: 'Go runtime scaled across CPU cores with thousands of concurrent lightweight goroutines without context-switch churn.' },
+          { title: '4. PostgreSQL Saturation', desc: 'PostgreSQL connection pool maintained deterministic response without crashing or dropping connection slots.' }
+        ]
+      },
+      spike: {
+        badge: 'SPIKE TEST (91,574+ ITERATIONS)',
+        title: 'Traffic Shock & Acute Spike Test (50 \u2192 500 VUs in 15s)',
+        image: 'assets/images/grafana-spike test.png',
+        caption: 'Grafana Telemetry: Traffic Shock Spike Test surging to 500 VUs in 15 seconds with fast self-recovery',
+        stats: [
+          { label: 'Total Volume', val: '91,574+ Req', sub: '2m25s acute shock simulation' },
+          { label: 'Spike Surge', val: '500 VUs', sub: 'Surged from 50 to 500 in 15s' },
+          { label: 'Recovery Time', val: '< 3.0 s', sub: 'Instantaneous self-healing' },
+          { label: 'System Uptime', val: '100.00%', sub: 'Zero panic, zero OOM kill' }
+        ],
+        kpis: [
+          { title: '1. Acute Surge Resistance', desc: 'Instantly absorbed 10x traffic surge without crashing Caddy reverse proxy or Go backend worker processes.' },
+          { title: '2. Connection Pool Surge', desc: 'pgxpool handled burst connections cleanly without connection starvation or timeout errors.' },
+          { title: '3. Rapid Latency Recovery', desc: 'Response times quickly normalized back to baseline after peak shock subsided.' },
+          { title: '4. Zero Data Loss', desc: 'No transaction loss or dropped HTTP sockets during rapid VU drain.' }
+        ]
+      },
+      race: {
+        badge: 'CONCURRENCY & INVARIANT TEST',
+        title: 'Concurrency Double-Entry Mutation Race (50 Concurrent VUs)',
+        image: 'assets/images/grafana-race test.png',
+        caption: 'Grafana Telemetry: Concurrent Double-Entry Journal Postings with 100% Invariant Parity SUM(Debit) == SUM(Credit)',
+        stats: [
+          { label: 'Journals Posted', val: '11,894+ Tx', sub: '1-minute continuous write race' },
+          { label: 'Concurrent Mutators', val: '50 VUs', sub: 'Simultaneous general ledger writes' },
+          { label: 'Invariant Violations', val: '0 (Zero)', sub: 'Debit strictly equals Credit' },
+          { label: 'Deadlocks Encountered', val: '0 (Zero)', sub: 'Row-level locking optimized' }
+        ],
+        kpis: [
+          { title: '1. Double-Entry Invariant Enforced', desc: 'SUM(debit) == SUM(credit) strictly preserved across all 11,894+ concurrent postings.' },
+          { title: '2. PostgreSQL Row Lock Mutex', desc: 'Zero transaction deadlocks while updating concurrent ledger account balances.' },
+          { title: '3. Write Latency Efficiency', desc: 'Complex multi-line journal insertions completed in sub-15ms under high concurrency.' },
+          { title: '4. Audit Trail Integrity', desc: 'Every mutation accurately produced structured audit log diffs without corruption.' }
+        ]
+      }
+    };
+
+    function switchBenchmarkTab(suiteKey) {
+      const suite = BENCHMARK_SUITES[suiteKey];
+      if (!suite) return;
+
+      const buttons = document.querySelectorAll('#benchmarkTabs .benchmark-tab-btn');
+      buttons.forEach(btn => {
+        if (btn.getAttribute('onclick').includes(suiteKey)) {
+          btn.classList.add('active');
+        } else {
+          btn.classList.remove('active');
+        }
+      });
+
+      document.getElementById('benchBadge').textContent = suite.badge;
+      document.getElementById('benchTitle').innerHTML = suite.title;
+
+      const img = document.getElementById('benchImg');
+      const container = document.getElementById('benchImgContainer');
+      img.src = suite.image;
+      container.onclick = () => openLightbox(suite.image, suite.caption);
+
+      suite.stats.forEach((st, idx) => {
+        const labelElem = document.getElementById(`benchStatLabel${idx}`);
+        const valElem = document.getElementById(`benchStatVal${idx}`);
+        const subElem = document.getElementById(`benchStatSub${idx}`);
+        if (labelElem) labelElem.textContent = st.label;
+        if (valElem) valElem.textContent = st.val;
+        if (subElem) subElem.textContent = st.sub;
+      });
+
+      suite.kpis.forEach((kpi, idx) => {
+        const titleElem = document.getElementById(`kpiTitle${idx}`);
+        const descElem = document.getElementById(`kpiDesc${idx}`);
+        if (titleElem) titleElem.textContent = kpi.title;
+        if (descElem) descElem.textContent = kpi.desc;
+      });
+    }
+
+    window.switchBenchmarkTab = switchBenchmarkTab;
+
     // Module Category Filter
     function filterModules(category) {
       const buttons = document.querySelectorAll('.module-filter-btn');
