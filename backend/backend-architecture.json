@@ -2,67 +2,109 @@
   "schema_version": 1,
   "diagram_type": "architecture",
   "meta": {
-    "title": "ERP Backend Architecture",
+    "title": "Industrial Enterprise ERP - Backend Architecture",
     "output": "backend-architecture.html",
-    "quality_profile": "showcase"
-  },
-  "layout": {
-    "mode": "grid",
-    "origin": [40, 40],
-    "cols": 4,
-    "gapX": 120,
-    "gapY": 100,
-    "cellW": 160,
-    "cellH": 60
+    "quality_profile": "showcase",
+    "viewBox": [1260, 520],
+    "views": [
+      {
+        "id": "p2p-request-flow",
+        "label": "Procure-to-Pay & API Path",
+        "focus": ["users", "caddy", "chi_router", "iam_auth", "mod_scm", "db_pool", "postgres"],
+        "note": "Trace requests from Next.js web client through Caddy, Chi router, IAM security, SCM domain logic, and transactional PostgreSQL storage."
+      },
+      {
+        "id": "security-and-domain",
+        "label": "Modular Monolith Domain Matrix",
+        "focus": ["iam_auth", "mod_scm", "mod_ops", "mod_fin", "mod_org", "db_pool"],
+        "note": "Clean architecture boundary isolating SCM, Operations, PSAK Accounting, and HRM with granular RBAC enforcement."
+      },
+      {
+        "id": "caching-and-async",
+        "label": "Platform Cache & Async Tasks",
+        "focus": ["chi_router", "mod_scm", "mod_ops", "mod_fin", "mod_org", "asynq_engine", "valkey", "db_pool"],
+        "note": "Cross-module caching, mutation idempotency, and distributed task queues powered by Valkey and Asynq worker engine."
+      }
+    ]
   },
   "components": [
-    { "id": "chi", "type": "backend", "label": "Chi Router", "sublabel": "HTTP API Server", "col": 1, "row": 0 },
-    { "id": "iam", "type": "security", "label": "IAM & Middleware", "sublabel": "Auth & Security", "col": 1, "row": 1 },
+    { "id": "users", "type": "external", "label": "Next.js Web", "sublabel": "React 19 / App Router", "pos": [35, 260], "size": [135, 60], "brand": "next-js" },
+    { "id": "caddy", "type": "security", "label": "Caddy Gateway", "sublabel": "Auto-HTTPS & Proxy", "pos": [225, 260], "size": [130, 60], "tag": "Reverse Proxy" },
+    { "id": "chi_router", "type": "backend", "label": "Chi Router", "sublabel": "REST API & SSE Stream", "pos": [415, 260], "size": [140, 60], "brand": "go", "tag": ":8080" },
+    { "id": "iam_auth", "type": "security", "label": "IAM & Policy Guard", "sublabel": "JWT, RBAC & Multi-Branch", "pos": [415, 110], "size": [140, 60], "tag": "Middleware" },
     
-    { "id": "modules_core", "type": "backend", "label": "Core Modules", "sublabel": "Master, Accounting, Sys", "col": 0, "row": 2 },
-    { "id": "modules_mfg", "type": "backend", "label": "Mfg & HRM Modules", "sublabel": "Manufacturing, HRM", "col": 1, "row": 2 },
-    { "id": "modules_ops", "type": "backend", "label": "Operations Modules", "sublabel": "Sales, Inv, Purch, Log", "col": 2, "row": 2 },
+    { "id": "mod_scm", "type": "backend", "label": "SCM & Purchasing", "sublabel": "P2P, PO, GRN, 3-Way", "pos": [625, 75], "size": [145, 55] },
+    { "id": "mod_ops", "type": "backend", "label": "Ops & Inventory", "sublabel": "Perpetual Stock & QC", "pos": [625, 160], "size": [145, 55] },
+    { "id": "mod_fin", "type": "backend", "label": "Finance & PSAK", "sublabel": "Double-Entry GL & Tax", "pos": [625, 265], "size": [145, 55] },
+    { "id": "mod_org", "type": "backend", "label": "HRM & Governance", "sublabel": "Payroll & Audit Logs", "pos": [625, 350], "size": [145, 55] },
     
-    { "id": "floci", "type": "cloud", "label": "Floci Storage", "sublabel": "S3 Compatible Storage", "col": 3, "row": 2 },
+    { "id": "floci", "type": "cloud", "label": "Floci Storage", "sublabel": "S3 Attachments & PDF", "pos": [865, 75], "size": [135, 55], "tag": "S3 API" },
+    { "id": "db_pool", "type": "backend", "label": "pgxpool & sqlc", "sublabel": "ACID SQL Engine", "pos": [865, 205], "size": [135, 60], "brand": "go" },
+    { "id": "asynq_engine", "type": "messagebus", "label": "Asynq Workers", "sublabel": "Async Jobs & Cron", "pos": [865, 345], "size": [135, 60] },
     
-    { "id": "db_pool", "type": "backend", "label": "pgx Pool", "sublabel": "sqlc query engine", "col": 1, "row": 3 },
-    { "id": "asynq", "type": "messagebus", "label": "Asynq Workers", "sublabel": "Background Tasks", "col": 2, "row": 3 },
-    { "id": "valkey", "type": "database", "label": "Valkey", "sublabel": "Redis Cache & Queue", "col": 3, "row": 3 },
-    
-    { "id": "postgres", "type": "database", "label": "PostgreSQL 16", "sublabel": "Relational DB", "col": 3, "row": 4 }
+    { "id": "postgres", "type": "database", "label": "PostgreSQL 16", "sublabel": "Durable Relational DB", "pos": [1075, 205], "size": [135, 60], "brand": "postgresql" },
+    { "id": "valkey", "type": "database", "label": "Valkey / Redis", "sublabel": "Cache, Queue & Lock", "pos": [1075, 345], "size": [135, 60], "brand": "redis" }
   ],
   "boundaries": [
     {
       "kind": "region",
-      "label": "Golang Backend Service",
-      "wraps": ["chi", "iam", "modules_core", "modules_mfg", "modules_ops", "db_pool", "asynq"]
+      "label": "Golang Backend Service (services/api)",
+      "wraps": ["chi_router", "iam_auth", "mod_scm", "mod_ops", "mod_fin", "mod_org", "db_pool", "asynq_engine"]
     },
     {
       "kind": "security-group",
-      "label": "Data Persistence",
-      "wraps": ["floci", "valkey", "postgres"]
+      "label": "Data Persistence & Local Cloud",
+      "wraps": ["floci", "postgres", "valkey"]
     }
   ],
   "connections": [
-    { "id": "chi_iam", "from": "chi", "to": "iam", "label": "auth check", "labelDy": 24 },
-    { "id": "iam_core", "from": "iam", "to": "modules_core", "label": "route", "labelDy": 24 },
-    { "id": "iam_mfg", "from": "iam", "to": "modules_mfg", "label": "route", "labelDy": 24 },
-    { "id": "iam_ops", "from": "iam", "to": "modules_ops", "label": "route", "labelDy": 24 },
+    { "id": "users_caddy", "from": "users", "to": "caddy", "label": "HTTPS :443", "variant": "emphasis" },
+    { "id": "caddy_chi", "from": "caddy", "to": "chi_router" },
+    { "id": "chi_iam", "from": "chi_router", "to": "iam_auth", "label": "guard & filter", "variant": "security", "fromSide": "top", "toSide": "bottom" },
     
-    { "id": "core_pool", "from": "modules_core", "to": "db_pool", "label": "query", "labelDy": 24 },
-    { "id": "mfg_pool", "from": "modules_mfg", "to": "db_pool", "label": "query", "labelDy": 24 },
-    { "id": "ops_pool", "from": "modules_ops", "to": "db_pool", "label": "query", "labelDy": 24 },
+    { "id": "chi_scm", "from": "chi_router", "to": "mod_scm", "fromSide": "right", "toSide": "left" },
+    { "id": "chi_ops", "from": "chi_router", "to": "mod_ops", "fromSide": "right", "toSide": "left" },
+    { "id": "chi_fin", "from": "chi_router", "to": "mod_fin", "fromSide": "right", "toSide": "left" },
+    { "id": "chi_org", "from": "chi_router", "to": "mod_org", "fromSide": "right", "toSide": "left" },
     
-    { "id": "ops_floci", "from": "modules_ops", "to": "floci", "label": "upload" },
-    { "id": "ops_valkey", "from": "modules_ops", "to": "valkey", "label": "enqueue" },
+    { "id": "scm_floci", "from": "mod_scm", "to": "floci", "label": "put object", "variant": "dashed", "fromSide": "right", "toSide": "left" },
+    { "id": "scm_pool", "from": "mod_scm", "to": "db_pool", "label": "sqlc query", "fromSide": "right", "toSide": "left" },
+    { "id": "ops_pool", "from": "mod_ops", "to": "db_pool", "fromSide": "right", "toSide": "left" },
+    { "id": "fin_pool", "from": "mod_fin", "to": "db_pool", "fromSide": "right", "toSide": "left" },
+    { "id": "org_asynq", "from": "mod_org", "to": "asynq_engine", "label": "enqueue task", "variant": "dashed", "fromSide": "right", "toSide": "left", "labelAt": [818, 365] },
     
-    { "id": "asynq_valkey", "from": "asynq", "to": "valkey", "label": "dequeue", "labelDy": 24 },
-    { "id": "asynq_pool", "from": "asynq", "to": "db_pool", "label": "query", "labelDy": 24 },
-    { "id": "pool_pg", "from": "db_pool", "to": "postgres", "label": "tcp/ip" }
+    { "id": "asynq_pool", "from": "asynq_engine", "to": "db_pool", "label": "batch execute", "variant": "dashed", "fromSide": "top", "toSide": "bottom" },
+    { "id": "pool_pg", "from": "db_pool", "to": "postgres", "label": "TCP :5432", "fromSide": "right", "toSide": "left" },
+    { "id": "asynq_valkey", "from": "asynq_engine", "to": "valkey", "label": "redis broker", "fromSide": "right", "toSide": "left" },
+    { "id": "chi_valkey", "from": "chi_router", "to": "valkey", "label": "cache & idempotency", "variant": "dashed", "fromSide": "bottom", "toSide": "bottom", "via": [[485, 440], [1142.5, 440]] }
   ],
   "cards": [
-    { "dot": "emerald", "title": "API Layer", "items": ["Chi Router with Auto-HTTPS via Caddy", "JWT auth & fine-grained RBAC"] },
-    { "dot": "cyan", "title": "Modular Monolith", "items": ["Modules logically separated", "Clean Architecture with internal/platform"] },
-    { "dot": "rose", "title": "Async & Data", "items": ["Asynq workers processing Valkey queues", "Floci for S3-compatible local object storage"] }
+    {
+      "dot": "emerald",
+      "title": "API & Ingress Layer",
+      "items": [
+        "Next.js 15 App Router client with TanStack Table and Zustand",
+        "Caddy edge proxy with Auto-HTTPS and zero-config TLS",
+        "Chi router with Valkey-backed idempotency & SSE live streams"
+      ]
+    },
+    {
+      "dot": "cyan",
+      "title": "Modular Monolith Core",
+      "items": [
+        "Domain modules: Purchasing (P2P), Operations (MRP), PSAK Accounting, HRM",
+        "Granular RBAC middleware enforcing module:action permissions",
+        "Multi-branch tenant isolation verified against user_branches table"
+      ]
+    },
+    {
+      "dot": "rose",
+      "title": "Storage & Valkey Infrastructure",
+      "items": [
+        "PostgreSQL 16 with pgxpool and sqlc pure type-safe queries",
+        "Valkey serving as shared cache, idempotency store, and Asynq broker",
+        "Asynq worker engine for periodic depreciation, batch payroll & MRP jobs"
+      ]
+    }
   ]
 }
