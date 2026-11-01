@@ -115,7 +115,7 @@ erDiagram
         string user_agent
         jsonb diff_before
         jsonb diff_after
-        timestamp timestamp
+        timestamp created_at
     }
 
     SYSTEM_SETTINGS {

@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Enterprise ERP Showcase | Golang & Next.js Industrial Architecture</title>
-  <meta name="description" content="Technical showcase and architectural overview of an industrial-grade ERP system built with Golang 1.22+ Modular Monolith and Next.js 15 App Router." />
+  <meta name="description" content="Technical showcase and architectural overview of an industrial-grade ERP system built with Golang 1.24+ Modular Monolith and Next.js 15 App Router." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
@@ -486,7 +486,7 @@
       line-height: 1.55;
     }
 
-    /* 18 Modules Section */
+    /* 20 Modules Section */
     .module-filter-bar {
       display: flex;
       gap: 0.5rem;
@@ -1004,7 +1004,7 @@
         <ul>
           <li><a href="#overview">Overview</a></li>
           <li><a href="#architecture">Architecture</a></li>
-          <li><a href="#modules">18 Modules</a></li>
+          <li><a href="#modules">20 Modules</a></li>
           <li><a href="#sdd-erd">SDD & ERDs</a></li>
           <li><a href="#performance">Benchmarks</a></li>
           <li><a href="#screens">Showcase</a></li>
@@ -1033,8 +1033,8 @@
         </h1>
 
         <p>
-          A unified enterprise resource planning platform engineered with Golang 1.22+ and Next.js 15 App Router.
-          Structured across 18 Clean Architecture domain modules, double-entry accounting invariants, perpetual inventory tracking, and multi-branch governance.
+          A unified enterprise resource planning platform engineered with Golang 1.24+ and Next.js 15 App Router.
+          Structured across 20 Clean Architecture domain modules, double-entry accounting invariants, perpetual inventory tracking, and multi-branch governance.
         </p>
 
         <div class="hero-actions">
@@ -1052,7 +1052,7 @@
         <div class="hero-stats">
           <div class="stat-card">
             <div class="stat-label">Core Runtime</div>
-            <div class="stat-value">Golang 1.22+</div>
+            <div class="stat-value">Golang 1.24+</div>
           </div>
           <div class="stat-card">
             <div class="stat-label">Web Client</div>
@@ -1060,11 +1060,11 @@
           </div>
           <div class="stat-card">
             <div class="stat-label">Domain Modules</div>
-            <div class="stat-value">18 Modules</div>
+            <div class="stat-value">20 Modules</div>
           </div>
           <div class="stat-card">
             <div class="stat-label">Database & SQL</div>
-            <div class="stat-value">PostgreSQL + sqlc</div>
+            <div class="stat-value">PostgreSQL + pgx</div>
           </div>
           <div class="stat-card">
             <div class="stat-label">Async Workers</div>
@@ -1099,7 +1099,7 @@
                 Comprehensive view of gateway routing, domain modules, asynchronous task pipelines, local S3 object storage, and PostgreSQL relational clusters.
               </p>
               <ul class="arch-features-list">
-                <li>Caddy Reverse Proxy with Auto-HTTPS termination</li>
+                <li>Caddy reverse proxy with path-based routing and optional Auto-HTTPS</li>
                 <li>Modular Monolith domain engine boundary isolation</li>
                 <li>Valkey queue engine with Asynq distributed workers</li>
                 <li>Floci S3-compatible local object storage adapter</li>
@@ -1116,7 +1116,7 @@
               <span class="arch-card-badge">GO CLEAN ARCHITECTURE</span>
               <h3>Backend Engine & Services</h3>
               <p>
-                Strict Ports and Adapters layer segregation. Type-safe SQL execution using sqlc and pgx/v5 driver, zero reflection on hot paths, and unified error mapping.
+                Strict Ports and Adapters layer segregation. Explicit parameterized SQL executed through pgx/v5, zero reflection on hot paths, and unified error mapping.
               </p>
               <ul class="arch-features-list">
                 <li>Chi HTTP router with granular RBAC middleware</li>
@@ -1271,7 +1271,7 @@
               <h4>Backend & Runtime</h4>
             </div>
             <div class="stack-item">
-              <span class="stack-item-name">Golang 1.22+</span>
+              <span class="stack-item-name">Golang 1.24+</span>
               <span class="stack-item-desc">Core Language</span>
             </div>
             <div class="stack-item">
@@ -1279,8 +1279,8 @@
               <span class="stack-item-desc">HTTP Engine</span>
             </div>
             <div class="stack-item">
-              <span class="stack-item-name">sqlc + pgx/v5</span>
-              <span class="stack-item-desc">Type-Safe SQL</span>
+              <span class="stack-item-name">pgx/v5 + SQL</span>
+              <span class="stack-item-desc">Explicit Parameterized Queries</span>
             </div>
             <div class="stack-item">
               <span class="stack-item-name">goose</span>
@@ -1329,7 +1329,7 @@
               <span class="stack-item-desc">Primary Relational DB</span>
             </div>
             <div class="stack-item">
-              <span class="stack-item-name">Valkey 7.2+</span>
+              <span class="stack-item-name">Valkey 8</span>
               <span class="stack-item-desc">In-Memory Cache & Broker</span>
             </div>
             <div class="stack-item">
@@ -1424,19 +1424,19 @@
       </div>
     </section>
 
-    <!-- 18 Modules Section -->
+    <!-- 20 Modules Section -->
     <section id="modules">
       <div class="container">
         <div class="section-header">
           <span class="section-tag">Complete Domain Coverage</span>
-          <h2 class="section-title">18 Clean Architecture Domain Modules</h2>
+          <h2 class="section-title">20 Clean Architecture Domain Modules</h2>
           <p class="section-desc">
-            The platform is structured into 18 decoupled domain modules with explicit boundary isolation, dedicated use cases, repositories, and handlers.
+            The platform is structured into 20 decoupled domain modules with explicit boundary isolation, dedicated use cases, repositories, and handlers.
           </p>
         </div>
 
         <div class="module-filter-bar">
-          <button class="module-filter-btn active" onclick="filterModules('all')">All 18 Modules</button>
+          <button class="module-filter-btn active" onclick="filterModules('all')">All 20 Modules</button>
           <button class="module-filter-btn" onclick="filterModules('scm')">Supply Chain & Operations</button>
           <button class="module-filter-btn" onclick="filterModules('finance')">Financials, Tax & Assets</button>
           <button class="module-filter-btn" onclick="filterModules('mfg')">Manufacturing & Maintenance</button>
@@ -1714,6 +1714,36 @@
               <span class="module-chip">System Settings</span>
             </div>
           </div>
+
+          <!-- Module 19: Documents Hub -->
+          <div class="module-card" data-cat="gov">
+            <div class="module-header">
+              <span class="module-code">MOD-19</span>
+              <span class="module-category-tag">Governance</span>
+            </div>
+            <h4>Corporate Documents Hub</h4>
+            <p>Official correspondence register for SK, ST, Paklaring, SP, BAST, SKU, memo, and certificate documents with tiered signatures, watermarks, and S3 archival.</p>
+            <div class="module-highlights">
+              <span class="module-chip">Document Register</span>
+              <span class="module-chip">S3 Archive</span>
+              <span class="module-chip">A4 Print</span>
+            </div>
+          </div>
+
+          <!-- Module 20: B2B Portal -->
+          <div class="module-card" data-cat="scm">
+            <div class="module-header">
+              <span class="module-code">MOD-20</span>
+              <span class="module-category-tag">Partner Portal</span>
+            </div>
+            <h4>B2B Vendor & Customer Portal</h4>
+            <p>Partner-scoped self-service for vendor PO acknowledgment, promised delivery dates, Advance Shipping Notices, and read-only customer orders and invoices.</p>
+            <div class="module-highlights">
+              <span class="module-chip">PO Acknowledgment</span>
+              <span class="module-chip">ASN</span>
+              <span class="module-chip">Customer Invoices</span>
+            </div>
+          </div>
         </div>
       </div>
     </section>
@@ -1725,7 +1755,7 @@
           <span class="section-tag">Software Design Documents & Schemas</span>
           <h2 class="section-title">Module SDD & Relational ERD Matrix</h2>
           <p class="section-desc">
-            Explore comprehensive use cases, operational activity workflows, API sequence diagrams, and relational database ERDs with PostgreSQL types and foreign key constraints across all 18 enterprise modules.
+            Explore comprehensive use cases, operational activity workflows, API sequence diagrams, and relational database ERDs with PostgreSQL types and foreign key constraints across all 20 enterprise modules.
           </p>
         </div>
 
@@ -1772,7 +1802,7 @@
           <span class="section-tag">Empirical Benchmark & Load Verification</span>
           <h2 class="section-title">High-Throughput Load Testing & Telemetry Verification</h2>
           <p class="section-desc">
-            Empirical stress test results executed with <code>k6</code> and monitored in real-time via Prometheus TSDB and Grafana dashboards across all 18 enterprise domain modules, scaling from single-digit concurrency up to 1,000 Virtual Users.
+            Empirical stress test results executed with <code>k6</code> and monitored in real-time via Prometheus TSDB and Grafana dashboards across the enterprise domain modules, scaling from single-digit concurrency up to 1,000 Virtual Users.
           </p>
         </div>
 
@@ -1805,7 +1835,7 @@
           <div class="stat-card" style="border-left: 3px solid #06b6d4;">
             <div class="stat-label" id="benchStatLabel1">Max Concurrency</div>
             <div class="stat-value" id="benchStatVal1">300 VUs</div>
-            <div id="benchStatSub1" style="font-size: 0.75rem; color: var(--text-dim); margin-top: 0.25rem;">Balanced traffic across 18 modules</div>
+            <div id="benchStatSub1" style="font-size: 0.75rem; color: var(--text-dim); margin-top: 0.25rem;">Balanced traffic across the tested module set</div>
           </div>
           <div class="stat-card" style="border-left: 3px solid #6366f1;">
             <div class="stat-label" id="benchStatLabel2">Average Latency</div>
@@ -1839,7 +1869,7 @@
           <div id="benchKpis" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem; margin-top: 1.5rem; padding-top: 1.25rem; border-top: 1px solid rgba(255, 255, 255, 0.06);">
             <div>
               <h5 style="font-size: 0.85rem; font-weight: 600; color: #818cf8; margin-bottom: 0.35rem;" id="kpiTitle0">1. Multi-Stage Workload</h5>
-              <p style="font-size: 0.8rem; color: var(--text-muted); line-height: 1.5;" id="kpiDesc0">Sustained 5-minute ramp through 6 stages up to 300 looping VUs with smooth scaling across all 18 enterprise modules.</p>
+              <p style="font-size: 0.8rem; color: var(--text-muted); line-height: 1.5;" id="kpiDesc0">Sustained 5-minute ramp through 6 stages up to 300 looping VUs with smooth scaling across the tested enterprise modules.</p>
             </div>
             <div>
               <h5 style="font-size: 0.85rem; font-weight: 600; color: #38bdf8; margin-bottom: 0.35rem;" id="kpiTitle1">2. 18-Module Latencies</h5>
@@ -2043,7 +2073,7 @@
           <span class="section-tag">Application Interface Gallery</span>
           <h2 class="section-title">System Interface Walkthrough</h2>
           <p class="section-desc">
-            High-resolution visual inspection of actual operational screens across all 18 enterprise modules, including executive dashboards, live Grafana load test telemetry, warehouse management, procurement grids, quality modals, manufacturing routing, and approval workflows.
+            High-resolution visual inspection of actual operational screens across all enterprise modules, including executive dashboards, live Grafana load test telemetry, warehouse management, procurement grids, quality modals, manufacturing routing, and approval workflows.
           </p>
         </div>
 
@@ -2384,7 +2414,7 @@
           </div>
 
           <!-- Screenshot 23: RBAC Matrix -->
-          <div class="gallery-item" data-cat="governance" onclick="openLightbox('assets/images/RBAC.png', 'RBAC Matrix - 102 Granular Permissions Across 18 Modules and 6 Actions')">
+          <div class="gallery-item" data-cat="governance" onclick="openLightbox('assets/images/RBAC.png', 'RBAC Matrix - 102 Granular Permissions Across 17 Modules and 6 Actions')">
             <div class="gallery-thumbnail">
               <img src="assets/images/RBAC.png" alt="RBAC Matrix" loading="lazy" />
             </div>
@@ -2437,7 +2467,7 @@
     <div class="container footer-content">
       <div>
         <p><strong>Industrial ERP Architecture Showcase</strong></p>
-        <p>Built with Golang 1.22+ and Next.js 15 App Router by Ahmad Noval</p>
+        <p>Built with Golang 1.24+ and Next.js 15 App Router by Ahmad Noval</p>
       </div>
       <ul class="footer-links">
         <li><a href="./architecture/erp-architecture.html" target="_blank">System Architecture</a></li>
@@ -2457,12 +2487,12 @@
         caption: 'Grafana Telemetry: 18-Module Stepped Stress Test up to 300 Concurrent Users with 0% Error Rate and Sub-400ms Latency',
         stats: [
           { label: 'Total Iterations', val: '53,967+', sub: '5-minute multi-stage stress ramp' },
-          { label: 'Max Concurrency', val: '300 VUs', sub: 'Balanced traffic across 18 modules' },
+          { label: 'Max Concurrency', val: '300 VUs', sub: 'Balanced traffic across the tested module set' },
           { label: 'Average Latency', val: '< 3.8 ms', sub: 'P95 latency under 25ms' },
           { label: 'HTTP Error Rate', val: '0.00%', sub: '100% successful requests' }
         ],
         kpis: [
-          { title: '1. Multi-Stage Workload', desc: 'Sustained 5-minute ramp through 6 stages up to 300 looping VUs with smooth scaling across all 18 enterprise modules.' },
+          { title: '1. Multi-Stage Workload', desc: 'Sustained 5-minute ramp through 6 stages up to 300 looping VUs with smooth scaling across the tested enterprise modules.' },
           { title: '2. Tested Endpoints & Routes', desc: '/api/auth/login, /api/inventory/items, /api/purchasing/requisitions, /api/sales/orders, /api/accounting/journals, /api/manufacturing/work-orders, /api/hrm/employees, /api/system/audit-logs.' },
           { title: '3. Memory & GC Health', desc: 'Bounded memory footprint with zero memory leaks, ~67MB heap, and sub-millisecond Go runtime garbage collection.' },
           { title: '4. Database Pool Headroom', desc: 'pgxpool handled concurrency with minimal connection wait and zero connection errors or starvation.' }

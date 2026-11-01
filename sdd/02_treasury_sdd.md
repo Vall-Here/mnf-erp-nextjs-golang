@@ -191,3 +191,14 @@ erDiagram
         timestamp reconciled_at
     }
 ```
+
+---
+
+## 6. Cakupan Implementasi Terkini
+
+Selain fungsi inti di atas, modul treasury saat ini juga menyediakan:
+
+- **Format Rekening Koran Elektronik**: parser MT940 multi-bank dan parser CSV bank Indonesia (BCA, Mandiri, BNI, BRI, atau format generik), dengan deteksi format otomatis (`AUTO`).
+- **Auto-Matching Multi-Pass**: Pass 1 pencocokan referensi dan nominal persis, Pass 2 toleransi tanggal plus-minus satu hari dengan nominal persis, Pass 3 pencocokan fuzzy deskripsi dengan jendela plus-minus tiga hari.
+- **Voucher Otomatis**: biaya administrasi bank dan bunga diklasifikasikan dan dihapus otomatis melalui jurnal double-entry yang diposting.
+- **Aturan Rekonsiliasi**: tabel `bank_reconciliation_rules` dengan isolasi `branch_id` dan kolom pada `bank_statements` / `bank_statement_lines` untuk field MT940 dan tingkat keyakinan pencocokan.

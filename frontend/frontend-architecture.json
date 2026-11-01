@@ -51,6 +51,7 @@
     { "dot": "emerald", "title": "Next.js 15", "items": ["App Router", "Server Components (RSC)", "Route Groups (auth, dashboard)"] },
     { "dot": "cyan", "title": "Presentation", "items": ["shadcn/ui (Radix Primitives)", "Tailwind CSS", "TanStack Table v8"] },
     { "dot": "amber", "title": "Client Logic", "items": ["React Hook Form", "Zod Validation", "Zustand State (auth, ui)"] },
-    { "dot": "rose", "title": "Data Fetching", "items": ["Custom API Client (lib/api-client.ts)", "JWT Bearer Interceptors"] }
+    { "dot": "rose", "title": "Data Fetching", "items": ["Custom API Client (lib/api-client.ts)", "JWT Bearer Interceptors"] },
+    { "dot": "emerald", "title": "Portal Surfaces", "items": ["Employee Self-Service (/ess)", "B2B Vendor & Customer Portal (/portal)", "Corporate Documents Hub (/documents)"] }
   ]
 }

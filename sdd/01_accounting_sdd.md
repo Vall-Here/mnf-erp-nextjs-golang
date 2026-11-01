@@ -185,3 +185,13 @@ erDiagram
         numeric closing_balance
     }
 ```
+
+---
+
+## 6. Cakupan Implementasi Terkini
+
+Selain fungsi inti di atas, modul accounting saat ini juga menyediakan:
+
+- **Budget Encumbrance Engine**: tabel `budgets`, `budget_lines`, dan `budget_encumbrances`. Verifikasi pengeluaran departemen berbasis ketersediaan anggaran (`Allocated - Encumbered - Actual`) dengan mode penegakan `HARD_STOP`, `ADVISORY_WARNING`, atau `TRACK_ONLY`.
+- **Konsolidasi Multi-Entitas PSAK 65**: tabel `consolidation_periods` dan `consolidation_elimination_entries`, kertas kerja konsolidasi multi-kolom, serta jurnal eliminasi rekening timbal-balik antar cabang.
+- **Integrasi Frontend**: tab Pagu Anggaran & Komitmen Belanja dan tab Konsolidasi Holding (PSAK 65) pada halaman `/accounting`.

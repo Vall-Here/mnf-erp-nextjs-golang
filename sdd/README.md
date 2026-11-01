@@ -1,15 +1,15 @@
 # Enterprise ERP Software Design Document (SDD) Matrix
 
-Dokumen ini merupakan panduan spesifikasi teknis dan desain arsitektur perangkat lunak (*Software Design Document*) untuk 18 modul inti Industrial Enterprise ERP.
+Dokumen ini merupakan panduan spesifikasi teknis dan desain arsitektur perangkat lunak (*Software Design Document*) untuk 20 modul inti Industrial Enterprise ERP.
 
 Seluruh spesifikasi grounded secara langsung pada implementasi kode aktual:
-- **Backend**: Golang 1.22+ Modular Monolith (Clean Architecture), `chi` router, `pgx/v5`, PostgreSQL 16.
-- **Frontend**: Next.js 15 (App Router), TypeScript Strict, Tailwind CSS, TanStack Table v8, TanStack Query.
-- **Invariants**: Accounting Double-Entry Balance (`SUM(debit) == SUM(credit)`), Perpetual Inventory, Multi-Tier RBAC, Audit Trail, Multi-Branch Governance (PSAK 65 / IFRS 10), and Pure DDL Migrations.
+- **Backend**: Golang 1.24+ Modular Monolith (Clean Architecture), `chi` router, `pgx/v5` dengan SQL berparameter eksplisit, PostgreSQL 16.
+- **Frontend**: Next.js 15 (App Router), React 19, TypeScript Strict, Tailwind CSS, TanStack Table v8, TanStack Query.
+- **Invariants**: Accounting Double-Entry Balance (`SUM(debit) == SUM(credit)`), Perpetual Inventory, Granular RBAC, Audit Trail, Multi-Branch Governance (PSAK 65 / IFRS 10), Pure DDL Migrations, dan Budget Encumbrance Control.
 
 ---
 
-## Indeks Dokumen Desain Modul (18 Modul)
+## Indeks Dokumen Desain Modul (20 Modul)
 
 | No | Modul | Berkas SDD | Diagram yang Tersedia |
 | :---: | :--- | :--- | :--- |
@@ -32,6 +32,8 @@ Seluruh spesifikasi grounded secara langsung pada implementasi kode aktual:
 | **16** | **IAM, RBAC & Security Matrix** | [16_iam_rbac_sdd.md](file:///e:/project/Next/ERP/docs/sdd/16_iam_rbac_sdd.md) | Use Case, Activity, Sequence, ERD |
 | **17** | **System Platform & Audit Trail** | [17_system_platform_sdd.md](file:///e:/project/Next/ERP/docs/sdd/17_system_platform_sdd.md) | Use Case, Activity, Sequence, ERD |
 | **18** | **Executive Dashboard & Analytics** | [18_executive_dashboard_sdd.md](file:///e:/project/Next/ERP/docs/sdd/18_executive_dashboard_sdd.md) | Use Case, Activity, Sequence, ERD |
+| **19** | **Corporate Documents Hub** | [19_documents_hub_sdd.md](file:///e:/project/Next/ERP/docs/sdd/19_documents_hub_sdd.md) | Use Case, Activity, Sequence, ERD |
+| **20** | **B2B Vendor & Customer Portal** | [20_b2b_portal_sdd.md](file:///e:/project/Next/ERP/docs/sdd/20_b2b_portal_sdd.md) | Use Case, Activity, Sequence, ERD |
 
 ---
 
@@ -50,7 +52,7 @@ Selain diagram Mermaid di dalam dokumen spesifikasi, sistem menyediakan visualis
 
 ---
 
-## Standar Notasi Diagram Modul (18 Berkas SDD)
+## Standar Notasi Diagram Modul (20 Berkas SDD)
 
 Setiap modul dianalisis dan dimodelkan dengan 4 pilar diagram standar:
 1. **Use Case Diagram**: Menggambarkan interaksi aktor manusia dan sub-sistem terhadap kapabilitas sistem.

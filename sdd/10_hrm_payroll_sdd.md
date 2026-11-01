@@ -202,3 +202,14 @@ erDiagram
         string payment_status "PENDING | TRANSFERRED"
     }
 ```
+
+---
+
+## 6. Cakupan Implementasi Terkini
+
+Selain fungsi inti di atas, modul HRM saat ini juga menyediakan:
+
+- **Employee Self-Service (ESS)**: endpoint mandiri `/api/hrm/ess/*` untuk profil karyawan, kalkulasi kuota cuti tahunan, pengajuan cuti berlampiran, log presensi, clock-in/out GPS geofence, dan pengajuan lembur (SPL) melalui tabel `overtime_requests`.
+- **Integrasi User-Karyawan**: relasi `employees.user_id` sehingga satu akun login dapat dipetakan ke data karyawan.
+- **Slip Gaji Terenkripsi**: slip gaji resmi dengan stempel tanda tangan digital SHA-256 untuk verifikasi keaslian dokumen.
+- **Portal Mandiri Karyawan**: halaman `/ess` dengan widget presensi waktu-nyata, ringkasan saldo cuti, tabel riwayat, modal cetak slip gaji, dan pusat persetujuan bawahan untuk atasan/supervisor.

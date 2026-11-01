@@ -189,3 +189,12 @@ erDiagram
         uuid journal_id FK
     }
 ```
+
+---
+
+## 6. Cakupan Implementasi Terkini
+
+Selain fungsi inti di atas, modul manufacturing saat ini juga menyediakan:
+
+- **MRP Engine**: tabel `mrp_runs` dan `mrp_planned_orders` dengan eksplosi BOM multi-level, penjadwalan mundur (*backward scheduling*), dan konversi batch planned order menjadi purchase requisition.
+- **Frontend MRP Tab**: tab MRP-I / MRP-II Engine pada halaman `/manufacturing` untuk menjalankan perencanaan ulang material dan meninjau rekomendasi pesanan.

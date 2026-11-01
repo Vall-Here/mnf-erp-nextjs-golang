@@ -29,7 +29,7 @@
   },
   "components": [
     { "id": "users", "type": "external", "label": "Next.js Web", "sublabel": "React 19 / App Router", "pos": [35, 260], "size": [135, 60], "brand": "next-js" },
-    { "id": "caddy", "type": "security", "label": "Caddy Gateway", "sublabel": "Auto-HTTPS & Proxy", "pos": [225, 260], "size": [130, 60], "tag": "Reverse Proxy" },
+    { "id": "caddy", "type": "security", "label": "Caddy Gateway", "sublabel": "Path Routing & Proxy", "pos": [225, 260], "size": [130, 60], "tag": "Reverse Proxy" },
     { "id": "chi_router", "type": "backend", "label": "Chi Router", "sublabel": "REST API & SSE Stream", "pos": [415, 260], "size": [140, 60], "brand": "go", "tag": ":8080" },
     { "id": "iam_auth", "type": "security", "label": "IAM & Policy Guard", "sublabel": "JWT, RBAC & Multi-Branch", "pos": [415, 110], "size": [140, 60], "tag": "Middleware" },
     
@@ -39,7 +39,7 @@
     { "id": "mod_org", "type": "backend", "label": "HRM & Governance", "sublabel": "Payroll & Audit Logs", "pos": [625, 350], "size": [145, 55] },
     
     { "id": "floci", "type": "cloud", "label": "Floci Storage", "sublabel": "S3 Attachments & PDF", "pos": [865, 75], "size": [135, 55], "tag": "S3 API" },
-    { "id": "db_pool", "type": "backend", "label": "pgxpool & sqlc", "sublabel": "ACID SQL Engine", "pos": [865, 205], "size": [135, 60], "brand": "go" },
+    { "id": "db_pool", "type": "backend", "label": "pgxpool & pgx", "sublabel": "ACID SQL Engine", "pos": [865, 205], "size": [135, 60], "brand": "go" },
     { "id": "asynq_engine", "type": "messagebus", "label": "Asynq Workers", "sublabel": "Async Jobs & Cron", "pos": [865, 345], "size": [135, 60] },
     
     { "id": "postgres", "type": "database", "label": "PostgreSQL 16", "sublabel": "Durable Relational DB", "pos": [1075, 205], "size": [135, 60], "brand": "postgresql" },
@@ -68,7 +68,7 @@
     { "id": "chi_org", "from": "chi_router", "to": "mod_org", "fromSide": "right", "toSide": "left" },
     
     { "id": "scm_floci", "from": "mod_scm", "to": "floci", "label": "put object", "variant": "dashed", "fromSide": "right", "toSide": "left" },
-    { "id": "scm_pool", "from": "mod_scm", "to": "db_pool", "label": "sqlc query", "fromSide": "right", "toSide": "left" },
+    { "id": "scm_pool", "from": "mod_scm", "to": "db_pool", "label": "SQL query", "fromSide": "right", "toSide": "left" },
     { "id": "ops_pool", "from": "mod_ops", "to": "db_pool", "fromSide": "right", "toSide": "left" },
     { "id": "fin_pool", "from": "mod_fin", "to": "db_pool", "fromSide": "right", "toSide": "left" },
     { "id": "org_asynq", "from": "mod_org", "to": "asynq_engine", "label": "enqueue task", "variant": "dashed", "fromSide": "right", "toSide": "left", "labelAt": [818, 365] },
@@ -84,7 +84,7 @@
       "title": "API & Ingress Layer",
       "items": [
         "Next.js 15 App Router client with TanStack Table and Zustand",
-        "Caddy edge proxy with Auto-HTTPS and zero-config TLS",
+        "Caddy edge proxy with path routing and optional Auto-HTTPS",
         "Chi router with Valkey-backed idempotency & SSE live streams"
       ]
     },
@@ -92,7 +92,7 @@
       "dot": "cyan",
       "title": "Modular Monolith Core",
       "items": [
-        "Domain modules: Purchasing (P2P), Operations (MRP), PSAK Accounting, HRM",
+        "Domain modules: Purchasing (P2P), Operations (MRP), PSAK Accounting, HRM, Documents, Portal",
         "Granular RBAC middleware enforcing module:action permissions",
         "Multi-branch tenant isolation verified against user_branches table"
       ]
@@ -101,7 +101,7 @@
       "dot": "rose",
       "title": "Storage & Valkey Infrastructure",
       "items": [
-        "PostgreSQL 16 with pgxpool and sqlc pure type-safe queries",
+        "PostgreSQL 16 with pgxpool and explicit parameterized SQL",
         "Valkey serving as shared cache, idempotency store, and Asynq broker",
         "Asynq worker engine for periodic depreciation, batch payroll & MRP jobs"
       ]
