@@ -1,7 +1,7 @@
 # 06. Software Design Document: Manufacturing Execution & Job Costing
 
 ## 1. Ringkasan Modul & Tanggung Jawab
-Modul **Manufacturing Execution & Job Costing** mengelola alur pabrikasi: Struktur Bahan Baku (*Bill of Materials / BOM*), Surat Perintah Kerja (*Work Orders / SPK*), Pengeluaran Bahan Baku ke Lantai Produksi (*Material Issues / Pick List*) dengan metode FEFO (*First-Expired, First-Out*), serta Kalkulasi Biaya Pesanan Aktual (*Job Order Costing*).
+Modul **Manufacturing Execution & Job Costing** mengelola alur pabrikasi kelapa sawit dan manufaktur industri PT SAWIT JAYA (SWT): Struktur Formula Bahan Baku (*Bill of Materials / BOM*), Surat Perintah Kerja (*Work Orders / SPK*), Pusat Kerja (*Work Centers*), Rute Operasi (*Routings*), Pengeluaran Bahan Baku Lantai Pabrik (*Material Issues / Pick List* FEFO), Perhitungan Perencanaan Kebutuhan Bahan (*MRP-I / MRP-II Engine*), serta Kalkulasi Biaya Pesanan Aktual (*Job Order Costing*) dengan penyerapan biaya scrap.
 
 - **Lokasi Backend**: `services/api/internal/modules/manufacturing/`
 - **Lokasi Frontend**: `apps/web/app/(dashboard)/manufacturing/`
@@ -13,110 +13,95 @@ Modul **Manufacturing Execution & Job Costing** mengelola alur pabrikasi: Strukt
 ```mermaid
 flowchart LR
     PPIC["Staf PPIC / Planner"]
-    ProdSpv["Supervisor Produksi"]
-    CostAcct["Akuntan Biaya (Costing)"]
-    PlantMgr["Kepala Pabrik (Plant Manager)"]
+    ProdSpv["Production Supervisor"]
+    PlantMgr["Plant Manager"]
+    CostAcct["Cost Accountant"]
 
     subgraph MfgModule ["Modul Manufacturing & Job Costing"]
-        UC1["Kelola Formula & Struktur BOM Multi-Level"]
-        UC2["Rilis Perintah Kerja Produksi (Work Order / SPK)"]
-        UC3["Pengeluaran Bahan Baku (Pick List Lot FEFO)"]
-        UC4["Pencatatan Hasil Produksi & Scrap / Reject"]
-        UC5["Alokasi Biaya Tenaga Kerja & Overhead (BOP)"]
-        UC6["Analisis Selisih Biaya (Job Cost Variance)"]
-        UC7["Otorisasi Penyelesaian Batch Produksi"]
+        UC1["Kelola Formula & BOM Multi-Tier"]
+        UC2["Rilis Surat Perintah Kerja (SPK: manufacturing:create)"]
+        UC3["Pengeluaran Bahan Baku ke Lantai Pabrik (Pick List FEFO)"]
+        UC4["Tracking Progres Operasi Stasiun Mesin (Routings)"]
+        UC5["Pencatatan Penyelesaian Produksi & Scrap Absorption"]
+        UC6["Eksekusi Mesin Perencanaan Bahan (MRP Runs)"]
+        UC7["Kalkulasi HPP Aktual & Analisis Selisih Biaya (Variance)"]
     end
 
     PPIC --> UC1
     PPIC --> UC2
+    PPIC --> UC6
 
     ProdSpv --> UC3
     ProdSpv --> UC4
+    ProdSpv --> UC5
 
-    CostAcct --> UC5
-    CostAcct --> UC6
+    PlantMgr --> UC2
+    PlantMgr --> UC5
 
-    PlantMgr --> UC7
+    CostAcct --> UC7
 ```
 
 ---
 
-## 3. Activity Diagram (Siklus Eksekusi Pabrikasi & Job Costing)
+## 3. Activity Diagram (Siklus Eksekusi SPK, Otorisasi Branch, & Penyelesaian Produksi)
 
 ```mermaid
 flowchart TD
-    Start([Perencanaan Produksi]) --> CreateBOM[Buat / Pilih Struktur BOM]
-    CreateBOM --> IssueWO[Rilis Work Order SPK & Target Jadwal]
-    IssueWO --> CheckMat{Ketersediaan Bahan Baku}
+    Start([Perencanaan Batch Pabrikasi]) --> CreateSPK[Staf Buat SPK Work Order]
+    CreateSPK --> BindBranch[Sistem Enforce Authorized Branch & Warehouse Pabrik]
+    BindBranch --> GenerateDocNo[Generate Nomor SPK Unik SPK/YYYY/MM/...]
     
-    CheckMat -- Bahan Kurang --> TriggerPR[Terbitkan PR Pengadaan Bahan]
-    TriggerPR --> WaitMat[Tunggu Penerimaan Bahan di Gudang]
-    WaitMat --> CheckMat
+    GenerateDocNo --> AutoRoutings[Salin Rute Stasiun Kerja dari BOM ke SPK Operations]
+    AutoRoutings --> IssueMaterials[Terbitkan Pick List Bahan Baku Lot FEFO]
     
-    CheckMat -- Bahan Lengkap --> PickFEFO[Pengeluaran Bahan Baku Sistem FEFO]
-    PickFEFO --> PrintPickList[Cetak Slip Pengeluaran Bahan Baku]
+    IssueMaterials --> ProcessFloor[Eksekusi Produksi di Lantai Pabrik & Rekam Jam Kerja]
+    ProcessFloor --> InspectQC[Inspeksi Mutu IPQC Kadar Asam Lemak Bebas / FFA]
     
-    PrintPickList --> ProdRun[Proses Produksi di Lantai Pabrik]
-    ProdRun --> TrackOutput[Catat Output Barang Jadi & Jam Mesin/Buruh]
+    InspectQC --> CompleteOrder[Supervisor Panggil /work-orders/{id}/complete]
+    CompleteOrder --> DeductComponents[Konsumsi Otomatis Bahan Baku dari stock_ledger]
+    DeductComponents --> AbsorbScrap[Serap Biaya Scrap ke Nilai HPP Barang Jadi]
+    DeductComponents --> IncreaseFG[Tambah Stok Barang Jadi pada Gudang Tujuan]
     
-    TrackOutput --> QCPass{Inspeksi Mutu QC Lolos?}
-    QCPass -- Gagal / Cacat --> Scrap[Catat Kuantitas Scrap / Reject]
-    Scrap --> CalcCost
-    
-    QCPass -- Lolos --> ReceiveFG[Penerimaan Barang Jadi ke Gudang FG]
-    ReceiveFG --> CalcCost[Kalkulasi Biaya Aktual HPP]
-    
-    CalcCost --> BreakCost[Hitung: Direct Materials + Direct Labor + Overhead BOP]
-    BreakCost --> CompareStd[Bandingkan dengan Standar BOM & Varians]
-    
-    CompareStd --> GenCostSheet[Cetak Lembar Biaya Pesanan Pabrikasi]
-    GenCostSheet --> AutoJournal[Auto-Posting Jurnal: Debit Persediaan FG, Kredit WIP]
-    AutoJournal --> EndDone([Selesai Siklus Produksi])
+    IncreaseFG --> CalculateJobCost[Kalkulasi HPP Aktual: Material + Tenaga Kerja + Overhead]
+    CalculateJobCost --> AutoGL[Auto-Posting Jurnal Pemindahan WIP ke Persediaan Barang Jadi]
+    AutoGL --> EndDone([Produksi Batch Selesai])
 ```
 
 ---
 
-## 4. Sequence Diagram (Pengeluaran Bahan Baku & Rekomendasi FEFO)
+## 4. Sequence Diagram (Penerbitan SPK & Pengikatan Fasilitas Pabrik)
 
 ```mermaid
 sequenceDiagram
     autonumber
-    actor Spv as Supervisor Produksi
+    actor Planner as PPIC Planner
     participant UI as Manufacturing Web (Next.js 15)
+    participant MW as Auth Middleware
     participant Hdl as Mfg Handler
     participant Svc as Mfg Service
-    participant Inv as Inventory Module
     participant Repo as Mfg Repository
     participant DB as PostgreSQL 16
 
-    Spv->>UI: Request Pengeluaran Bahan Baku untuk WO
-    UI->>Hdl: POST /api/v1/manufacturing/issues
-    Hdl->>Svc: IssueMaterials(ctx, input)
+    Planner->>UI: Input SPK Baru (BOM, Warehouse Pabrik, Target Qty)
+    UI->>MW: POST /api/manufacturing/work-orders (Bearer Token)
+    MW->>MW: Verifikasi Authorized Branch (Anti-IDOR) & manufacturing:create
+    MW->>Hdl: HandleCreateWorkOrder
+    Hdl->>Svc: CreateWorkOrder
     
     rect rgb(240, 248, 255)
-        Svc->>Repo: GetWorkOrder(woID)
-        Repo->>DB: SELECT * FROM work_orders WHERE id = ...
+        Note over Svc,DB: Transaksi Database Terisolasi (pgx.Tx)
+        Svc->>Repo: Validasi BOM & Ambil Branch Fisik dari Warehouse
+        Repo->>DB: SELECT branch_id FROM warehouses WHERE id = $warehouseID
         
-        loop Tiap Komponen Bahan Baku
-            Svc->>Inv: GetFEFOLots(itemID, requiredQty)
-            Inv->>DB: SELECT * FROM item_lots WHERE item_id = ... ORDER BY expiry_date ASC
-            DB-->>Inv: Sorted Active Lots
-            
-            Svc->>Inv: DeductLotStock(lotID, allocatedQty, "OUT_MFG", woNumber)
-            Inv->>DB: UPDATE item_lots SET current_qty = current_qty - allocatedQty
-            Inv->>DB: INSERT INTO stock_movements (OUT_MFG)
-            
-            Svc->>Repo: RecordMaterialIssueLine(woID, itemID, lotID, qty, cost)
-            Repo->>DB: INSERT INTO work_order_material_issues ...
-        end
+        Svc->>Repo: Generate Nomor SPK Atomik
+        Repo->>DB: INSERT INTO work_orders (wo_number, status: PLANNED, branch_id)
         
-        Svc->>Repo: Update WO Actual Material Cost
-        Repo->>DB: UPDATE work_orders SET actual_material_cost = ...
+        Svc->>Repo: Gandakan Operasi dari Master BOM Routings
+        Repo->>DB: INSERT INTO work_order_operations (work_center_id, operation_name, step_number)
     end
 
-    Svc-->>Hdl: Issue Result & Lot Allocations
-    Hdl-->>UI: 201 Created
-    UI-->>Spv: Tampilkan Slip Pengeluaran Bahan Baku (Pick List A4)
+    Svc-->>Hdl: Work Order Entity
+    Hdl-->>UI: 201 Created (SPK Berhasil Diterbitkan)
 ```
 
 ---
@@ -125,76 +110,66 @@ sequenceDiagram
 
 ```mermaid
 erDiagram
-    ITEMS ||--o{ BILLS_OF_MATERIAL : "as_finished_good"
-    BILLS_OF_MATERIAL ||--|{ BOM_ITEMS : "composed_of"
-    ITEMS ||--o{ BOM_ITEMS : "as_raw_material"
-    BILLS_OF_MATERIAL ||--o{ WORK_ORDERS : "manufactured_by"
+    BOM_HEADERS ||--|{ BOM_LINES : "contains"
+    BOM_HEADERS ||--o{ BOM_ROUTINGS : "defines"
+    BOM_HEADERS ||--o{ WORK_ORDERS : "manufactured_by"
+    WORK_CENTERS ||--o{ BOM_ROUTINGS : "performed_at"
+    WORK_ORDERS ||--o{ WORK_ORDER_OPERATIONS : "tracks"
+    WORK_CENTERS ||--o{ WORK_ORDER_OPERATIONS : "executes"
     WORK_ORDERS ||--o{ WORK_ORDER_MATERIAL_ISSUES : "consumes"
-    WORK_ORDERS ||--o| WORK_ORDER_COSTINGS : "costed_in"
 
-    BILLS_OF_MATERIAL {
+    BOM_HEADERS {
         uuid id PK
+        uuid company_id FK
         uuid finished_good_id FK
         string bom_code UK
         string name
         numeric base_quantity
-        numeric standard_cost
         boolean is_active
     }
 
-    BOM_ITEMS {
+    BOM_LINES {
         uuid id PK
         uuid bom_id FK
-        uuid component_item_id FK
+        uuid item_id FK
         numeric quantity
-        numeric scrap_tolerance_percent
+        numeric scrap_factor
+    }
+
+    WORK_CENTERS {
+        uuid id PK
+        uuid company_id FK
+        uuid branch_id FK
+        string code UK
+        string name
+        numeric hourly_cost_rate
+        numeric capacity_hours_per_day
+        boolean is_active
     }
 
     WORK_ORDERS {
         uuid id PK
-        uuid bom_id FK
+        uuid company_id FK
         uuid branch_id FK
+        uuid bom_id FK
+        uuid warehouse_id FK
         string wo_number UK
+        numeric target_quantity
+        numeric completed_quantity
+        numeric scrap_quantity
+        string status "PLANNED | IN_PROGRESS | COMPLETED | CANCELLED"
         date start_date
-        date due_date
-        numeric planned_qty
-        numeric completed_qty
-        numeric rejected_qty
-        string status "DRAFT | RELEASED | IN_PROGRESS | COMPLETED | CANCELLED"
-        numeric actual_material_cost
-        numeric actual_labor_cost
-        numeric actual_overhead_cost
+        date end_date
+        uuid created_by FK
     }
 
-    WORK_ORDER_MATERIAL_ISSUES {
+    WORK_ORDER_OPERATIONS {
         uuid id PK
         uuid work_order_id FK
-        uuid item_id FK
-        uuid lot_id FK
-        uuid bin_id FK
-        numeric quantity_issued
-        numeric unit_cost
-        timestamp issued_at
-    }
-
-    WORK_ORDER_COSTINGS {
-        uuid id PK
-        uuid work_order_id FK
-        numeric total_material_cost
-        numeric total_labor_cost
-        numeric total_overhead_cost
-        numeric total_actual_cost
-        numeric standard_cost_variance
-        string variance_type "FAVORABLE | UNFAVORABLE"
-        uuid journal_id FK
+        uuid work_center_id FK
+        string operation_name
+        integer step_number
+        numeric progress_percent
+        string status "PENDING | IN_PROGRESS | COMPLETED"
     }
 ```
-
----
-
-## 6. Cakupan Implementasi Terkini
-
-Selain fungsi inti di atas, modul manufacturing saat ini juga menyediakan:
-
-- **MRP Engine**: tabel `mrp_runs` dan `mrp_planned_orders` dengan eksplosi BOM multi-level, penjadwalan mundur (*backward scheduling*), dan konversi batch planned order menjadi purchase requisition.
-- **Frontend MRP Tab**: tab MRP-I / MRP-II Engine pada halaman `/manufacturing` untuk menjalankan perencanaan ulang material dan meninjau rekomendasi pesanan.

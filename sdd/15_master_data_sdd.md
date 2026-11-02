@@ -1,7 +1,7 @@
-# 15. Software Design Document: Master Data & Multi-Branch Governance
+# 15. Software Design Document: Master Data & Operational Site Governance
 
 ## 1. Ringkasan Modul & Tanggung Jawab
-Modul **Master Data & Multi-Branch Governance** mengelola fondasi organisasi perusahaan: Struktur Entitas Induk (*Companies*), Cabang Operasional (*Branches / Multi-Branch Governance* - PSAK 65 / IFRS 10), Mata Uang & Kurs (*Currencies & Exchange Rates*), Satuan Pengukuran (*UOM & Konversi*), Pusat Biaya (*Cost Centers*), serta Mitra Bisnis Terpadu (*Counterparties*).
+Modul **Master Data & Operational Site Governance** mengelola fondasi organisasi korporasi industri PT SAWIT JAYA (SWT): Struktur Entitas Perseroan Tunggal (*Single Corporate Legal Entity*), Fasilitas Fisik Operasional Pabrik & Distribusi (*Operational Sites / Branches*), Mata Uang & Kurs (*Currencies & Exchange Rates*), Satuan Pengukuran (*UOM & Konversi*), Pusat Biaya (*Cost Centers*), serta Database Rekanan Mitra Bisnis Terpadu (*Counterparties*).
 
 - **Lokasi Backend**: `services/api/internal/modules/master/`
 - **Lokasi Frontend**: `apps/web/app/(dashboard)/master-data/`
@@ -13,17 +13,17 @@ Modul **Master Data & Multi-Branch Governance** mengelola fondasi organisasi per
 ```mermaid
 flowchart LR
     SysAdmin["Super Administrator"]
-    BranchMgr["Kepala Cabang (Branch Manager)"]
+    PlantMgr["Kepala Pabrik (Plant Manager)"]
     FinController["Financial Controller"]
 
-    subgraph MasterModule ["Modul Master Data & Multi-Branch"]
-        UC1["Konfigurasi Entitas Perusahaan & NPWP"]
-        UC2["Kelola Cabang & Alokasi Akun Rekening Koran Timbal-Balik"]
-        UC3["Kelola Mata Uang & Pembaharuan Kurs Harian"]
-        UC4["Manajemen Satuan Barang (UOM) & Faktor Konversi"]
-        UC5["Struktur Pusat Biaya (Cost Centers & Profit Centers)"]
-        UC6["Kelola Database Mitra Bisnis Terpusat (Counterparty)"]
-        UC7["Audit Kepatuhan Isolasi Data Multi-Cabang"]
+    subgraph MasterModule ["Modul Master Data & Operational Sites"]
+        UC1["Konfigurasi Entitas PT SAWIT JAYA & Legalitas NPWP"]
+        UC2["Kelola Fasilitas Pabrik Kelapa Sawit & Gudang Distribusi (branches)"]
+        UC3["Kelola Mata Uang & Pembaharuan Kurs Transaksi"]
+        UC4["Manajemen Satuan Barang Industri (UOM) & Konversi"]
+        UC5["Struktur Pusat Biaya Pabrik (Cost Centers)"]
+        UC6["Kelola Master Rekanan Terpusat (Vendors & Customers)"]
+        UC7["Audit Integritas Data & Isolasi Operasional Antar-Site"]
     end
 
     SysAdmin --> UC1
@@ -32,8 +32,8 @@ flowchart LR
     SysAdmin --> UC4
     SysAdmin --> UC7
 
-    BranchMgr --> UC5
-    BranchMgr --> UC6
+    PlantMgr --> UC5
+    PlantMgr --> UC6
 
     FinController --> UC2
     FinController --> UC3
@@ -42,27 +42,32 @@ flowchart LR
 
 ---
 
-## 3. Activity Diagram (Tata Kelola Multi-Cabang & Validasi Isolasi)
+## 3. Activity Diagram (Tata Kelola Fasilitas Fisik & Isolasi Operasional)
 
 ```mermaid
 flowchart TD
     Start([Pengguna Mengakses Sistem]) --> AuthToken[Validasi Sesi Pengguna & Token JWT]
     AuthToken --> FetchBranches[Ambil Daftar Cabang yang Diizinkan dari user_branches]
     
-    FetchBranches --> SelectBranch{Pilih Cabang Aktif (activeBranchId)}
-    SelectBranch --> SetContext[Sematkan Tenant Context: Company ID & Branch ID]
+    FetchBranches --> SelectBranch{Pilih Site Operasional (activeBranchId)}
+    SelectBranch --> IsSuperAdmin{Super Admin / Direksi?}
+    
+    IsSuperAdmin -- Ya --> AllowConsolidated[Dapat Memilih Semua Cabang atau Konsolidasi Nasional]
+    IsSuperAdmin -- Tidak --> EnforceScoped[Wajib Terkunci pada Site Penugasan Resmi Pengguna]
+    
+    AllowConsolidated --> SetContext[Sematkan Konteks: Company ID & Authorized Branch ID]
+    EnforceScoped --> SetContext
     
     SetContext --> ExecQuery[Jalankan Transaksi / Kueri Data]
     ExecQuery --> FilterBranch[Tambahkan Filter Otomatis: WHERE branch_id = activeBranchId]
     
-    FilterBranch --> IsInterBranch{Apakah Transaksi Antar-Cabang?}
-    IsInterBranch -- Tidak --> CommitLocal[Simpan Data Mutasi Cabang Lokal]
+    FilterBranch --> IsInterSiteTransfer{Pergerakan Barang Antar-Site?}
+    IsInterSiteTransfer -- Tidak --> CommitLocal[Simpan Data Mutasi Site Lokal]
     
-    IsInterBranch -- Ya --> CreateReciprocal[Bentuk Pencatatan Rekening Koran Timbal-Balik]
-    CreateReciprocal --> PostDueToDueFrom[Debit: Due From Branch B, Kredit: Due To Branch A]
-    PostDueToDueFrom --> CommitLocal
+    IsInterSiteTransfer -- Ya --> STOFlow[Bentuk Stock Transfer Order / STO Antar-Gudang Fisik]
+    STOFlow --> CommitLocal
     
-    CommitLocal --> EndDone([Kueri Terisolasi Aman])
+    CommitLocal --> EndDone([Kueri Terisolasi & Sesuai Governance])
 ```
 
 ---
@@ -80,21 +85,20 @@ sequenceDiagram
     participant Repo as Master Data Repository
     participant DB as PostgreSQL 16
 
-    User->>UI: Pilih Cabang Operasional dari Header Cabang
+    User->>UI: Pilih Fasilitas Operasional dari Header Cabang
     UI->>MW: Request dengan Header 'X-Branch-ID: {branch_id}'
-    MW->>DB: SELECT * FROM user_branches WHERE user_id = ... AND branch_id = ...
-    DB-->>MW: Hak Akses Cabang Valid
+    MW->>MW: Verifikasi AllowedBranches di Token Claims
     
-    MW->>Hdl: Teruskan Request dengan Context (CompanyID, BranchID)
+    MW->>Hdl: Teruskan Request dengan Context (CompanyID, AuthorizedBranchID)
     Hdl->>Svc: GetBranchScopedData(ctx)
     Svc->>Repo: ListEntitiesByBranch(companyID, branchID)
-    Repo->>DB: SELECT * FROM warehouses WHERE branch_id = ...
-    DB-->>Repo: Dataset Terisolasi Cabang
+    Repo->>DB: SELECT * FROM warehouses WHERE branch_id = $branchID
+    DB-->>Repo: Dataset Terisolasi Fasilitas Pabrik Tersebut
     
-    Repo-->>Svc: Clean Scoped Entities
+    Repo-->>Svc: Scoped Warehouses & Master Data
     Svc-->>Hdl: Response Data
     Hdl-->>UI: 200 OK
-    UI-->>User: Tampilkan Data Khusus Cabang yang Aktif
+    UI-->>User: Tampilkan Data Khusus Fasilitas Pabrik yang Dipilih
 ```
 
 ---
@@ -109,55 +113,37 @@ erDiagram
     COMPANIES ||--o{ COST_CENTERS : "establishes"
     COMPANIES ||--o{ COUNTERPARTIES : "interacts_with"
     BRANCHES ||--o{ COST_CENTERS : "contains"
-    CURRENCIES ||--o{ EXCHANGE_RATES : "has_rates"
+    BRANCHES ||--o{ WAREHOUSES : "houses"
 
     COMPANIES {
         uuid id PK
-        string code UK
-        string name
-        string legal_name
-        string tax_id
+        string code UK "SWT"
+        string name "PT SAWIT JAYA"
+        string legal_name "PT SAWIT JAYA (PERSEROAN TERBATAS)"
+        string tax_id "NPWP Korporat"
         string address
-        string phone
-        string base_currency
+        string base_currency "IDR"
         boolean is_active
     }
 
     BRANCHES {
         uuid id PK
         uuid company_id FK
-        string code UK
-        string name
+        string code UK "PKS-01 | PKS-02 | DC-03"
+        string name "Kantor Pusat / Pabrik Kelapa Sawit"
         string address
-        string phone
-        string timezone
-        uuid due_from_account_id FK
-        uuid due_to_account_id FK
+        string timezone "WIB | WITA"
         boolean is_active
     }
 
-    CURRENCIES {
-        string code PK "e.g. IDR, USD, EUR, SGD"
-        string name
-        string symbol
-        integer decimal_places
-        boolean is_base
-    }
-
-    EXCHANGE_RATES {
-        uuid id PK
-        string currency_code FK
-        date effective_date
-        numeric rate_to_base
-        string rate_source "BI_MIDDLE | JISDOR | MANUAL"
-    }
-
-    UOMS {
+    WAREHOUSES {
         uuid id PK
         uuid company_id FK
-        string code UK "e.g. PCS, BOX, KG, LTR, MTR"
+        uuid branch_id FK
+        string code UK
         string name
-        string category "COUNT | WEIGHT | VOLUME | LENGTH"
+        string address
+        boolean is_active
     }
 
     COST_CENTERS {

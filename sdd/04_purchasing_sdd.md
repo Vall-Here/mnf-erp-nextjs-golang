@@ -1,7 +1,7 @@
 # 04. Software Design Document: Purchasing & Procurement
 
 ## 1. Ringkasan Modul & Tanggung Jawab
-Modul **Purchasing & Procurement** mengendalikan siklus pengadaan barang & jasa (*Procure-to-Pay*): Permintaan Pembelian (*Purchase Requisition / PR*), Permintaan Penawaran Pemasok (*RFQ*), Pesanan Pembelian (*Purchase Order / PO*), Penerimaan Barang Gudang (*Goods Receipt Note / GRN*), Alokasi Biaya Tambahan (*Landed Cost*), dan Tagihan Pemasok (*Vendor Bills / AP*).
+Modul **Purchasing & Procurement** mengendalikan seluruh proses pengadaan barang dan jasa (*Procure-to-Pay* / P2P): Permintaan Pembelian (*Purchase Requisition / PR*), Tender Penawaran Pemasok (*RFQ & Vendor Bidding*), Penetapan Pemenang (*Awarding*), Pesanan Pembelian (*Purchase Order / PO*), Penerimaan Barang Gudang (*Goods Receipt Note / GRN*), Alokasi Biaya Tambahan (*Landed Cost*), Verifikasi 3-Way Matching, dan Pengesahan Tagihan Pemasok (*Vendor Bills / AP*).
 
 - **Lokasi Backend**: `services/api/internal/modules/purchasing/`
 - **Lokasi Frontend**: `apps/web/app/(dashboard)/purchasing/`
@@ -13,113 +13,108 @@ Modul **Purchasing & Procurement** mengendalikan siklus pengadaan barang & jasa 
 ```mermaid
 flowchart LR
     Requester["Staff Pemohon (User Dept)"]
-    Buyer["Procurement Specialist"]
-    Mgr["Manajer Pengadaan / Direktur"]
-    Receiver["Staff Gudang Penerima"]
-    APStaff["Staff Utang Usaha (AP)"]
+    Buyer["Procurement Officer"]
+    PurchMgr["Purchasing Manager"]
+    FinMgr["Finance & Accounting Manager"]
+    Receiver["Staff Gudang (GRN Receiver)"]
+    APStaff["Staff Utang Usaha (AP Staff)"]
 
     subgraph PurchasingModule ["Modul Purchasing & Procurement"]
-        UC1["Ajukan Permintaan Pembelian (PR)"]
-        UC2["Buat Tender & RFQ ke Pemasok"]
-        UC3["Komparasi Harga Penawaran Vendor"]
-        UC4["Terbitkan Purchase Order (PO)"]
-        UC5["Otorisasi PO Multi-Tier (1x s.d 4x Level)"]
-        UC6["Penerimaan Fisik Barang Gudang (GRN)"]
-        UC7["Pencatatan Biaya Tambahan (Landed Cost)"]
-        UC8["Verifikasi 3-Way Match & Tagihan Vendor"]
+        UC1["Pengajuan Purchase Requisition (PR)"]
+        UC2["Penerbitan Tender & RFQ ke Pemasok"]
+        UC3["Pencatatan Penawaran Vendor (Vendor Bids)"]
+        UC4["Penetapan Pemenang Tender (Award RFQ: purchasing:approve)"]
+        UC5["Penerbitan Purchase Order (PO)"]
+        UC6["Otorisasi PO Multi-Tier (purchasing:approve)"]
+        UC7["Penerimaan Barang Fisik Gudang (GRN)"]
+        UC8["Verifikasi 3-Way Matching (PO vs GRN vs Bill)"]
+        UC9["Pengesahan Tagihan Pemasok (purchasing:approve / accounting:approve)"]
     end
 
     Requester --> UC1
     Buyer --> UC2
     Buyer --> UC3
-    Buyer --> UC4
+    Buyer --> UC5
 
-    Mgr --> UC5
+    PurchMgr --> UC4
+    PurchMgr --> UC6
+    PurchMgr --> UC9
+    FinMgr --> UC9
 
-    Receiver --> UC6
-
-    Buyer --> UC7
+    Receiver --> UC7
     APStaff --> UC8
 ```
 
 ---
 
-## 3. Activity Diagram (Siklus Procure-to-Pay & 3-Way Matching)
+## 3. Activity Diagram (Siklus Procure-to-Pay, RFQ Award, & SoD 3-Way Match)
 
 ```mermaid
 flowchart TD
     Start([Kebutuhan Pengadaan]) --> CreatePR[User Buat Purchase Requisition]
-    CreatePR --> ApprovePR[Otorisasi PR oleh Atasan]
-    ApprovePR --> CreateRFQ[Buyer Terbitkan RFQ ke Minimal 3 Vendor]
+    CreatePR --> ApprovePR[Otorisasi PR oleh Atasan / Manajer]
+    ApprovePR --> CreateRFQ[Buyer Terbitkan RFQ ke Minimal 3 Pemasok]
     
-    CreateRFQ --> ReceiveBids[Terima Penawaran & Evaluasi Komparasi]
-    ReceiveBids --> SelectVendor[Pilih Vendor Pemenang]
-    SelectVendor --> CreatePO[Terbitkan Purchase Order / PO]
+    CreateRFQ --> ReceiveBids[Catat Penawaran Harga & Spesifikasi Pemasok]
+    ReceiveBids --> AwardRFQ{Penetapan Pemenang: Memiliki purchasing:approve?}
     
-    CreatePO --> CheckValue{Ambang Batas Nominal PO}
-    CheckValue -- < Rp 100 Juta --> ApprL2[Otorisasi SPV & Manajer]
-    CheckValue -- >= Rp 100 Juta --> ApprL3[Otorisasi Direktur Keuangan / CFO]
-    CheckValue -- >= Rp 500 Juta --> ApprL4[Otorisasi Direktur Utama / BOD]
+    AwardRFQ -- Tidak --> DenyAward[403 Forbidden: Staf Buyer Dilarang Menetapkan Pemenang Sendiri]
+    DenyAward --> EndFail([Tender Tertunda])
     
-    ApprL2 --> SendPO[Kirim PO ke Pemasok]
-    ApprL3 --> SendPO
-    ApprL4 --> SendPO
+    AwardRFQ -- Ya --> SetWinner[Pemenang Ditetapkan & PO Diterbitkan]
+    SetWinner --> ApprovePO[Persetujuan PO Multi-Tier Berdasarkan Nominal]
     
-    SendPO --> ArriveGoods[Barang Tiba di Gudang]
-    ArriveGoods --> ReceiveGRN[Inspeksi & Terbitkan Goods Receipt Note]
-    ReceiveGRN --> AutoStock[Auto-Movement Stok Masuk IN_PURCHASE]
+    ApprovePO --> ArriveGoods[Barang Tiba di Fasilitas Gudang Pabrik]
+    ArriveGoods --> ReceiveGRN[Staff Gudang Terbitkan GRN & Inspeksi IQC]
+    ReceiveGRN --> ArriveBill[Terima Faktur Tagihan dari Vendor]
     
-    AutoStock --> ArriveBill[Terima Faktur / Invoice dari Vendor]
-    ArriveBill --> ThreeWayMatch{3-Way Match PO vs GRN vs Bill}
+    ArriveBill --> ThreeWayMatch{3-Way Match: Kuantitas & Harga Sesuai PO & GRN?}
+    ThreeWayMatch -- Selisih Material --> HoldBill[Tahan Tagihan & Terbitkan Debit Note]
+    HoldBill --> EndFail
     
-    ThreeWayMatch -- Selisih Kuantitas/Harga --> HoldBill[Tahan Tagihan & Minta Klarifikasi]
-    HoldBill --> ArriveBill
-    
-    ThreeWayMatch -- Cocok & Valid --> PostBill[Posting Vendor Bill]
-    PostBill --> AutoJournal[Auto-Posting Jurnal: Debit Persediaan/Beban, Kredit Utang AP]
-    AutoJournal --> EndDone([Selesai Pengadaan])
+    ThreeWayMatch -- Cocok --> ApproveBill{Otorisasi Tagihan: purchasing:approve / accounting:approve?}
+    ApproveBill -- Ditolak / SoD Violation --> RejectBill[Tolak: Pembuat Tagihan Dilarang Approve Sendiri]
+    ApproveBill -- Disetujui --> PostBill[Posting Vendor Bill ke Utang Dagang AP]
+    PostBill --> EndDone([Siklus Pengadaan Selesai])
 ```
 
 ---
 
-## 4. Sequence Diagram (Goods Receipt Note & Stock Valuation)
+## 4. Sequence Diagram (Goods Receipt Note & Stock Ledger)
 
 ```mermaid
 sequenceDiagram
     autonumber
     actor Receiver as Staff Gudang Penerima
     participant UI as Purchasing Web (Next.js 15)
+    participant MW as Auth Middleware
     participant Hdl as Purchasing Handler
     participant Svc as Purchasing Service
-    participant Inv as Inventory Module
     participant Repo as Purchasing Repository
     participant DB as PostgreSQL 16
 
-    Receiver->>UI: Input Penerimaan Barang dari PO
-    UI->>Hdl: POST /api/v1/purchasing/receipts
-    Hdl->>Svc: CreateGoodsReceipt(ctx, input)
+    Receiver->>UI: Submit Penerimaan Barang dari PO
+    UI->>MW: POST /api/purchasing/orders/{id}/receive (Bearer Token)
+    MW->>MW: Verifikasi izin inventory:create / purchasing:edit
+    MW->>Hdl: HandleReceiveOrder
+    Hdl->>Svc: ReceiveOrder
     
     rect rgb(240, 248, 255)
-        Svc->>Repo: Begin Tx
-        Svc->>Repo: Lock PO & Validate Open Quantity
-        Repo->>DB: SELECT * FROM purchase_orders WHERE id = ... FOR UPDATE
+        Note over Svc,DB: Mutasi Stok Masuk Perpetual (pgx.Tx)
+        Svc->>Repo: Validasi Sisa PO Belum Diterima
+        Repo->>DB: SELECT * FROM purchase_orders WHERE id = $1 FOR UPDATE
         
-        Svc->>Inv: AddStock(branchID, warehouseID, itemID, qty, unitCost, "IN_PURCHASE", grnNumber)
-        Inv->>DB: INSERT INTO stock_movements (IN_PURCHASE)
-        Inv->>DB: UPDATE items SET balance_qty = balance_qty + qty, avg_cost = ...
+        Svc->>Repo: Catat Mutasi Penerimaan
+        Repo->>DB: INSERT INTO stock_ledger (movement_type: IN_PURCHASE, warehouse_id, qty)
+        Repo->>DB: UPDATE item_stock_summary SET balance_quantity = balance_quantity + qty
         
-        Svc->>Repo: Insert GRN & Lines
-        Repo->>DB: INSERT INTO goods_receipt_notes ...
-        Repo->>DB: INSERT INTO goods_receipt_note_items ...
-        
-        Svc->>Repo: Update PO Received Qty & Status
-        Repo->>DB: UPDATE purchase_orders SET status = 'PARTIALLY_RECEIVED' / 'RECEIVED'
-        Svc->>Repo: Commit Tx
+        Svc->>Repo: Catat Dokumen Penerimaan Gudang (GRN)
+        Repo->>DB: INSERT INTO purchase_receipts (grn_number, status: RECEIVED)
+        Repo->>DB: UPDATE purchase_orders SET status = 'RECEIVED'
     end
 
-    Svc-->>Hdl: GRN Entity
-    Hdl-->>UI: 201 Created
-    UI-->>Receiver: Tampilkan Surat Penerimaan Barang (GRN) A4
+    Svc-->>Hdl: Receipt Entity
+    Hdl-->>UI: 200 OK (GRN Berhasil Diterbitkan)
 ```
 
 ---
@@ -128,15 +123,14 @@ sequenceDiagram
 
 ```mermaid
 erDiagram
+    VENDORS ||--o{ PURCHASE_REQUISITIONS : "targets"
     VENDORS ||--o{ PURCHASE_ORDERS : "receives"
     VENDORS ||--o{ VENDOR_BILLS : "bills"
-    PURCHASE_REQUISITIONS ||--|{ PURCHASE_REQUISITION_ITEMS : "contains"
-    PURCHASE_REQUISITIONS ||--o{ PURCHASE_ORDERS : "converted_to"
+    PURCHASE_REQUISITIONS ||--o| PURCHASE_ORDERS : "converted_to"
     PURCHASE_ORDERS ||--|{ PURCHASE_ORDER_ITEMS : "contains"
-    PURCHASE_ORDERS ||--o{ GOODS_RECEIPT_NOTES : "fulfilled_by"
-    PURCHASE_ORDERS ||--o{ VENDOR_BILLS : "matched_to"
-    GOODS_RECEIPT_NOTES ||--|{ GOODS_RECEIPT_NOTE_ITEMS : "contains"
-    VENDOR_BILLS ||--|{ VENDOR_BILL_ITEMS : "contains"
+    PURCHASE_ORDERS ||--o{ PURCHASE_RECEIPTS : "fulfilled_by"
+    PURCHASE_RECEIPTS ||--|{ PURCHASE_RECEIPT_ITEMS : "contains"
+    PURCHASE_RECEIPTS ||--o| VENDOR_BILLS : "matched_to"
 
     VENDORS {
         uuid id PK
@@ -150,55 +144,44 @@ erDiagram
         boolean is_active
     }
 
-    PURCHASE_REQUISITIONS {
-        uuid id PK
-        uuid company_id FK
-        uuid branch_id FK
-        string pr_number UK
-        date request_date
-        date required_date
-        string department
-        string status "DRAFT | SUBMITTED | APPROVED | REJECTED"
-        uuid requester_id FK
-    }
-
     PURCHASE_ORDERS {
         uuid id PK
         uuid company_id FK
         uuid branch_id FK
         uuid vendor_id FK
-        uuid pr_id FK
         string po_number UK
         date order_date
-        date expected_delivery_date
-        string status "DRAFT | CONFIRMED | RECEIVED | CANCELLED"
+        string status "DRAFT | PENDING_APPROVAL | APPROVED | RECEIVED | CANCELLED"
         numeric subtotal
         numeric tax_amount
         numeric grand_total
-        uuid approval_id FK
+        uuid approved_by FK
+        timestamp approved_at
     }
 
-    GOODS_RECEIPT_NOTES {
+    PURCHASE_RECEIPTS {
         uuid id PK
-        uuid purchase_order_id FK
+        uuid company_id FK
         uuid branch_id FK
+        uuid purchase_order_id FK
         uuid warehouse_id FK
-        string grn_number UK
+        string receipt_number UK
         date receipt_date
-        string delivery_note_ref
-        string status "RECEIVED | INSPECTED"
-        uuid received_by FK
+        string status "RECEIVED | QC_PENDING | COMPLETED"
     }
 
     VENDOR_BILLS {
         uuid id PK
-        uuid purchase_order_id FK
+        uuid company_id FK
         uuid vendor_id FK
+        uuid purchase_order_id FK
+        uuid purchase_receipt_id FK
         string bill_number UK
         date bill_date
         date due_date
         numeric grand_total
-        string payment_status "UNPAID | PARTIALLY_PAID | PAID"
-        uuid journal_id FK
+        string status "DRAFT | APPROVED | PAID"
+        boolean three_way_matched
+        uuid approved_by FK
     }
 ```
