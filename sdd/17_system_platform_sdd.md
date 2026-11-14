@@ -47,7 +47,7 @@ flowchart TD
     ApplyMutation --> GenerateDiff[Bandingkan State Lama vs State Baru / JSON Diff]
     GenerateDiff --> CaptureContext[Ambil Konteks: User ID, Branch ID, Client IP, Resource Type]
     
-    CaptureContext --> InsertAudit[INSERT INTO audit_logs (Immutable Record)]
+    CaptureContext --> InsertAudit["INSERT INTO audit_logs (Immutable Record)"]
     InsertAudit --> CommitTx[Commit Transaksi Database]
     
     CommitTx --> IsAsyncJobNeeded{Apakah Perlu Background Task?}

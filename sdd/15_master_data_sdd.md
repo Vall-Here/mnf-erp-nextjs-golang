@@ -49,8 +49,8 @@ flowchart TD
     Start([Pengguna Mengakses Sistem]) --> AuthToken[Validasi Sesi Pengguna & Token JWT]
     AuthToken --> FetchBranches[Ambil Daftar Cabang yang Diizinkan dari user_branches]
     
-    FetchBranches --> SelectBranch{Pilih Site Operasional (activeBranchId)}
-    SelectBranch --> IsSuperAdmin{Super Admin / Direksi?}
+    FetchBranches --> SelectBranch{"Pilih Site Operasional (activeBranchId)"}
+    SelectBranch --> IsSuperAdmin{"Super Admin / Direksi?"}
     
     IsSuperAdmin -- Ya --> AllowConsolidated[Dapat Memilih Semua Cabang atau Konsolidasi Nasional]
     IsSuperAdmin -- Tidak --> EnforceScoped[Wajib Terkunci pada Site Penugasan Resmi Pengguna]

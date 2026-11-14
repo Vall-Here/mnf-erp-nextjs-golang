@@ -68,17 +68,17 @@ flowchart TD
     MarkRevision --> NotifyRequester[Kembalikan ke Pemohon untuk Diperbaiki]
     NotifyRequester --> EndFail([Revisi])
     
-    ApproverAction -- Tolak (Reject) --> MarkRejected[Status REJECTED & Catat Alasan]
+    ApproverAction -->|"Tolak (Reject)"| MarkRejected["Status REJECTED & Catat Alasan"]
     MarkRejected --> LockDoc[Kunci Dokumen Bisnis Status Ditolak]
     LockDoc --> EndFail
     
-    ApproverAction -- Setujui (Approve) --> RecordStep[Catat Histori Approval, Tanggal & Digital Hash]
-    RecordStep --> IsFinalStep{Apakah Step Saat Ini == N (Final)?}
+    ApproverAction -->|"Setujui (Approve)"| RecordStep["Catat Histori Approval, Tanggal & Digital Hash"]
+    RecordStep --> IsFinalStep{"Apakah Step Saat Ini == N (Final)?"}
     
-    IsFinalStep -- Belum --> NextStep[Naikkan Step Order: Current Step + 1]
+    IsFinalStep -->|"Belum"| NextStep["Naikkan Step Order: Current Step + 1"]
     NextStep --> NotifyApprover
     
-    IsFinalStep -- Ya (Final) --> MarkApproved[Status APPROVAL: APPROVED]
+    IsFinalStep -->|"Ya (Final)"| MarkApproved["Status APPROVAL: APPROVED"]
     MarkApproved --> UnlockDoc[Ubah Status Dokumen Bisnis: APPROVED / POSTED]
     UnlockDoc --> StampSignatures[Sematkan Bukti Pengesahan ke Dokumen Cetak]
     StampSignatures --> EndSuccess([Otorisasi Selesai Penuh])

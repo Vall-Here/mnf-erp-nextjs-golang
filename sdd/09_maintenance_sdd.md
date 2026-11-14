@@ -65,7 +65,7 @@ flowchart TD
     
     NeedParts -- Tidak --> RepairAction[Lakukan Perbaikan & Penyetelan Mekanikal/Elektrikal]
     
-    RepairAction --> RunTest[Uji Coba Pengoperasian (Run-Test 30 Menit)]
+    RepairAction --> RunTest["Uji Coba Pengoperasian (Run-Test 30 Menit)"]
     RunTest --> IsNormal{Mesin Beroperasi Normal?}
     
     IsNormal -- Belum Normal --> Diagnose

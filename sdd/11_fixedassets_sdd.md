@@ -54,10 +54,10 @@ flowchart TD
     FetchAssets --> LoopAsset[Proses Kalkulasi Penyusutan per Aset]
     LoopAsset --> CheckMethod{Metode Penyusutan}
     
-    CheckMethod -- Garis Lurus (Straight-Line) --> CalcSL[Depresiasi = (Harga Perolehan - Residu) / Bulan Masa Manfaat]
-    CheckMethod -- Saldo Menurun (Declining) --> CalcDB[Depresiasi = Nilai Buku Awal * Tarif Saldo Menurun]
+    CheckMethod -->|"Garis Lurus (Straight-Line)"| CalcSL["Depresiasi = (Harga Perolehan - Residu) / Bulan Masa Manfaat"]
+    CheckMethod -->|"Saldo Menurun (Declining)"| CalcDB["Depresiasi = Nilai Buku Awal * Tarif Saldo Menurun"]
     
-    CalcSL --> UpdateNBV[Hitung Nilai Buku Baru / Net Book Value]
+    CalcSL --> UpdateNBV["Hitung Nilai Buku Baru / Net Book Value"]
     CalcDB --> UpdateNBV
     
     UpdateNBV --> SaveLine[Simpan Rincian Depreciation Line]
