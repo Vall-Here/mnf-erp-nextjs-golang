@@ -1028,13 +1028,13 @@
         </div>
 
         <h1>
-          Showcase Industrial ERP Engine<br />
-          <span>Desing by Ahmad Noval</span>
+          Industrial Enterprise ERP<br />
+          <span>PT SAWIT JAYA</span>
         </h1>
 
         <p>
-          A unified enterprise resource planning platform engineered with Golang 1.24+ and Next.js 15 App Router.
-          Structured across 20 Clean Architecture domain modules, double-entry accounting invariants, perpetual inventory tracking, and multi-branch governance.
+          A unified industrial enterprise resource planning platform engineered with Golang 1.24+ and Next.js 15 App Router.
+          Structured across 20 Clean Architecture domain modules, double-entry accounting invariants, perpetual inventory tracking, and single corporate entity multi-warehouse governance.
         </p>
 
         <div class="hero-actions">
@@ -1071,8 +1071,8 @@
             <div class="stat-value">Valkey + Asynq</div>
           </div>
           <div class="stat-card">
-            <div class="stat-label">Accounting Standard</div>
-            <div class="stat-value">PSAK 65 / IFRS 10</div>
+            <div class="stat-label">Corporate Structure</div>
+            <div class="stat-value">Single Legal Entity</div>
           </div>
         </div>
       </div>
@@ -1384,10 +1384,10 @@
           <div class="invariant-card green">
             <div class="invariant-header">
               <span class="invariant-num">INV-03</span>
-              <h4>Multi-Branch Isolation & Governance</h4>
+              <h4>Industrial Site & Multi-Warehouse Governance</h4>
             </div>
             <p>
-              Operational mutations and queries are strictly scoped by <code>branch_id</code> and verified against user membership tables. Inter-branch movements generate bilateral clearing entries according to PSAK 65 / IFRS 10.
+              PT SAWIT JAYA operates as a single integrated legal entity. All financial transactions flow into one General Ledger. Operational physical movements strictly occur across warehouses via Stock Transfer Orders (STO) with tracked in-transit status without inter-company billing.
             </p>
           </div>
 
@@ -1451,11 +1451,11 @@
               <span class="module-category-tag">Governance</span>
             </div>
             <h4>Identity & Access Management (IAM)</h4>
-            <p>Authentication, JWT rotation via secure HttpOnly cookies, RBAC permission matrix (102 actions), user lifecycle, and UserBranches tenant mapping.</p>
+            <p>Authentication, JWT rotation via secure HttpOnly cookies, RBAC permission matrix (102 actions), user lifecycle, and operational site authorization.</p>
             <div class="module-highlights">
               <span class="module-chip">JWT Auth</span>
               <span class="module-chip">RBAC Matrix</span>
-              <span class="module-chip">UserBranches</span>
+              <span class="module-chip">Site Auth</span>
             </div>
           </div>
 
@@ -1466,9 +1466,9 @@
               <span class="module-category-tag">Core Foundation</span>
             </div>
             <h4>Master Data Management</h4>
-            <p>Branch hierarchies, standard Chart of Accounts (COA PSAK), multi-currency tables, Unit of Measure (UoM) conversions, tax categories, and business partners.</p>
+            <p>Operational site hierarchies, standard Chart of Accounts (COA Indonesia SAK), multi-currency tables, Unit of Measure (UoM) conversions, tax categories, and business partners.</p>
             <div class="module-highlights">
-              <span class="module-chip">Branches</span>
+              <span class="module-chip">Operational Sites</span>
               <span class="module-chip">COA Standard</span>
               <span class="module-chip">Currencies</span>
               <span class="module-chip">UoM</span>
@@ -1482,10 +1482,10 @@
               <span class="module-category-tag">Financials</span>
             </div>
             <h4>General Ledger & Accounting</h4>
-            <p>Strict double-entry balance validation (Debit == Credit), automated operational journal postings, inter-branch clearing accounts (PSAK 65 / IFRS 10), and financial reporting.</p>
+            <p>Strict double-entry balance validation (Debit == Credit), automated operational journal postings, unified General Ledger across operational sites, and financial reporting.</p>
             <div class="module-highlights">
               <span class="module-chip">Double-Entry</span>
-              <span class="module-chip">PSAK 65</span>
+              <span class="module-chip">Unified GL</span>
               <span class="module-chip">Trial Balance</span>
             </div>
           </div>
@@ -1497,10 +1497,10 @@
               <span class="module-category-tag">Supply Chain</span>
             </div>
             <h4>Perpetual Inventory & Warehousing</h4>
-            <p>Real-time perpetual stock ledger (FIFO valuation), multi-warehouse bin hierarchies, stock transfers, reservations, reorder triggers, and physical stock opname.</p>
+            <p>Real-time perpetual stock ledger (FIFO valuation), multi-warehouse bin hierarchies, Stock Transfer Orders (STO) with in-transit tracking, reservations, reorder triggers, and physical stock opname.</p>
             <div class="module-highlights">
               <span class="module-chip">FIFO Ledger</span>
-              <span class="module-chip">Multi-Bin</span>
+              <span class="module-chip">Multi-Warehouse STO</span>
               <span class="module-chip">Stock Opname</span>
             </div>
           </div>
@@ -1691,10 +1691,10 @@
               <span class="module-code">MOD-17</span>
               <span class="module-category-tag">Analytics</span>
             </div>
-            <h4>Holding & Department Analytics</h4>
-            <p>Centralized holding consolidated overview vs department-isolated operational dashboards (Fabrication, Warehouse, Purchasing, Sales, HR, Finance).</p>
+            <h4>Corporate & Operational Analytics</h4>
+            <p>Corporate executive overview vs department-isolated operational dashboards (Fabrication, Warehouse, Purchasing, Sales, HR, Finance) and physical site performance.</p>
             <div class="module-highlights">
-              <span class="module-chip">Holding View</span>
+              <span class="module-chip">Corporate View</span>
               <span class="module-chip">Dept Scopes</span>
               <span class="module-chip">Real-Time KPIs</span>
             </div>
@@ -2467,7 +2467,7 @@
     <div class="container footer-content">
       <div>
         <p><strong>Industrial ERP Architecture Showcase</strong></p>
-        <p>Built with Golang 1.24+ and Next.js 15 App Router by Ahmad Noval</p>
+        <p>Built with Golang 1.24+ and Next.js 15 App Router | PT SAWIT JAYA</p>
       </div>
       <ul class="footer-links">
         <li><a href="./architecture/erp-architecture.html" target="_blank">System Architecture</a></li>

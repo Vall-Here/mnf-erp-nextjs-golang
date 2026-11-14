@@ -94,7 +94,7 @@
       "items": [
         "Domain modules: Purchasing (P2P), Operations (MRP), PSAK Accounting, HRM, Documents, Portal",
         "Granular RBAC middleware enforcing module:action permissions",
-        "Multi-branch tenant isolation verified against user_branches table"
+        "Multi-site plant & warehouse governance with operational branch isolation"
       ]
     },
     {

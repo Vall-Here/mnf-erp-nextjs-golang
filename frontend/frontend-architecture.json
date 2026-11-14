@@ -24,7 +24,7 @@
     { "id": "forms", "type": "frontend", "label": "RHF & Zod", "sublabel": "Forms & Validation", "col": 2, "row": 0 },
     { "id": "zustand", "type": "database", "label": "Zustand Stores", "sublabel": "Client State", "col": 2, "row": 1 },
     
-    { "id": "api_client", "type": "backend", "label": "API Client", "sublabel": "Axios & JWT", "col": 3, "row": 1 },
+    { "id": "api_client", "type": "backend", "label": "API Client", "sublabel": "Fetch & JWT", "col": 3, "row": 1 },
     { "id": "backend", "type": "backend", "label": "Go API", "sublabel": "REST Services", "col": 3, "row": 2 }
   ],
   "boundaries": [
