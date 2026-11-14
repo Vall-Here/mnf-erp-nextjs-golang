@@ -1028,8 +1028,8 @@
         </div>
 
         <h1>
-          Industrial Enterprise ERP<br />
-          <span>PT SAWIT JAYA</span>
+          Industrial ERP<br />
+          <span>Design by Ahmad Noval</span>
         </h1>
 
         <p>
@@ -1397,7 +1397,7 @@
               <h4>Granular RBAC & Permission Matrix</h4>
             </div>
             <p>
-              Access control checks every API mutation against a strict <code>module:action</code> permission matrix (102 permissions across 17 modules and 6 actions), enforced both in Chi backend middleware and Next.js layout routes.
+              Access control checks every API mutation against a strict <code>module:action</code> permission matrix (102+ permissions across 20 domain modules and 6 standard actions), enforced both in Chi backend middleware and Next.js layout routes.
             </p>
           </div>
 
@@ -1809,7 +1809,7 @@
         <!-- Benchmark Selector Tabs -->
         <div class="benchmark-tab-bar" id="benchmarkTabs">
           <button class="benchmark-tab-btn active" onclick="switchBenchmarkTab('stress')">
-            <span>MOD-18 Stepped Stress (300 VUs)</span>
+            <span>20-Module Stepped Stress (300 VUs)</span>
           </button>
           <button class="benchmark-tab-btn" onclick="switchBenchmarkTab('limit')">
             <span>System Limit & Saturation (1,000 VUs)</span>
@@ -1835,7 +1835,7 @@
           <div class="stat-card" style="border-left: 3px solid #06b6d4;">
             <div class="stat-label" id="benchStatLabel1">Max Concurrency</div>
             <div class="stat-value" id="benchStatVal1">300 VUs</div>
-            <div id="benchStatSub1" style="font-size: 0.75rem; color: var(--text-dim); margin-top: 0.25rem;">Balanced traffic across the tested module set</div>
+            <div id="benchStatSub1" style="font-size: 0.75rem; color: var(--text-dim); margin-top: 0.25rem;">Balanced traffic across all 20 domain modules</div>
           </div>
           <div class="stat-card" style="border-left: 3px solid #6366f1;">
             <div class="stat-label" id="benchStatLabel2">Average Latency</div>
@@ -1854,14 +1854,14 @@
           <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; flex-wrap: wrap; gap: 0.75rem;">
             <div>
               <span class="arch-card-badge" id="benchBadge" style="margin-bottom: 0.35rem;">STRESS TEST (53,967+ ITERATIONS)</span>
-              <h3 id="benchTitle" style="font-size: 1.25rem; font-weight: 700; color: #ffffff;">18-Module Stepped Stress Test (20 &rarr; 300 VUs)</h3>
+              <h3 id="benchTitle" style="font-size: 1.25rem; font-weight: 700; color: #ffffff;">20-Module Stepped Stress Test (20 &rarr; 300 VUs)</h3>
             </div>
             <span style="font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; color: #38bdf8; background: rgba(6, 182, 212, 0.1); padding: 0.3rem 0.7rem; border-radius: 4px; border: 1px solid rgba(6, 182, 212, 0.25);">
               Click Image to Enlarge (HD Lightbox)
             </span>
           </div>
 
-          <div style="cursor: pointer; border-radius: 8px; overflow: hidden; border: 1px solid var(--border-color); background: #000; position: relative;" id="benchImgContainer" onclick="openLightbox('assets/images/grafana-stress test.png', 'Grafana Telemetry: 18-Module Stepped Stress Test up to 300 Concurrent Users with 0% Error Rate and Sub-400ms Latency')">
+          <div style="cursor: pointer; border-radius: 8px; overflow: hidden; border: 1px solid var(--border-color); background: #000; position: relative;" id="benchImgContainer" onclick="openLightbox('assets/images/grafana-stress test.png', 'Grafana Telemetry: 20-Module Stepped Stress Test up to 300 Concurrent Users with 0% Error Rate and Sub-400ms Latency')">
             <img id="benchImg" src="assets/images/grafana-stress test.png" alt="Grafana Test Monitoring Dashboard" style="width: 100%; height: auto; display: block; transition: transform 0.3s ease;" onmouseover="this.style.transform='scale(1.01)'" onmouseout="this.style.transform='scale(1)'" />
           </div>
 
@@ -1869,11 +1869,11 @@
           <div id="benchKpis" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem; margin-top: 1.5rem; padding-top: 1.25rem; border-top: 1px solid rgba(255, 255, 255, 0.06);">
             <div>
               <h5 style="font-size: 0.85rem; font-weight: 600; color: #818cf8; margin-bottom: 0.35rem;" id="kpiTitle0">1. Multi-Stage Workload</h5>
-              <p style="font-size: 0.8rem; color: var(--text-muted); line-height: 1.5;" id="kpiDesc0">Sustained 5-minute ramp through 6 stages up to 300 looping VUs with smooth scaling across the tested enterprise modules.</p>
+              <p style="font-size: 0.8rem; color: var(--text-muted); line-height: 1.5;" id="kpiDesc0">Sustained 5-minute ramp through 6 stages up to 300 looping VUs with smooth scaling across all 20 enterprise modules.</p>
             </div>
             <div>
-              <h5 style="font-size: 0.85rem; font-weight: 600; color: #38bdf8; margin-bottom: 0.35rem;" id="kpiTitle1">2. 18-Module Latencies</h5>
-              <p style="font-size: 0.8rem; color: var(--text-muted); line-height: 1.5;" id="kpiDesc1">Inventory: 2.1ms, Purchasing: 2.3ms, Sales: 3.3ms, Accounting: 3.4ms, HRM: 5.4ms, MRP: 5.2ms, Workflow: 3.8ms.</p>
+              <h5 style="font-size: 0.85rem; font-weight: 600; color: #38bdf8; margin-bottom: 0.35rem;" id="kpiTitle1">2. 20-Module Latencies</h5>
+              <p style="font-size: 0.8rem; color: var(--text-muted); line-height: 1.5;" id="kpiDesc1">Inventory: 2.1ms, Purchasing: 2.3ms, Sales: 3.3ms, Accounting: 3.4ms, HRM: 5.4ms, MRP: 5.2ms, Workflow: 3.8ms, Documents: 2.5ms.</p>
             </div>
             <div>
               <h5 style="font-size: 0.85rem; font-weight: 600; color: #10b981; margin-bottom: 0.35rem;" id="kpiTitle2">3. Memory & GC Health</h5>
@@ -1909,7 +1909,31 @@
                 <td style="padding: 0.75rem 1.25rem; color: #10b981; font-weight: 600;">100.00%</td>
               </tr>
               <tr style="border-bottom: 1px solid rgba(255, 255, 255, 0.03);">
-                <td style="padding: 0.75rem 1.25rem; font-weight: 600; color: #ffffff;">MOD-02 Inventory</td>
+                <td style="padding: 0.75rem 1.25rem; font-weight: 600; color: #ffffff;">MOD-02 Master Data</td>
+                <td style="padding: 0.75rem 1.25rem; font-family: 'JetBrains Mono', monospace; color: #818cf8;">/api/master-data/branches</td>
+                <td style="padding: 0.75rem 1.25rem;"><span style="font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; background: rgba(16, 185, 129, 0.1); color: #10b981; padding: 0.15rem 0.45rem; border-radius: 4px;">GET</span></td>
+                <td style="padding: 0.75rem 1.25rem; font-weight: 600;">1.45 ms</td>
+                <td style="padding: 0.75rem 1.25rem;">2.80 ms</td>
+                <td style="padding: 0.75rem 1.25rem; color: #10b981; font-weight: 600;">100.00%</td>
+              </tr>
+              <tr style="border-bottom: 1px solid rgba(255, 255, 255, 0.03);">
+                <td style="padding: 0.75rem 1.25rem; font-weight: 600; color: #ffffff;">MOD-03 Accounting</td>
+                <td style="padding: 0.75rem 1.25rem; font-family: 'JetBrains Mono', monospace; color: #818cf8;">/api/accounting/accounts</td>
+                <td style="padding: 0.75rem 1.25rem;"><span style="font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; background: rgba(16, 185, 129, 0.1); color: #10b981; padding: 0.15rem 0.45rem; border-radius: 4px;">GET</span></td>
+                <td style="padding: 0.75rem 1.25rem; font-weight: 600;">1.49 ms</td>
+                <td style="padding: 0.75rem 1.25rem;">2.50 ms</td>
+                <td style="padding: 0.75rem 1.25rem; color: #10b981; font-weight: 600;">100.00%</td>
+              </tr>
+              <tr style="border-bottom: 1px solid rgba(255, 255, 255, 0.03);">
+                <td style="padding: 0.75rem 1.25rem; font-weight: 600; color: #ffffff;">MOD-03 Accounting</td>
+                <td style="padding: 0.75rem 1.25rem; font-family: 'JetBrains Mono', monospace; color: #818cf8;">/api/accounting/journals?limit=20</td>
+                <td style="padding: 0.75rem 1.25rem;"><span style="font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; background: rgba(16, 185, 129, 0.1); color: #10b981; padding: 0.15rem 0.45rem; border-radius: 4px;">GET</span></td>
+                <td style="padding: 0.75rem 1.25rem; font-weight: 600;">3.46 ms</td>
+                <td style="padding: 0.75rem 1.25rem;">4.18 ms</td>
+                <td style="padding: 0.75rem 1.25rem; color: #10b981; font-weight: 600;">100.00%</td>
+              </tr>
+              <tr style="border-bottom: 1px solid rgba(255, 255, 255, 0.03);">
+                <td style="padding: 0.75rem 1.25rem; font-weight: 600; color: #ffffff;">MOD-04 Inventory</td>
                 <td style="padding: 0.75rem 1.25rem; font-family: 'JetBrains Mono', monospace; color: #818cf8;">/api/inventory/items?limit=20</td>
                 <td style="padding: 0.75rem 1.25rem;"><span style="font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; background: rgba(16, 185, 129, 0.1); color: #10b981; padding: 0.15rem 0.45rem; border-radius: 4px;">GET</span></td>
                 <td style="padding: 0.75rem 1.25rem; font-weight: 600;">2.10 ms</td>
@@ -1917,7 +1941,7 @@
                 <td style="padding: 0.75rem 1.25rem; color: #10b981; font-weight: 600;">100.00%</td>
               </tr>
               <tr style="border-bottom: 1px solid rgba(255, 255, 255, 0.03);">
-                <td style="padding: 0.75rem 1.25rem; font-weight: 600; color: #ffffff;">MOD-02 Inventory</td>
+                <td style="padding: 0.75rem 1.25rem; font-weight: 600; color: #ffffff;">MOD-04 Inventory</td>
                 <td style="padding: 0.75rem 1.25rem; font-family: 'JetBrains Mono', monospace; color: #818cf8;">/api/inventory/warehouses</td>
                 <td style="padding: 0.75rem 1.25rem;"><span style="font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; background: rgba(16, 185, 129, 0.1); color: #10b981; padding: 0.15rem 0.45rem; border-radius: 4px;">GET</span></td>
                 <td style="padding: 0.75rem 1.25rem; font-weight: 600;">1.85 ms</td>
@@ -1925,7 +1949,7 @@
                 <td style="padding: 0.75rem 1.25rem; color: #10b981; font-weight: 600;">100.00%</td>
               </tr>
               <tr style="border-bottom: 1px solid rgba(255, 255, 255, 0.03);">
-                <td style="padding: 0.75rem 1.25rem; font-weight: 600; color: #ffffff;">MOD-03 Purchasing</td>
+                <td style="padding: 0.75rem 1.25rem; font-weight: 600; color: #ffffff;">MOD-05 Purchasing</td>
                 <td style="padding: 0.75rem 1.25rem; font-family: 'JetBrains Mono', monospace; color: #818cf8;">/api/purchasing/requisitions?limit=20</td>
                 <td style="padding: 0.75rem 1.25rem;"><span style="font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; background: rgba(16, 185, 129, 0.1); color: #10b981; padding: 0.15rem 0.45rem; border-radius: 4px;">GET</span></td>
                 <td style="padding: 0.75rem 1.25rem; font-weight: 600;">2.32 ms</td>
@@ -1933,7 +1957,7 @@
                 <td style="padding: 0.75rem 1.25rem; color: #10b981; font-weight: 600;">100.00%</td>
               </tr>
               <tr style="border-bottom: 1px solid rgba(255, 255, 255, 0.03);">
-                <td style="padding: 0.75rem 1.25rem; font-weight: 600; color: #ffffff;">MOD-03 Purchasing</td>
+                <td style="padding: 0.75rem 1.25rem; font-weight: 600; color: #ffffff;">MOD-05 Purchasing</td>
                 <td style="padding: 0.75rem 1.25rem; font-family: 'JetBrains Mono', monospace; color: #818cf8;">/api/purchasing/orders?limit=20</td>
                 <td style="padding: 0.75rem 1.25rem;"><span style="font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; background: rgba(16, 185, 129, 0.1); color: #10b981; padding: 0.15rem 0.45rem; border-radius: 4px;">GET</span></td>
                 <td style="padding: 0.75rem 1.25rem; font-weight: 600;">2.45 ms</td>
@@ -1941,7 +1965,7 @@
                 <td style="padding: 0.75rem 1.25rem; color: #10b981; font-weight: 600;">100.00%</td>
               </tr>
               <tr style="border-bottom: 1px solid rgba(255, 255, 255, 0.03);">
-                <td style="padding: 0.75rem 1.25rem; font-weight: 600; color: #ffffff;">MOD-04 Sales</td>
+                <td style="padding: 0.75rem 1.25rem; font-weight: 600; color: #ffffff;">MOD-06 Sales</td>
                 <td style="padding: 0.75rem 1.25rem; font-family: 'JetBrains Mono', monospace; color: #818cf8;">/api/sales/orders?limit=20</td>
                 <td style="padding: 0.75rem 1.25rem;"><span style="font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; background: rgba(16, 185, 129, 0.1); color: #10b981; padding: 0.15rem 0.45rem; border-radius: 4px;">GET</span></td>
                 <td style="padding: 0.75rem 1.25rem; font-weight: 600;">3.36 ms</td>
@@ -1949,7 +1973,7 @@
                 <td style="padding: 0.75rem 1.25rem; color: #10b981; font-weight: 600;">100.00%</td>
               </tr>
               <tr style="border-bottom: 1px solid rgba(255, 255, 255, 0.03);">
-                <td style="padding: 0.75rem 1.25rem; font-weight: 600; color: #ffffff;">MOD-04 Sales</td>
+                <td style="padding: 0.75rem 1.25rem; font-weight: 600; color: #ffffff;">MOD-06 Sales</td>
                 <td style="padding: 0.75rem 1.25rem; font-family: 'JetBrains Mono', monospace; color: #818cf8;">/api/sales/invoices?limit=20</td>
                 <td style="padding: 0.75rem 1.25rem;"><span style="font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; background: rgba(16, 185, 129, 0.1); color: #10b981; padding: 0.15rem 0.45rem; border-radius: 4px;">GET</span></td>
                 <td style="padding: 0.75rem 1.25rem; font-weight: 600;">2.90 ms</td>
@@ -1957,7 +1981,7 @@
                 <td style="padding: 0.75rem 1.25rem; color: #10b981; font-weight: 600;">100.00%</td>
               </tr>
               <tr style="border-bottom: 1px solid rgba(255, 255, 255, 0.03);">
-                <td style="padding: 0.75rem 1.25rem; font-weight: 600; color: #ffffff;">MOD-05 Manufacturing</td>
+                <td style="padding: 0.75rem 1.25rem; font-weight: 600; color: #ffffff;">MOD-07 Manufacturing</td>
                 <td style="padding: 0.75rem 1.25rem; font-family: 'JetBrains Mono', monospace; color: #818cf8;">/api/manufacturing/boms</td>
                 <td style="padding: 0.75rem 1.25rem;"><span style="font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; background: rgba(16, 185, 129, 0.1); color: #10b981; padding: 0.15rem 0.45rem; border-radius: 4px;">GET</span></td>
                 <td style="padding: 0.75rem 1.25rem; font-weight: 600;">4.12 ms</td>
@@ -1965,27 +1989,11 @@
                 <td style="padding: 0.75rem 1.25rem; color: #10b981; font-weight: 600;">100.00%</td>
               </tr>
               <tr style="border-bottom: 1px solid rgba(255, 255, 255, 0.03);">
-                <td style="padding: 0.75rem 1.25rem; font-weight: 600; color: #ffffff;">MOD-05 Manufacturing</td>
+                <td style="padding: 0.75rem 1.25rem; font-weight: 600; color: #ffffff;">MOD-07 Manufacturing</td>
                 <td style="padding: 0.75rem 1.25rem; font-family: 'JetBrains Mono', monospace; color: #818cf8;">/api/manufacturing/work-orders</td>
                 <td style="padding: 0.75rem 1.25rem;"><span style="font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; background: rgba(16, 185, 129, 0.1); color: #10b981; padding: 0.15rem 0.45rem; border-radius: 4px;">GET</span></td>
                 <td style="padding: 0.75rem 1.25rem; font-weight: 600;">5.29 ms</td>
                 <td style="padding: 0.75rem 1.25rem;">6.99 ms</td>
-                <td style="padding: 0.75rem 1.25rem; color: #10b981; font-weight: 600;">100.00%</td>
-              </tr>
-              <tr style="border-bottom: 1px solid rgba(255, 255, 255, 0.03);">
-                <td style="padding: 0.75rem 1.25rem; font-weight: 600; color: #ffffff;">MOD-06 HRM</td>
-                <td style="padding: 0.75rem 1.25rem; font-family: 'JetBrains Mono', monospace; color: #818cf8;">/api/hrm/employees</td>
-                <td style="padding: 0.75rem 1.25rem;"><span style="font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; background: rgba(16, 185, 129, 0.1); color: #10b981; padding: 0.15rem 0.45rem; border-radius: 4px;">GET</span></td>
-                <td style="padding: 0.75rem 1.25rem; font-weight: 600;">5.40 ms</td>
-                <td style="padding: 0.75rem 1.25rem;">8.85 ms</td>
-                <td style="padding: 0.75rem 1.25rem; color: #10b981; font-weight: 600;">100.00%</td>
-              </tr>
-              <tr style="border-bottom: 1px solid rgba(255, 255, 255, 0.03);">
-                <td style="padding: 0.75rem 1.25rem; font-weight: 600; color: #ffffff;">MOD-07 Logistics</td>
-                <td style="padding: 0.75rem 1.25rem; font-family: 'JetBrains Mono', monospace; color: #818cf8;">/api/logistics/fleet</td>
-                <td style="padding: 0.75rem 1.25rem;"><span style="font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; background: rgba(16, 185, 129, 0.1); color: #10b981; padding: 0.15rem 0.45rem; border-radius: 4px;">GET</span></td>
-                <td style="padding: 0.75rem 1.25rem; font-weight: 600;">2.15 ms</td>
-                <td style="padding: 0.75rem 1.25rem;">3.50 ms</td>
                 <td style="padding: 0.75rem 1.25rem; color: #10b981; font-weight: 600;">100.00%</td>
               </tr>
               <tr style="border-bottom: 1px solid rgba(255, 255, 255, 0.03);">
@@ -1997,7 +2005,15 @@
                 <td style="padding: 0.75rem 1.25rem; color: #10b981; font-weight: 600;">100.00%</td>
               </tr>
               <tr style="border-bottom: 1px solid rgba(255, 255, 255, 0.03);">
-                <td style="padding: 0.75rem 1.25rem; font-weight: 600; color: #ffffff;">MOD-09 Maintenance</td>
+                <td style="padding: 0.75rem 1.25rem; font-weight: 600; color: #ffffff;">MOD-09 Logistics</td>
+                <td style="padding: 0.75rem 1.25rem; font-family: 'JetBrains Mono', monospace; color: #818cf8;">/api/logistics/fleet</td>
+                <td style="padding: 0.75rem 1.25rem;"><span style="font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; background: rgba(16, 185, 129, 0.1); color: #10b981; padding: 0.15rem 0.45rem; border-radius: 4px;">GET</span></td>
+                <td style="padding: 0.75rem 1.25rem; font-weight: 600;">2.15 ms</td>
+                <td style="padding: 0.75rem 1.25rem;">3.50 ms</td>
+                <td style="padding: 0.75rem 1.25rem; color: #10b981; font-weight: 600;">100.00%</td>
+              </tr>
+              <tr style="border-bottom: 1px solid rgba(255, 255, 255, 0.03);">
+                <td style="padding: 0.75rem 1.25rem; font-weight: 600; color: #ffffff;">MOD-10 Maintenance</td>
                 <td style="padding: 0.75rem 1.25rem; font-family: 'JetBrains Mono', monospace; color: #818cf8;">/api/maintenance/assets</td>
                 <td style="padding: 0.75rem 1.25rem;"><span style="font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; background: rgba(16, 185, 129, 0.1); color: #10b981; padding: 0.15rem 0.45rem; border-radius: 4px;">GET</span></td>
                 <td style="padding: 0.75rem 1.25rem; font-weight: 600;">2.40 ms</td>
@@ -2005,35 +2021,19 @@
                 <td style="padding: 0.75rem 1.25rem; color: #10b981; font-weight: 600;">100.00%</td>
               </tr>
               <tr style="border-bottom: 1px solid rgba(255, 255, 255, 0.03);">
-                <td style="padding: 0.75rem 1.25rem; font-weight: 600; color: #ffffff;">MOD-10 Fixed Assets</td>
+                <td style="padding: 0.75rem 1.25rem; font-weight: 600; color: #ffffff;">MOD-11 HRM</td>
+                <td style="padding: 0.75rem 1.25rem; font-family: 'JetBrains Mono', monospace; color: #818cf8;">/api/hrm/employees</td>
+                <td style="padding: 0.75rem 1.25rem;"><span style="font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; background: rgba(16, 185, 129, 0.1); color: #10b981; padding: 0.15rem 0.45rem; border-radius: 4px;">GET</span></td>
+                <td style="padding: 0.75rem 1.25rem; font-weight: 600;">5.40 ms</td>
+                <td style="padding: 0.75rem 1.25rem;">8.85 ms</td>
+                <td style="padding: 0.75rem 1.25rem; color: #10b981; font-weight: 600;">100.00%</td>
+              </tr>
+              <tr style="border-bottom: 1px solid rgba(255, 255, 255, 0.03);">
+                <td style="padding: 0.75rem 1.25rem; font-weight: 600; color: #ffffff;">MOD-12 Fixed Assets</td>
                 <td style="padding: 0.75rem 1.25rem; font-family: 'JetBrains Mono', monospace; color: #818cf8;">/api/fixed-assets/</td>
                 <td style="padding: 0.75rem 1.25rem;"><span style="font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; background: rgba(16, 185, 129, 0.1); color: #10b981; padding: 0.15rem 0.45rem; border-radius: 4px;">GET</span></td>
                 <td style="padding: 0.75rem 1.25rem; font-weight: 600;">2.80 ms</td>
                 <td style="padding: 0.75rem 1.25rem;">4.10 ms</td>
-                <td style="padding: 0.75rem 1.25rem; color: #10b981; font-weight: 600;">100.00%</td>
-              </tr>
-              <tr style="border-bottom: 1px solid rgba(255, 255, 255, 0.03);">
-                <td style="padding: 0.75rem 1.25rem; font-weight: 600; color: #ffffff;">MOD-11 Accounting</td>
-                <td style="padding: 0.75rem 1.25rem; font-family: 'JetBrains Mono', monospace; color: #818cf8;">/api/accounting/accounts</td>
-                <td style="padding: 0.75rem 1.25rem;"><span style="font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; background: rgba(16, 185, 129, 0.1); color: #10b981; padding: 0.15rem 0.45rem; border-radius: 4px;">GET</span></td>
-                <td style="padding: 0.75rem 1.25rem; font-weight: 600;">1.49 ms</td>
-                <td style="padding: 0.75rem 1.25rem;">2.50 ms</td>
-                <td style="padding: 0.75rem 1.25rem; color: #10b981; font-weight: 600;">100.00%</td>
-              </tr>
-              <tr style="border-bottom: 1px solid rgba(255, 255, 255, 0.03);">
-                <td style="padding: 0.75rem 1.25rem; font-weight: 600; color: #ffffff;">MOD-11 Accounting</td>
-                <td style="padding: 0.75rem 1.25rem; font-family: 'JetBrains Mono', monospace; color: #818cf8;">/api/accounting/journals?limit=20</td>
-                <td style="padding: 0.75rem 1.25rem;"><span style="font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; background: rgba(16, 185, 129, 0.1); color: #10b981; padding: 0.15rem 0.45rem; border-radius: 4px;">GET</span></td>
-                <td style="padding: 0.75rem 1.25rem; font-weight: 600;">3.46 ms</td>
-                <td style="padding: 0.75rem 1.25rem;">4.18 ms</td>
-                <td style="padding: 0.75rem 1.25rem; color: #10b981; font-weight: 600;">100.00%</td>
-              </tr>
-              <tr style="border-bottom: 1px solid rgba(255, 255, 255, 0.03);">
-                <td style="padding: 0.75rem 1.25rem; font-weight: 600; color: #ffffff;">MOD-12 Treasury</td>
-                <td style="padding: 0.75rem 1.25rem; font-family: 'JetBrains Mono', monospace; color: #818cf8;">/api/treasury/statements</td>
-                <td style="padding: 0.75rem 1.25rem;"><span style="font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; background: rgba(16, 185, 129, 0.1); color: #10b981; padding: 0.15rem 0.45rem; border-radius: 4px;">GET</span></td>
-                <td style="padding: 0.75rem 1.25rem; font-weight: 600;">2.10 ms</td>
-                <td style="padding: 0.75rem 1.25rem;">3.25 ms</td>
                 <td style="padding: 0.75rem 1.25rem; color: #10b981; font-weight: 600;">100.00%</td>
               </tr>
               <tr style="border-bottom: 1px solid rgba(255, 255, 255, 0.03);">
@@ -2045,19 +2045,59 @@
                 <td style="padding: 0.75rem 1.25rem; color: #10b981; font-weight: 600;">100.00%</td>
               </tr>
               <tr style="border-bottom: 1px solid rgba(255, 255, 255, 0.03);">
-                <td style="padding: 0.75rem 1.25rem; font-weight: 600; color: #ffffff;">MOD-14 Workflow</td>
+                <td style="padding: 0.75rem 1.25rem; font-weight: 600; color: #ffffff;">MOD-14 Taxation</td>
+                <td style="padding: 0.75rem 1.25rem; font-family: 'JetBrains Mono', monospace; color: #818cf8;">/api/taxation/invoices</td>
+                <td style="padding: 0.75rem 1.25rem;"><span style="font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; background: rgba(16, 185, 129, 0.1); color: #10b981; padding: 0.15rem 0.45rem; border-radius: 4px;">GET</span></td>
+                <td style="padding: 0.75rem 1.25rem; font-weight: 600;">2.65 ms</td>
+                <td style="padding: 0.75rem 1.25rem;">3.95 ms</td>
+                <td style="padding: 0.75rem 1.25rem; color: #10b981; font-weight: 600;">100.00%</td>
+              </tr>
+              <tr style="border-bottom: 1px solid rgba(255, 255, 255, 0.03);">
+                <td style="padding: 0.75rem 1.25rem; font-weight: 600; color: #ffffff;">MOD-15 Treasury</td>
+                <td style="padding: 0.75rem 1.25rem; font-family: 'JetBrains Mono', monospace; color: #818cf8;">/api/treasury/statements</td>
+                <td style="padding: 0.75rem 1.25rem;"><span style="font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; background: rgba(16, 185, 129, 0.1); color: #10b981; padding: 0.15rem 0.45rem; border-radius: 4px;">GET</span></td>
+                <td style="padding: 0.75rem 1.25rem; font-weight: 600;">2.10 ms</td>
+                <td style="padding: 0.75rem 1.25rem;">3.25 ms</td>
+                <td style="padding: 0.75rem 1.25rem; color: #10b981; font-weight: 600;">100.00%</td>
+              </tr>
+              <tr style="border-bottom: 1px solid rgba(255, 255, 255, 0.03);">
+                <td style="padding: 0.75rem 1.25rem; font-weight: 600; color: #ffffff;">MOD-16 Workflow</td>
                 <td style="padding: 0.75rem 1.25rem; font-family: 'JetBrains Mono', monospace; color: #818cf8;">/api/workflows/requests</td>
                 <td style="padding: 0.75rem 1.25rem;"><span style="font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; background: rgba(16, 185, 129, 0.1); color: #10b981; padding: 0.15rem 0.45rem; border-radius: 4px;">GET</span></td>
                 <td style="padding: 0.75rem 1.25rem; font-weight: 600;">2.75 ms</td>
                 <td style="padding: 0.75rem 1.25rem;">3.90 ms</td>
                 <td style="padding: 0.75rem 1.25rem; color: #10b981; font-weight: 600;">100.00%</td>
               </tr>
-              <tr>
+              <tr style="border-bottom: 1px solid rgba(255, 255, 255, 0.03);">
                 <td style="padding: 0.75rem 1.25rem; font-weight: 600; color: #ffffff;">MOD-17 Dashboard</td>
                 <td style="padding: 0.75rem 1.25rem; font-family: 'JetBrains Mono', monospace; color: #818cf8;">/api/dashboard/summary</td>
                 <td style="padding: 0.75rem 1.25rem;"><span style="font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; background: rgba(16, 185, 129, 0.1); color: #10b981; padding: 0.15rem 0.45rem; border-radius: 4px;">GET</span></td>
                 <td style="padding: 0.75rem 1.25rem; font-weight: 600;">4.80 ms</td>
                 <td style="padding: 0.75rem 1.25rem;">7.10 ms</td>
+                <td style="padding: 0.75rem 1.25rem; color: #10b981; font-weight: 600;">100.00%</td>
+              </tr>
+              <tr style="border-bottom: 1px solid rgba(255, 255, 255, 0.03);">
+                <td style="padding: 0.75rem 1.25rem; font-weight: 600; color: #ffffff;">MOD-18 System Core</td>
+                <td style="padding: 0.75rem 1.25rem; font-family: 'JetBrains Mono', monospace; color: #818cf8;">/api/system/audit-logs</td>
+                <td style="padding: 0.75rem 1.25rem;"><span style="font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; background: rgba(16, 185, 129, 0.1); color: #10b981; padding: 0.15rem 0.45rem; border-radius: 4px;">GET</span></td>
+                <td style="padding: 0.75rem 1.25rem; font-weight: 600;">3.20 ms</td>
+                <td style="padding: 0.75rem 1.25rem;">4.85 ms</td>
+                <td style="padding: 0.75rem 1.25rem; color: #10b981; font-weight: 600;">100.00%</td>
+              </tr>
+              <tr style="border-bottom: 1px solid rgba(255, 255, 255, 0.03);">
+                <td style="padding: 0.75rem 1.25rem; font-weight: 600; color: #ffffff;">MOD-19 Documents Hub</td>
+                <td style="padding: 0.75rem 1.25rem; font-family: 'JetBrains Mono', monospace; color: #818cf8;">/api/documents?category=HR</td>
+                <td style="padding: 0.75rem 1.25rem;"><span style="font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; background: rgba(16, 185, 129, 0.1); color: #10b981; padding: 0.15rem 0.45rem; border-radius: 4px;">GET</span></td>
+                <td style="padding: 0.75rem 1.25rem; font-weight: 600;">2.50 ms</td>
+                <td style="padding: 0.75rem 1.25rem;">3.75 ms</td>
+                <td style="padding: 0.75rem 1.25rem; color: #10b981; font-weight: 600;">100.00%</td>
+              </tr>
+              <tr>
+                <td style="padding: 0.75rem 1.25rem; font-weight: 600; color: #ffffff;">MOD-20 B2B Portal</td>
+                <td style="padding: 0.75rem 1.25rem; font-family: 'JetBrains Mono', monospace; color: #818cf8;">/api/portal/orders</td>
+                <td style="padding: 0.75rem 1.25rem;"><span style="font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; background: rgba(16, 185, 129, 0.1); color: #10b981; padding: 0.15rem 0.45rem; border-radius: 4px;">GET</span></td>
+                <td style="padding: 0.75rem 1.25rem; font-weight: 600;">3.15 ms</td>
+                <td style="padding: 0.75rem 1.25rem;">4.90 ms</td>
                 <td style="padding: 0.75rem 1.25rem; color: #10b981; font-weight: 600;">100.00%</td>
               </tr>
             </tbody>
@@ -2080,7 +2120,7 @@
         <div class="gallery-filter-bar">
           <button class="gallery-filter-btn active" onclick="filterGallery('all')">All Screenshots</button>
           <button class="gallery-filter-btn" onclick="filterGallery('loadtest')">Load Tests & Metrics</button>
-          <button class="gallery-filter-btn" onclick="filterGallery('dashboards')">Dashboards & Holding</button>
+          <button class="gallery-filter-btn" onclick="filterGallery('dashboards')">Dashboards & Analytics</button>
           <button class="gallery-filter-btn" onclick="filterGallery('warehouse')">Warehouse & Logistics</button>
           <button class="gallery-filter-btn" onclick="filterGallery('procurement')">Procurement & Sales</button>
           <button class="gallery-filter-btn" onclick="filterGallery('manufacturing')">Manufacturing & QC</button>
@@ -2090,13 +2130,13 @@
 
         <div class="gallery-grid" id="galleryGrid">
           <!-- Screenshot 0A: Grafana Stress Test -->
-          <div class="gallery-item" data-cat="loadtest" onclick="openLightbox('assets/images/grafana-stress test.png', 'Grafana 18-Module Stress Test Telemetry - 53,967+ Iterations, 300 VUs, Sub-400ms P95, 0% Errors')">
+          <div class="gallery-item" data-cat="loadtest" onclick="openLightbox('assets/images/grafana-stress test.png', 'Grafana 20-Module Stress Test Telemetry - 53,967+ Iterations, 300 VUs, Sub-400ms P95, 0% Errors')">
             <div class="gallery-thumbnail">
               <img src="assets/images/grafana-stress test.png" alt="Grafana Stress Test" loading="lazy" />
             </div>
             <div class="gallery-meta">
               <span class="gallery-tag">OBSERVABILITY / TELEMETRY</span>
-              <div class="gallery-title">18-Module Stepped Stress Test</div>
+              <div class="gallery-title">20-Module Stepped Stress Test</div>
               <div class="gallery-desc">53K+ iterations across 6 stages up to 300 VUs with 0% error rate and sub-25ms P95 latency.</div>
             </div>
           </div>
@@ -2155,9 +2195,9 @@
               <img src="assets/images/dashboard.png" alt="Executive Dashboard" loading="lazy" onerror="this.src='https://placehold.co/800x450/0f1523/6366f1?text=Dashboard+Overview'" />
             </div>
             <div class="gallery-meta">
-              <span class="gallery-tag">MOD-17 DASHBOARDS</span>
+              <span class="gallery-tag">MOD-17 DASHBOARD</span>
               <div class="gallery-title">Executive Dashboard</div>
-              <div class="gallery-desc">Consolidated enterprise KPI oversight, inventory turnover velocity, and branch status summaries.</div>
+              <div class="gallery-desc">Corporate enterprise KPI oversight, inventory turnover velocity, and operational site summaries.</div>
             </div>
           </div>
 
@@ -2167,7 +2207,7 @@
               <img src="assets/images/Status Infrastruktur.png" alt="Infrastructure Status" loading="lazy" onerror="this.src='https://placehold.co/800x450/0f1523/6366f1?text=System+Status'" />
             </div>
             <div class="gallery-meta">
-              <span class="gallery-tag">MOD-17 DASHBOARDS</span>
+              <span class="gallery-tag">MOD-18 SYSTEM CORE</span>
               <div class="gallery-title">Infrastructure Status</div>
               <div class="gallery-desc">Real-time system health, connectivity, and database metric tracking.</div>
             </div>
@@ -2179,7 +2219,7 @@
               <img src="assets/images/dashboard-light.png" alt="Dashboard Light Mode" loading="lazy" onerror="this.src='https://placehold.co/800x450/0f1523/6366f1?text=Dashboard+Light'" />
             </div>
             <div class="gallery-meta">
-              <span class="gallery-tag">MOD-17 DASHBOARDS</span>
+              <span class="gallery-tag">MOD-17 DASHBOARD</span>
               <div class="gallery-title">Dashboard (Light Mode)</div>
               <div class="gallery-desc">Alternative light theme interface for bright environments and readability.</div>
             </div>
@@ -2193,7 +2233,7 @@
             <div class="gallery-meta">
               <span class="gallery-tag">MOD-04 INVENTORY</span>
               <div class="gallery-title">Perpetual Inventory Ledger</div>
-              <div class="gallery-desc">Bin-level item balances, reservation statuses, FIFO unit valuation, and reorder triggers.</div>
+              <div class="gallery-desc">Bin-level item balances, Stock Transfer Orders (STO), FIFO unit valuation, and reorder triggers.</div>
             </div>
           </div>
 
@@ -2215,7 +2255,7 @@
               <img src="assets/images/QAQC.png" alt="GRN Form" loading="lazy" onerror="this.src='https://placehold.co/800x450/0f1523/6366f1?text=GRN+Inspection+Form'" />
             </div>
             <div class="gallery-meta">
-              <span class="gallery-tag">MOD-10 QUALITY CONTROL</span>
+              <span class="gallery-tag">MOD-08 QUALITY</span>
               <div class="gallery-title">Inbound GRN & QC Inspection</div>
               <div class="gallery-desc">Detailed receipt modal form with QA checkpoints, lot numbering, bin assignment, and discrepancy logs.</div>
             </div>
@@ -2253,7 +2293,7 @@
             <div class="gallery-meta">
               <span class="gallery-tag">MOD-02 MASTER DATA</span>
               <div class="gallery-title">Master Data Configuration</div>
-              <div class="gallery-desc">Branch parameters, tax schedules, product categories, and unit of measure conversion rules.</div>
+              <div class="gallery-desc">Operational site parameters, tax schedules, product categories, and unit of measure conversion rules.</div>
             </div>
           </div>
 
@@ -2263,9 +2303,9 @@
               <img src="assets/images/pusat dokument.png" alt="Document Storage" loading="lazy" onerror="this.src='https://placehold.co/800x450/0f1523/6366f1?text=Document+Storage'" />
             </div>
             <div class="gallery-meta">
-              <span class="gallery-tag">MOD-18 SYSTEM CORE</span>
+              <span class="gallery-tag">MOD-19 DOCUMENTS HUB</span>
               <div class="gallery-title">Document & Attachment Registry</div>
-              <div class="gallery-desc">S3-compatible file storage registry linked directly to transaction records with audit metadata.</div>
+              <div class="gallery-desc">Corporate documents hub and S3-compatible file storage registry linked directly to transaction records with audit metadata.</div>
             </div>
           </div>
 
@@ -2275,7 +2315,7 @@
               <img src="assets/images/Return&RMA.png" alt="Returns Management" loading="lazy" onerror="this.src='https://placehold.co/800x450/0f1523/6366f1?text=Returns+Management'" />
             </div>
             <div class="gallery-meta">
-              <span class="gallery-tag">MOD-15 RETURNS</span>
+              <span class="gallery-tag">MOD-13 RETURNS</span>
               <div class="gallery-title">Returns & RMA Processing</div>
               <div class="gallery-desc">Customer return authorizations, quarantine inspection workflows, and vendor debit notes.</div>
             </div>
@@ -2289,7 +2329,7 @@
             <div class="gallery-meta">
               <span class="gallery-tag">MOD-02 MASTER DATA</span>
               <div class="gallery-title">Document Series & Legal Profile</div>
-              <div class="gallery-desc">Configurable running numbers for operational documents and legal entity details.</div>
+              <div class="gallery-desc">Configurable running numbers for operational documents and PT SAWIT JAYA legal entity details.</div>
             </div>
           </div>
 
@@ -2311,7 +2351,7 @@
               <img src="assets/images/PenjualanPiutang-O2C.png" alt="Sales Order to Cash" loading="lazy" />
             </div>
             <div class="gallery-meta">
-              <span class="gallery-tag">MOD-06 SALES (O2C)</span>
+              <span class="gallery-tag">MOD-06 SALES</span>
               <div class="gallery-title">Sales Orders & CRM</div>
               <div class="gallery-desc">Customer order tracking, dynamic credit limit evaluation, and invoicing generation.</div>
             </div>
@@ -2335,7 +2375,7 @@
               <img src="assets/images/Plant Maintanance.png" alt="TPM Schedules" loading="lazy" />
             </div>
             <div class="gallery-meta">
-              <span class="gallery-tag">MOD-11 MAINTENANCE</span>
+              <span class="gallery-tag">MOD-10 MAINTENANCE</span>
               <div class="gallery-title">TPM & Asset Maintenance</div>
               <div class="gallery-desc">Machine registry, MTBF analytics, and automated preventive maintenance work order generation.</div>
             </div>
@@ -2359,7 +2399,7 @@
               <img src="assets/images/kas&bank.png" alt="Treasury Management" loading="lazy" onerror="this.src='https://placehold.co/800x450/0f1523/f59e0b?text=Treasury+Management'" />
             </div>
             <div class="gallery-meta">
-              <span class="gallery-tag">MOD-13 TREASURY</span>
+              <span class="gallery-tag">MOD-15 TREASURY</span>
               <div class="gallery-title">Cash & Bank Management</div>
               <div class="gallery-desc">Internal fund transfers, bank reconciliations, and petty cash disbursement logs.</div>
             </div>
@@ -2395,7 +2435,7 @@
               <img src="assets/images/sdm&payroll.png" alt="HRM Module" loading="lazy" onerror="this.src='https://placehold.co/800x450/0f1523/8b5cf6?text=HRM+Payroll'" />
             </div>
             <div class="gallery-meta">
-              <span class="gallery-tag">MOD-08 HRM</span>
+              <span class="gallery-tag">MOD-11 HRM</span>
               <div class="gallery-title">HR & Payroll Sync</div>
               <div class="gallery-desc">Biometric IoT attendance synchronization, leave balances, and automated e-Payroll.</div>
             </div>
@@ -2409,19 +2449,19 @@
             <div class="gallery-meta">
               <span class="gallery-tag">MOD-01 IAM</span>
               <div class="gallery-title">User Lifecycle & Security</div>
-              <div class="gallery-desc">User account lifecycle, password rotation, multi-branch assignment, and active session states.</div>
+              <div class="gallery-desc">User account lifecycle, password rotation, operational site assignment, and active session states.</div>
             </div>
           </div>
 
           <!-- Screenshot 23: RBAC Matrix -->
-          <div class="gallery-item" data-cat="governance" onclick="openLightbox('assets/images/RBAC.png', 'RBAC Matrix - 102 Granular Permissions Across 17 Modules and 6 Actions')">
+          <div class="gallery-item" data-cat="governance" onclick="openLightbox('assets/images/RBAC.png', 'RBAC Matrix - Granular Permissions Across 20 Modules and 6 Actions')">
             <div class="gallery-thumbnail">
               <img src="assets/images/RBAC.png" alt="RBAC Matrix" loading="lazy" />
             </div>
             <div class="gallery-meta">
               <span class="gallery-tag">MOD-01 IAM</span>
               <div class="gallery-title">RBAC Permission Matrix</div>
-              <div class="gallery-desc">Granular matrix mapping 102 distinct permission flags across modules, actions, and custom roles.</div>
+              <div class="gallery-desc">Granular matrix mapping 102+ distinct permission flags across modules, actions, and custom roles.</div>
             </div>
           </div>
 
@@ -2431,7 +2471,7 @@
               <img src="assets/images/Integrasi MEsin.png" alt="Machine Integration" loading="lazy" />
             </div>
             <div class="gallery-meta">
-              <span class="gallery-tag">MOD-18 INFRASTRUCTURE</span>
+              <span class="gallery-tag">MOD-18 SYSTEM CORE</span>
               <div class="gallery-title">Industrial Machine Integration</div>
               <div class="gallery-desc">Biometric devices and factory floor IoT machine telemetry integration with automated sync.</div>
             </div>
@@ -2482,18 +2522,18 @@
     const BENCHMARK_SUITES = {
       stress: {
         badge: 'STRESS TEST (53,967+ ITERATIONS)',
-        title: '18-Module Stepped Stress Test (20 &rarr; 300 VUs)',
+        title: '20-Module Stepped Stress Test (20 &rarr; 300 VUs)',
         image: 'assets/images/grafana-stress test.png',
-        caption: 'Grafana Telemetry: 18-Module Stepped Stress Test up to 300 Concurrent Users with 0% Error Rate and Sub-400ms Latency',
+        caption: 'Grafana Telemetry: 20-Module Stepped Stress Test up to 300 Concurrent Users with 0% Error Rate and Sub-400ms Latency',
         stats: [
           { label: 'Total Iterations', val: '53,967+', sub: '5-minute multi-stage stress ramp' },
-          { label: 'Max Concurrency', val: '300 VUs', sub: 'Balanced traffic across the tested module set' },
+          { label: 'Max Concurrency', val: '300 VUs', sub: 'Balanced traffic across all 20 enterprise modules' },
           { label: 'Average Latency', val: '< 3.8 ms', sub: 'P95 latency under 25ms' },
           { label: 'HTTP Error Rate', val: '0.00%', sub: '100% successful requests' }
         ],
         kpis: [
-          { title: '1. Multi-Stage Workload', desc: 'Sustained 5-minute ramp through 6 stages up to 300 looping VUs with smooth scaling across the tested enterprise modules.' },
-          { title: '2. Tested Endpoints & Routes', desc: '/api/auth/login, /api/inventory/items, /api/purchasing/requisitions, /api/sales/orders, /api/accounting/journals, /api/manufacturing/work-orders, /api/hrm/employees, /api/system/audit-logs.' },
+          { title: '1. Multi-Stage Workload', desc: 'Sustained 5-minute ramp through 6 stages up to 300 looping VUs with smooth scaling across all 20 enterprise modules.' },
+          { title: '2. Tested Endpoints & Routes', desc: '/api/auth/login, /api/master-data/branches, /api/inventory/items, /api/purchasing/requisitions, /api/sales/orders, /api/accounting/journals, /api/manufacturing/work-orders, /api/hrm/employees, /api/documents, /api/system/audit-logs.' },
           { title: '3. Memory & GC Health', desc: 'Bounded memory footprint with zero memory leaks, ~67MB heap, and sub-millisecond Go runtime garbage collection.' },
           { title: '4. Database Pool Headroom', desc: 'pgxpool handled concurrency with minimal connection wait and zero connection errors or starvation.' }
         ]
